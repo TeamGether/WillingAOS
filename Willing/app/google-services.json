@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "335112792876",
+    "project_id": "willing-88271",
+    "storage_bucket": "willing-88271.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335112792876:android:16adb110d43a7b2de55a89",
+        "android_client_info": {
+          "package_name": "com.teamgether.willing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "335112792876-vdj24qpce8pshlgctcm5s4qs4ptn1vt1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO6xEccyLA0N429J3oEVX2FY4i3v9bWTo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "335112792876-vdj24qpce8pshlgctcm5s4qs4ptn1vt1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
