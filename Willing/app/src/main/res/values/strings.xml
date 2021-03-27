@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Willing</string>
+
+    <string name ="sign_up_nickName">닉네임</string>
+    <string name ="sign_up_email">이메일</string>
+    <string name ="sign_up_emailAuth">이메일 인증</string>
+    <string name ="sign_up_pwd">비밀번호</string>
+    <string name ="sign_up_checkPwd">비밀번호 확인</string>
+    <string name ="sign_up_donaName">기부명</string>
+    <string name ="sign_up_gotoLogin">로그인</string>
+
+
+
+
+
 </resources>
