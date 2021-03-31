@@ -7,7 +7,7 @@
     <string name ="sign_up_pwd">비밀번호</string>
     <string name ="sign_up_checkPwd">비밀번호 확인</string>
     <string name ="sign_up_donaName">기부명</string>
-    <string name ="sign_up_gotoLogin">로그인</string>
+    <string name ="sign_up_gotoLogin">회원가입</string>
 
 
 
