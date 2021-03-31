@@ -1,28 +1,32 @@
 package com.teamgether.willing.viewModel
 
 import android.content.Intent
-import android.util.Log
+import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.teamgether.willing.MainActivity
 import com.teamgether.willing.model.UserInfo
-import kotlin.math.log
 
 open class SignupViewModel : AppCompatActivity() {
-
     lateinit var auth: FirebaseAuth
 
-    val db = Firebase.firestore
+    lateinit var db: FirebaseFirestore
 
 
-    fun createUser(email: String, password: String) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        db = Firebase.firestore
         auth = Firebase.auth
         auth.languageCode = "ko"
 
+    }
+
+    fun createUser(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -39,7 +43,6 @@ open class SignupViewModel : AppCompatActivity() {
     }
 
     fun setData(nickname: String, email: String, donationName: String) {
-
         val userInfo = UserInfo(nickname, email, donationName)
 
         db.collection("User").add(userInfo).addOnSuccessListener {
