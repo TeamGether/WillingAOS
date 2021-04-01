@@ -13,4 +13,6 @@
     <string name="login_login_btn">로그인</string>
     <string name="login_goto_signUp_btn">회원가입</string>
 
+    <string name="email_verification_alert">가입하신 메일의 인증링크를 눌러 이메일 인증을 마쳐주세요!</string>
+    <string name="email_verification_btn">확인</string>
 </resources>
