@@ -10,7 +10,7 @@ class SignUpActivity : SignupViewModel() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-        gotoLogin.setOnClickListener {
+        finishSignUpBtn.setOnClickListener {
             val email = signup_email.text.toString()
             val password = signup_pw.text.toString()
             val nickname = signup_nickName.text.toString()
