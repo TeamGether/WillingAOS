@@ -1,6 +1,5 @@
 package com.teamgether.willing.view
 
-import android.content.Intent
 import android.os.Bundle
 import com.teamgether.willing.R
 import com.teamgether.willing.viewModel.SignUpViewModel
@@ -11,6 +10,8 @@ class SignUpActivity : SignUpViewModel() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
+
+
         finishSignUpBtn.setOnClickListener {
             val email = signup_email.text.toString()
             val password = signup_pw.text.toString()
@@ -18,12 +19,21 @@ class SignUpActivity : SignUpViewModel() {
             val donationName = signup_dona.text.toString()
 
             createUser(email, password)
-            setData(nickname,email, donationName)
+            setData(nickname, email, donationName)
 
 
         }
 
     }
+
+    internal fun btn_on() {
+        sign_up_check_nickName_btn.isEnabled = true
+    }
+
+    internal fun btn_off() {
+        sign_up_check_nickName_btn.isEnabled = false
+    }
+
 
 }
 
