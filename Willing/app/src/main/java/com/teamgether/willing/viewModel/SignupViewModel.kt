@@ -10,13 +10,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.teamgether.willing.MainActivity
+import com.teamgether.willing.R
 import com.teamgether.willing.model.UserInfo
 
 open class SignupViewModel : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
 
     lateinit var db: FirebaseFirestore
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
