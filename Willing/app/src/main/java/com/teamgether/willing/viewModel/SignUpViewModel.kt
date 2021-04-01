@@ -9,14 +9,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.teamgether.willing.MainActivity
 import com.teamgether.willing.model.UserInfo
+import com.teamgether.willing.view.LoginActivity
 
-open class SignupViewModel : AppCompatActivity() {
+open class SignUpViewModel : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
 
     lateinit var db: FirebaseFirestore
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +30,7 @@ open class SignupViewModel : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         startToast("회원가입 성공")
-                        val nextIntent = Intent(this, MainActivity::class.java)
+                        val nextIntent = Intent(this, LoginActivity::class.java)
                         startActivity(nextIntent)
                     } else {
                         startToast("회원가입 실패")

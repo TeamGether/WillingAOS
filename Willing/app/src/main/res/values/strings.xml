@@ -1,15 +1,18 @@
 <resources>
     <string name="app_name">Willing</string>
 
-    <string name ="sign_up_nickName">닉네임</string>
-    <string name ="sign_up_email">이메일</string>
-    <string name ="sign_up_pwd">비밀번호</string>
-    <string name ="sign_up_checkPwd">비밀번호 확인</string>
-    <string name ="sign_up_donaName">기부명</string>
-    <string name ="sign_up_signUp">회원가입</string>
+    <string name="sign_up_nickName">닉네임</string>
+    <string name="sign_up_email">이메일</string>
+    <string name="sign_up_pwd">비밀번호</string>
+    <string name="sign_up_checkPwd">비밀번호 확인</string>
+    <string name="sign_up_donaName">기부명</string>
+    <string name="sign_up_signUp_btn">회원가입</string>
 
+    <string name="login_email">이메일</string>
+    <string name="login_pwd">비밀번호</string>
+    <string name="login_login_btn">로그인</string>
+    <string name="login_goto_signUp_btn">회원가입</string>
 
-
-
-
+    <string name="email_verification_alert">가입하신 메일의 인증링크를 눌러 이메일 인증을 마쳐주세요!</string>
+    <string name="email_verification_btn">확인</string>
 </resources>
