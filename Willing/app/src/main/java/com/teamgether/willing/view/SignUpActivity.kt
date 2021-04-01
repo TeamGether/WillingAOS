@@ -1,11 +1,12 @@
 package com.teamgether.willing.view
 
+import android.content.Intent
 import android.os.Bundle
 import com.teamgether.willing.R
-import com.teamgether.willing.viewModel.SignupViewModel
+import com.teamgether.willing.viewModel.SignUpViewModel
 import kotlinx.android.synthetic.main.activity_signup.*
 
-class SignUpActivity : SignupViewModel() {
+class SignUpActivity : SignUpViewModel() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -18,6 +19,7 @@ class SignUpActivity : SignupViewModel() {
 
             createUser(email, password)
             setData(nickname,email, donationName)
+
 
         }
 
