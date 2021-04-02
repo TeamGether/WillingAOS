@@ -1,10 +1,10 @@
 package com.teamgether.willing.model
 
 data class UserInfo(
-    val nickname: String? = "",
+    val name: String ?= "",
     val email: String? = "",
     val donationName: String? = "",
-    val tobe:String ?= "",
-    val imageUrl:String ?= "",
-    val userVerification:Boolean ?= false
+    val tobe: String? = "",
+    val imageUrl: String? = "",
+    var userVerification: Boolean ?= false
 )
