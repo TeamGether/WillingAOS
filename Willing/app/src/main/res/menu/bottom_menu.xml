@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_challenge"
+        android:icon="@drawable/motivation"
+        android:title="" />
+
+    <item
+        android:id="@+id/menu_ranking"
+        android:icon="@drawable/ranking"
+        android:title="" />
+
+    <item
+        android:title=""
+        android:icon="@drawable/squares"
+        android:id="@+id/menu_feed" />
+
+    <item
+        android:id="@+id/menu_friends"
+        android:icon="@drawable/friends"
+        android:title="" />
+
+    <item
+        android:id="@+id/menu_mypage"
+        android:title=""
+        android:icon="@drawable/smile" />
+
+</menu>
