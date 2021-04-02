@@ -12,6 +12,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.teamgether.willing.R
 import com.teamgether.willing.model.UserInfo
 import com.teamgether.willing.view.LoginActivity
 import kotlinx.android.synthetic.main.activity_signup.*
@@ -57,7 +58,7 @@ open class SignUpViewModel : AppCompatActivity() {
 
     fun nickNameCheck(name: String, isDuplicate: Boolean) {
         var isDuplicate: Boolean = false
-        sign_up_warning_nickName.isVisible = false
+        sign_up_warning_nickName.text = ""
 
         db.collection("User").whereEqualTo("name", name)
             .get()
@@ -65,8 +66,7 @@ open class SignUpViewModel : AppCompatActivity() {
                 for (document in documents) {
                     isDuplicate = true
                     if (isDuplicate) {
-                        sign_up_warning_nickName.isVisible = true
-
+                        sign_up_warning_nickName.setText(R.string.sign_up_warning_nickName)
                     }
                     Log.d("result", "${document.id} => ${document.data}")
 

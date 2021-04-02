@@ -14,10 +14,13 @@ class SignUpActivity : SignUpViewModel() {
 
         sign_up_check_nickName_btn.setOnClickListener {
             val name = signup_nickName.text.toString()
-            var isDuplicate = false
-            nickNameCheck(name,isDuplicate)
-
-
+            sign_up_warning_nickName.text = ""
+            if (name.contains(" ")) {
+                sign_up_warning_nickName.setText(R.string.sign_up_warning_spacing)
+            } else {
+                var isDuplicate = false
+                nickNameCheck(name, isDuplicate)
+            }
         }
 
 
