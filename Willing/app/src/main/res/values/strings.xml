@@ -15,4 +15,16 @@
 
     <string name="email_verification_alert">가입하신 메일의 인증링크를 눌러 이메일 인증을 마쳐주세요!</string>
     <string name="email_verification_btn">확인</string>
+
+    <string name="create_goalTitle">어떤 목표를 도전하시나요? </string>
+    <string name="create_goalReson">왜 이목표를 도전하나요? </string>
+    <string name="create_wanttobe">이 목표를 이뤄서 내가 되고싶은 사람은 ? </string>
+    <string name="create_goalTogether">이 목표를 같이하는 친구가 있나요 ?  </string>
+
+    <string name="create_next">다음  </string>
+
+
+
+
+
 </resources>
