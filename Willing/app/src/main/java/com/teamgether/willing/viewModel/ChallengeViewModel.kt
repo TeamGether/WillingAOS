@@ -1,4 +1,7 @@
 package com.teamgether.willing.viewModel
 
-class ChallengeCreateViewModel {
+import androidx.lifecycle.ViewModel
+
+class ChallengeViewModel :ViewModel(){
+
 }
