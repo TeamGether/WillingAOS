@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_next"
@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.022" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/write_goal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="584dp"
@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp"
-        android:text="@string/create_goalReson"
+        android:text="@string/create_goalReason"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
         app:layout_constraintVertical_bias="0.213" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/write_reason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="504dp"
@@ -88,7 +88,7 @@
 
     <EditText
 
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/write_wanttobe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="408dp"
@@ -114,7 +114,7 @@
         app:layout_constraintVertical_bias="0.499" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName4"
+        android:id="@+id/write_goalTogether"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="292dp"
