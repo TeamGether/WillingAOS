@@ -20,24 +20,24 @@ class LoginActivity : LoginViewModel() {
             val email = login_email.text.toString()
             val password = login_pwd.text.toString()
 
-//            login_warning_email.text = ""
-//            login_warning_pwd.text = ""
+            login_warning_email.text = ""
+            login_warning_pwd.text = ""
 
 
-            if(email.isNotBlank()&&email.isNotEmpty()&&password.isNotEmpty()&&password.isNotBlank()){
-//                login_warning_email.text = ""
-//                login_warning_pwd.text = ""
+            if(email.isNotBlank()&&password.isNotBlank()){
+                login_warning_email.text = ""
+                login_warning_pwd.text = ""
                 login(email, password)
             }else{
-                if (email.isEmpty() or email.isBlank()) {
-//                    login_warning_email.setText(R.string.login_warning_null)
+                if (email.isBlank()) {
+                    login_warning_email.setText(R.string.login_warning_null)
                 }else{
-//                    login_warning_email.text = ""
+                    login_warning_email.text = ""
                 }
-                if (password.isEmpty() or password.isBlank()) {
-//                    login_warning_pwd.setText(R.string.login_warning_null)
+                if (password.isBlank()) {
+                    login_warning_pwd.setText(R.string.login_warning_null)
                 }else{
-//                    login_warning_pwd.text = ""
+                    login_warning_pwd.text = ""
                 }
             }
 
