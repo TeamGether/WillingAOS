@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import com.firebase.ui.auth.data.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,50 +28,62 @@ open class SignUpViewModel : AppCompatActivity() {
 
     }
 
-    fun createUser(email: String, password: String) {
+    fun createUser(email: String, password: String,name: String,donationName: String,startActivity:()->Unit) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     startToast("회원가입 성공")
-                    val nextIntent = Intent(this, LoginActivity::class.java)
-                    startActivity(nextIntent)
+                    setData(name, email, donationName,startActivity)
+
                 } else {
                     startToast("회원가입 실패")
                 }
             }
             .addOnFailureListener {
                 it.printStackTrace()
+                Log.d("result", "실패~")
             }
     }
 
-    fun setData(name: String, email: String, donationName: String) {
+    private fun setData(name: String, email: String, donationName: String,startActivity:()->Unit) {
         val userInfo = UserInfo(name, email, donationName)
 
         db.collection("User").add(userInfo).addOnSuccessListener {
             startToast("데이터 추가 성공")
+            sendEmail(email,startActivity)
+
         }.addOnFailureListener {
             startToast("데이터 추가 실패..")
         }
     }
 
-    fun nickNameCheck(name: String, isDuplicate: Boolean) {
-        var isDuplicate: Boolean = false
+    fun nickNameCheck(name: String,  setDuplicate: (Boolean) -> Unit) {
         sign_up_warning_nickName.text = ""
+
 
         db.collection("User").whereEqualTo("name", name)
             .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    isDuplicate = true
-                    if (isDuplicate) {
-                        sign_up_warning_nickName.setText(R.string.sign_up_warning_nickName)
-                    }
-                    Log.d("result", "${document.id} => ${document.data}")
-
-                }
+            .addOnSuccessListener {
+                setDuplicate(true)
             }
-
     }
+
+
+    private fun sendEmail(email: String,startActivity:()->Unit){
+        val user = Firebase.auth.currentUser
+
+        user!!.sendEmailVerification()
+            .addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    val userInfo = UserInfo()
+                    Log.d("emailSend", " 성공")
+                    Log.d("result", user.isEmailVerified.toString())
+                    startActivity()
+
+               }
+            }
+    }
+
 
     private fun startToast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
