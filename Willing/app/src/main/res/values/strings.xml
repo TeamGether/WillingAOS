@@ -2,7 +2,7 @@
     <string name="app_name">Willing</string>
 
     <string name="sign_up_nickName">닉네임</string>
-    <string name="sign_up_check_nickName">검사</string>
+    <string name="sign_up_check_nickName">닉네임 중복 검사</string>
     <string name="sign_up_email">이메일</string>
     <string name="sign_up_pwd">비밀번호</string>
     <string name="sign_up_checkPwd">비밀번호 확인</string>
