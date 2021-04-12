@@ -19,9 +19,6 @@
     <string name="sign_up_warning_checkPlz"> 중복검사를 해주세요.</string>
     <string name="sign_up_usable">사용가능한 닉네임입니다.</string>
 
-
-
-
     <string name="login_email">이메일</string>
     <string name="login_pwd">비밀번호</string>
     <string name="login_login_btn">로그인</string>
@@ -30,8 +27,8 @@
 
 
 
-
-    <string name="email_verification_alert">가입하신 메일의 인증링크를 눌러 이메일 인증을 마쳐주세요!</string>
-    <string name="email_verification_btn">확인</string>
+    <string name="email_verification_title">이메일 확인을 통해 메일 인증을 진행해주세요!</string>
+    <string name="email_verification_message">입력하신 메일의 메일함에 들어가 인증 링크를 눌러주세요!</string>
+    <string name="email_verification_btnText">확인</string>
 
 </resources>
