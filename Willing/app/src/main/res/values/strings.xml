@@ -34,4 +34,7 @@
     <string name="email_verification_alert">가입하신 메일의 인증링크를 눌러 이메일 인증을 마쳐주세요!</string>
     <string name="email_verification_btn">확인</string>
 
+
+    <string name="ranking_donate">이번달 기부왕</string>
+
 </resources>
