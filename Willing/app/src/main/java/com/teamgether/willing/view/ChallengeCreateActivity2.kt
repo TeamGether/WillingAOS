@@ -6,17 +6,16 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.google.firebase.database.*
+import com.google.firestore.v1.DocumentTransform
 import com.teamgether.willing.MainActivity
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeInfo
 import com.teamgether.willing.viewModel.ChallengeViewModel
 import kotlinx.android.synthetic.main.activity_challenge_create2.*
+import java.sql.Types.TIMESTAMP
 import java.util.*
 
 class ChallengeCreateActivity2 :  ChallengeViewModel(){
-
-    private val database by lazy { FirebaseDatabase.getInstance() }
-    private val challengeRef = database.getReference("challenge")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +23,7 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
         setContentView(R.layout.activity_challenge_create2)
 
         val challengeInfo = ChallengeInfo()
-        challengeInfo.writeTime = ServerValue.TIMESTAMP
+//        challengeInfo.writeTime = DocumentTransform.FieldTransform.ServerValue.TIMESTAMP
 
 
         var period_data = resources.getStringArray(R.array.period_list)
@@ -90,32 +89,11 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
 
             setData2(money,set,goal_number,period,donation)
 
-            challengeRef.child("Challenge").setValue(challengeInfo.money)
-
 
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
         }
 
-        challengeRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-            }
-            override fun onDataChange(p0: DataSnapshot) {
-                for (snapshot in p0.children) {
-                    if (snapshot.key.equals("Challenge")) {
-                        longToast(snapshot.value)
-                    }
-                    else{
-                        longToast("Error!!")
-                    }
-                }
-            }
-
-            private fun longToast(value: Any?) {
-
-
-            }
-        })
 
 
 

@@ -3,10 +3,12 @@ package com.teamgether.willing.view
 import android.content.Intent
 import android.os.Bundle
 import com.google.firebase.database.*
+import com.google.firestore.v1.DocumentTransform
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeInfo
 import com.teamgether.willing.viewModel.ChallengeViewModel
 import kotlinx.android.synthetic.main.activity_challenge_create.*
+import java.sql.Types.TIMESTAMP
 
 
 class ChallengeCreateActivity : ChallengeViewModel() {
@@ -19,7 +21,7 @@ class ChallengeCreateActivity : ChallengeViewModel() {
         nextpage.setOnClickListener {
             val challengeInfo = ChallengeInfo()
 
-            challengeInfo.writeTime = ServerValue.TIMESTAMP
+//            challengeInfo.writeTime = DocumentTransform.FieldTransform.ServerValue.TIMESTAMP
 
             val content = write_goal.text.toString()
             val reason =write_reason.text.toString()
