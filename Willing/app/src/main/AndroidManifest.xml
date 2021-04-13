@@ -24,6 +24,11 @@
         <activity android:name=".MainActivity">
 
         </activity>
+
+        <activity android:name=".view.GroupChoiceActivity"></activity>
+        <activity android:name=".view.ChallengeCreateActivity"></activity>
+        <activity android:name=".view.ChallengeCreateActivity2"></activity>
+
     </application>
 
 </manifest>

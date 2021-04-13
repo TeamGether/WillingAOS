@@ -1,18 +1,26 @@
 package com.teamgether.willing.model
 
-data class ChallengeInfo (
-    val content: String? = "",
-    val count: Int? = 0,
+data class ChallengeInfo(
+    var content: String = "",
+    var count: String = "",
+    var goal_number: String = "",
     val donation: String? = "",
-    val group:String = "",
+    var group:String = "",
     val money: Int? = 0,
+    val set: Int? = 0,
     val percentage: Int? = 0,
-    val reason:String ?= "",
+    var reason:String ?= "",
     val show:Boolean ?= false,
     val success:Boolean ?= false,
     val time:String ?= "",
-    val tobe:String ?= "",
+    var tobe:String ?= "",
+    var friends:String ?= "",
     val user:String ?= "",
     val imageUrl:String ?= "",
     val userVerification:Boolean ?= false
-)
+
+){
+
+    var writeTime: Any = Any()
+
+}
