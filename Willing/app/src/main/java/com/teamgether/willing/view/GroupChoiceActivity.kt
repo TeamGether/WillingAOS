@@ -14,11 +14,16 @@ class GroupChoiceActivity : ChallengeViewModel() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_choice)
 
-        withFriends.setOnClickListener {
+        nofriends_btn.setOnClickListener {
             val intent = Intent(this,ChallengeCreateActivity::class.java)
+            intent.putExtra("isGroup", "no")
             startActivity(intent)
+        }
 
-
+        withfriend_btn.setOnClickListener {
+            val intent = Intent(this,ChallengeCreateActivity::class.java)
+            intent.putExtra("isGroup","yes")
+            startActivity(intent)
         }
 
     }

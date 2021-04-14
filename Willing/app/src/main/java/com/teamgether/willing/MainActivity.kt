@@ -22,20 +22,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.main = this
 
         binding.mainBottomNavigation.setOnNavigationItemSelectedListener(this)
 
         supportFragmentManager.beginTransaction().add(R.id.main_frameLayout, ChallengeFragment()).commit()
-
-        button2.setOnClickListener {
-            val intent = Intent(this, GroupChoiceActivity::class.java)
-            startActivity(intent)
-        }
-
 
     }
 

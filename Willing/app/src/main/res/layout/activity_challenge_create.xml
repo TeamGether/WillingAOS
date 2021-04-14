@@ -44,62 +44,45 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-
             android:background="#f3cd86"
             android:text="@string/create_goalTitle"
-            android:textSize="22sp"
-
-
-
-          />
+            android:textSize="22sp" />
 
         <EditText
             android:id="@+id/write_goal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-
             android:ems="10"
-            android:inputType="textPersonName"
-
-             />
+            android:inputType="textPersonName" />
 
         <TextView
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#f3cd86"
             android:text="@string/create_wanttobe"
-
             android:textSize="22sp"
-            android:layout_margin="15dp"
-
-            />
+            android:layout_margin="15dp" />
 
         <EditText
 
-            android:id="@+id/write_wanttobe"
+            android:id="@+id/write_tobe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="512dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:layout_margin="15dp"
-            />
-
-
+            android:layout_margin="15dp" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#f3cd86"
-
             android:text="@string/create_goalReason"
             android:textSize="22sp"
             android:layout_margin="15dp" />
@@ -111,16 +94,13 @@
             android:layout_marginBottom="512dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:layout_margin="15dp"
-            />
+            android:layout_margin="15dp" />
 
         <TextView
-
-            android:id="@+id/textView5"
+            android:id="@+id/write_goalTogether_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#f3cd86"
-
             android:text="@string/create_goalTogether"
             android:textSize="22sp"
             android:layout_margin="15dp"/>
