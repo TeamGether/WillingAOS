@@ -38,15 +38,28 @@ class ChallengeCreateActivity : ChallengeViewModel() {
             Toast.makeText(this, "전달된 이름이 없습니다", Toast.LENGTH_SHORT).show()
         }
 
-        val title : String? = write_goal.text.toString()
-        val reason : String? = write_reason.text.toString()
-        val tobe : String?= write_tobe.text.toString()
+
+
+//        val title : String? = write_goal.text.toString()
+//        val reason : String? = write_reason.text.toString()
+//        val tobe : String?= write_tobe.text.toString()
+
+        val title = write_goal.text.toString()
+        val reason = write_reason.text.toString()
+        val tobe = write_tobe.text.toString()
+
+        val challengeInfo = ChallengeInfo()
+
+        challengeInfo.title = title
+        challengeInfo.reason =  reason
+        challengeInfo.tobe = tobe
 
         nextpage.setOnClickListener {
             val intent = Intent(this,ChallengeCreateActivity2::class.java)
-            intent.putExtra("title",title)
-            intent.putExtra("reason",reason)
-            intent.putExtra("tobe",tobe)
+
+//            intent.putExtra("title",title)
+//            intent.putExtra("reason",reason)
+//            intent.putExtra("tobe",tobe)
 
             startActivity(intent)
         }

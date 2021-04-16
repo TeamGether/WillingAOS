@@ -2,6 +2,7 @@ package com.teamgether.willing.model
 
 data class ChallengeInfo(
     var content: String = "",
+    var title: String = "",
     var count: String = "",
     var goal_number: String = "",
     val donation: String? = "",

@@ -15,7 +15,9 @@ import com.teamgether.willing.MainActivity
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeInfo
 import com.teamgether.willing.viewModel.ChallengeViewModel
+import kotlinx.android.synthetic.main.activity_challenge_create.*
 import kotlinx.android.synthetic.main.activity_challenge_create2.*
+import kotlinx.android.synthetic.main.activity_challenge_create2.write_money
 import java.util.*
 
 
@@ -26,8 +28,6 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge_create2)
-
-
 
         var period = resources.getStringArray(R.array.period_list)
         var adapter2 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, period)
@@ -46,7 +46,6 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
         count_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
-                count.toString()
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -72,6 +71,7 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
         val set = write_set.text.toString()
         val detail = write_detail.text.toString()
 
+
         start.setOnClickListener {
 
             intent.putExtra("money", money)
@@ -80,19 +80,24 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
             intent.putExtra("period", period)
             intent.putExtra("count", count)
             intent.putExtra("donate", donate)
-
+//            intent.getStringExtra("title")
+//            intent.getStringExtra("reason")
+//            intent.getStringExtra("tobe")
 
             val data = hashMapOf(
+                "title" to ChallengeInfo("title").toString(),
+                "reason" to ChallengeInfo("reason").toString(),
+                "tobe" to ChallengeInfo("tobe").toString(),
                 "money" to write_money.text.toString(),
                 "set" to write_set.text.toString(),
                 "detail" to write_detail.text.toString(),
-                "period" to period_spinner.toString(),
-                "count" to count_spinner.toString(),
-                "doante" to donate_spinner.toString()
+                "period" to period_spinner.selectedItem.toString(),
+                "count" to count_spinner.selectedItem.toString(),
+                "doante" to donate_spinner.selectedItem.toString()
+
             )
 
             val db = Firebase.firestore
-
 
             db.collection("Challenge")
                 .add(data)
@@ -102,16 +107,16 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
                 }
-        }
-
 
 
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
 
+
         }
 
 
+        }
 
 
     }
