@@ -40,13 +40,7 @@ open class LoginViewModel : AppCompatActivity() {
 
             } else {
                 alertUser()
-//                val builder = AlertDialog.Builder(this)
-//                    .setTitle("로그인 실패")
-//                    .setMessage("등록된 사용자가 아니거나 비밀번호가 틀렸습니다. 로그인 정보를 다시 확인해주세요!")
-//                    .setPositiveButton("확인"){
-//                            _: DialogInterface?, _: Int ->
-//                    }
-//                builder.show()
+
             }
         }
     }
@@ -63,14 +57,6 @@ open class LoginViewModel : AppCompatActivity() {
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
         } else {
-            //알럿
-//            val builder = AlertDialog.Builder(this)
-//                .setTitle("이메일 확인을 통해 메일 인증을 진행해주세요!")
-//                .setMessage("입력하신 메일의 메일함에 들어가 인증 링크를 눌러주세요!")
-//                .setPositiveButton("확인"){
-//                        _: DialogInterface?, _: Int ->
-//                }
-//            builder.show()
             alertEmail()
             Firebase.auth.signOut()
         }
