@@ -41,29 +41,6 @@ class SignUpActivity : SignUpViewModel() {
                     }
                 }
             }
-
-
-//            var isDuplicate: Boolean
-//            val name = signup_nickName.text.toString()
-//            sign_up_warning_nickName.text = ""
-//            if (name.isNotBlank() or name.isNotEmpty()) {
-//                if (name.contains(" ")) {
-//                    sign_up_warning_nickName.setText(R.string.sign_up_warning_spacing)
-//                } else {
-//                    isDuplicate = false
-//
-//                    nickNameCheck(name, isDuplicate)
-//                    if (isDuplicate) {
-//                        sign_up_warning_nickName.setText(R.string.sign_up_warning_nickName)
-//                    } else {
-//                        sign_up_warning_nickName.setText(R.string.sign_up_warning_usable)
-//                    }
-//
-//                }
-//            } else {
-//                sign_up_warning_nickName.setText(R.string.sign_up_warning_null)
-//
-//            }
         }
 
         finishSignUpBtn.setOnClickListener {

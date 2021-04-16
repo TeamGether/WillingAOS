@@ -29,48 +29,49 @@ open class LoginViewModel : AppCompatActivity() {
 
     }
 
-    fun login(email: String, password: String) {
+    fun login(email: String, password: String, alertUser: () -> Unit, alertEmail: () -> Unit) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.d("login", "성공")
                 val user = auth.currentUser
-                getUserVerification()
+                getUserVerification(alertEmail)
 
                 Log.d("userVerificationin ", user.isEmailVerified.toString())
 
             } else {
-                val builder = AlertDialog.Builder(this)
-                    .setTitle("로그인 실패")
-                    .setMessage("등록된 사용자가 아니거나 비밀번호가 틀렸습니다. 로그인 정보를 다시 확인해주세요!")
-                    .setPositiveButton("확인"){
-                            _: DialogInterface?, _: Int ->
-                    }
-                builder.show()
+                alertUser()
+//                val builder = AlertDialog.Builder(this)
+//                    .setTitle("로그인 실패")
+//                    .setMessage("등록된 사용자가 아니거나 비밀번호가 틀렸습니다. 로그인 정보를 다시 확인해주세요!")
+//                    .setPositiveButton("확인"){
+//                            _: DialogInterface?, _: Int ->
+//                    }
+//                builder.show()
             }
         }
     }
 
 
-
     //sentAlarm
 
     // email 인증 확인 후 intent
-    fun getUserVerification() {
+    fun getUserVerification(alertEmail: () -> Unit) {
         val user = Firebase.auth.currentUser
-        if(user.isEmailVerified){
+        if (user.isEmailVerified) {
             Log.d("userVerificationin ", user.isEmailVerified.toString())
             //인텐트
             val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
-        }else{
+        } else {
             //알럿
-            val builder = AlertDialog.Builder(this)
-                .setTitle("이메일 확인을 통해 메일 인증을 진행해주세요!")
-                .setMessage("입력하신 메일의 메일함에 들어가 인증 링크를 눌러주세요!")
-                .setPositiveButton("확인"){
-                        _: DialogInterface?, _: Int ->
-                }
-            builder.show()
+//            val builder = AlertDialog.Builder(this)
+//                .setTitle("이메일 확인을 통해 메일 인증을 진행해주세요!")
+//                .setMessage("입력하신 메일의 메일함에 들어가 인증 링크를 눌러주세요!")
+//                .setPositiveButton("확인"){
+//                        _: DialogInterface?, _: Int ->
+//                }
+//            builder.show()
+            alertEmail()
             Firebase.auth.signOut()
         }
 

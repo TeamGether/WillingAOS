@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.viewModel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
+import org.w3c.dom.Text
 
 class LoginActivity : LoginViewModel() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,19 +25,19 @@ class LoginActivity : LoginViewModel() {
             login_warning_pwd.text = ""
 
 
-            if(email.isNotBlank()&&password.isNotBlank()){
+            if (email.isNotBlank() && password.isNotBlank()) {
                 login_warning_email.text = ""
                 login_warning_pwd.text = ""
-                login(email, password)
-            }else{
+                login(email, password,::alertUser,::alertEmail)
+            } else {
                 if (email.isBlank()) {
                     login_warning_email.setText(R.string.login_warning_null)
-                }else{
+                } else {
                     login_warning_email.text = ""
                 }
                 if (password.isBlank()) {
                     login_warning_pwd.setText(R.string.login_warning_null)
-                }else{
+                } else {
                     login_warning_pwd.text = ""
                 }
             }
@@ -47,7 +48,20 @@ class LoginActivity : LoginViewModel() {
             val nextIntent = Intent(this, SignUpActivity::class.java)
             startActivity(nextIntent)
         }
+    }
 
-
+    fun alertBuild(setTitle:Int,setMessage:Int,setButton:Int) {
+        val builder = AlertDialog.Builder(this)
+            .setTitle(setTitle)
+            .setMessage(setMessage)
+            .setPositiveButton(setButton) { _: DialogInterface?, _: Int ->
+            }
+        builder.show()
+    }
+    fun alertEmail(){
+        alertBuild(R.string.email_verification_title,R.string.email_verification_message,R.string.email_verification_btnText)
+    }
+    fun alertUser(){
+        alertBuild(R.string.login_wrong_user_title,R.string.login_wrong_user_message,R.string.login_wrong_user_btnText)
     }
 }
