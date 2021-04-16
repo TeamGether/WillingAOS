@@ -6,7 +6,7 @@ data class ChallengeInfo(
     var goal_number: String = "",
     val donation: String? = "",
     var group:String = "",
-    val money: Int? = 0,
+    var money: Int? = 0,
     val set: Int? = 0,
     val percentage: Int? = 0,
     var reason:String ?= "",
