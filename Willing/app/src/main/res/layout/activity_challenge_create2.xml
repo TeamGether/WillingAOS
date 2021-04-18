@@ -63,8 +63,9 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="50dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -120,8 +121,8 @@
                             android:id="@+id/textView8"
                             android:layout_width="68dp"
                             android:layout_height="19dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="24dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="20dp"
                             android:text="윌링머니 : "
                             android:textSize="16sp"
                             app:layout_constraintEnd_toStartOf="@+id/write_money"
@@ -148,7 +149,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:text="(최소금액 5000원)"
-                            android:textSize="8sp"
+                            android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="@+id/textView9"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
@@ -367,54 +368,6 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="34dp"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout13">
-
-                        <TextView
-                            android:id="@+id/textView26"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="이목표를 공개할까요 ?"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <View
-                            android:layout_width="180dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginBottom="4dp"
-
-                            android:alpha="0.5"
-                            android:background="@color/yellow"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/switch4"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent" />
-
-                        <Switch
-                            android:id="@+id/switch4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.9"
-                            app:layout_constraintStart_toEndOf="@+id/textView26"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0" />
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout7"
                         android:layout_width="match_parent"
                         android:layout_height="66dp"
@@ -491,8 +444,8 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout3"
                         android:layout_width="match_parent"
-                        android:layout_height="46dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
@@ -503,23 +456,25 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
                             android:text="시작 날짜 : "
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/year_spinner"
-                            app:layout_constraintHorizontal_bias="0.5"
+
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
 
                         <Spinner
                             android:id="@+id/year_spinner"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="@+id/textView5"
-                            app:layout_constraintEnd_toStartOf="@+id/textView11"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/textView5"
-                            app:layout_constraintTop_toTopOf="@+id/textView5" />
+                            android:layout_marginStart="8dp"
+                            android:entries="@array/year_list"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.826" />
 
                         <TextView
                             android:id="@+id/textView11"
@@ -529,7 +484,6 @@
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="@+id/year_spinner"
                             app:layout_constraintEnd_toStartOf="@+id/month_spinner"
-                            app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/year_spinner"
                             app:layout_constraintTop_toTopOf="@+id/year_spinner" />
 
@@ -538,12 +492,15 @@
                             android:id="@+id/month_spinner"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:entries="@array/month_list"
                             app:layout_constraintBottom_toBottomOf="@+id/textView11"
                             app:layout_constraintEnd_toStartOf="@+id/textView12"
                             app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintHorizontal_weight="0.2"
                             app:layout_constraintStart_toEndOf="@+id/textView11"
                             app:layout_constraintTop_toTopOf="@+id/textView11"
-                            app:layout_constraintVertical_bias="0.272" />
+                            app:layout_constraintVertical_bias="0.944" />
 
                         <TextView
                             android:id="@+id/textView12"
@@ -554,19 +511,22 @@
                             app:layout_constraintBottom_toBottomOf="@+id/month_spinner"
                             app:layout_constraintEnd_toStartOf="@+id/date_spinner"
                             app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintHorizontal_weight="0.2"
                             app:layout_constraintStart_toEndOf="@+id/month_spinner"
-                            app:layout_constraintTop_toTopOf="@+id/month_spinner" />
+                            app:layout_constraintTop_toTopOf="@+id/month_spinner"
+                            app:layout_constraintVertical_bias="0.0" />
 
                         <Spinner
                             android:id="@+id/date_spinner"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="@+id/textView12"
-                            app:layout_constraintEnd_toStartOf="@+id/textView13"
+
+                            android:layout_marginBottom="8dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/textView12"
-                            app:layout_constraintTop_toTopOf="@+id/textView12"
-                            app:layout_constraintVertical_bias="0.272" />
+                            app:layout_constraintHorizontal_weight="0.2"
+                            app:layout_constraintStart_toEndOf="@+id/textView12" />
 
                         <TextView
                             android:id="@+id/textView13"
@@ -577,8 +537,56 @@
                             app:layout_constraintBottom_toBottomOf="@+id/date_spinner"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintHorizontal_weight="0.2"
                             app:layout_constraintStart_toEndOf="@+id/date_spinner"
                             app:layout_constraintTop_toTopOf="@+id/date_spinner" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="34dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout13">
+
+                        <TextView
+                            android:id="@+id/textView26"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="이목표를 공개할까요 ?"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <View
+                            android:layout_width="180dp"
+                            android:layout_height="15dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginBottom="4dp"
+
+                            android:alpha="0.5"
+                            android:background="@color/yellow"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/switch4"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <Switch
+                            android:id="@+id/switch4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.9"
+                            app:layout_constraintStart_toEndOf="@+id/textView26"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

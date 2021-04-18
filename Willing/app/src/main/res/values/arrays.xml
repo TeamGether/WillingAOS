@@ -50,6 +50,8 @@
         <item>14</item>
     </string-array>
 
+
+
     <string-array name ="donationCenter_list">
     <item>선택</item>
     <item>그린피스</item>
@@ -60,6 +62,24 @@
     <item>굿네이버스</item>
     <item>유니세프</item>
     <item>초록우산</item>
+    </string-array>
 
+    <string-array name ="year_list">
+        <item>선택</item>
+        <item>2021</item>
+    </string-array>
+
+    <string-array name ="month_list">
+        <item>선택</item>
+        <item>1</item>
+        <item>1</item><item>2</item><item>3</item><item>4</item><item>5</item><item>6</item>
+        <item>7</item><item>8</item><item>9</item><item>10</item><item>11</item><item>12</item>
+
+
+    </string-array>
+
+    <string-array name ="date_list">
+        <item>선택</item>
+        <item>2021</item>
     </string-array>
 </resources>
