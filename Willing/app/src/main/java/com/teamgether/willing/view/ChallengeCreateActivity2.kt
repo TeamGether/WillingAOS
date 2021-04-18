@@ -2,13 +2,10 @@ package com.teamgether.willing.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.method.TextKeyListener.clear
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.teamgether.willing.MainActivity
@@ -21,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_challenge_create2.write_money
 import java.util.*
 
 
-class ChallengeCreateActivity2 :  ChallengeViewModel(){
+class ChallengeCreateActivity2 : ChallengeViewModel() {
 
     private val TAG = "Firestore"
 
@@ -49,7 +46,7 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                period_spinner.setSelection(0)
+                count_spinner.setSelection(0)
             }
 
         }
@@ -62,7 +59,7 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                period_spinner.setSelection(0)
+                donate_spinner.setSelection(0)
             }
 
         }
@@ -72,22 +69,33 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
         val detail = write_detail.text.toString()
 
 
-        start.setOnClickListener {
+        start_btn.setOnClickListener {
 
-            intent.putExtra("money", money)
-            intent.putExtra("set", set)
-            intent.putExtra("detail", detail)
-            intent.putExtra("period", period)
-            intent.putExtra("count", count)
-            intent.putExtra("donate", donate)
-//            intent.getStringExtra("title")
-//            intent.getStringExtra("reason")
-//            intent.getStringExtra("tobe")
+//            intent.putExtra("money", money)
+//            intent.putExtra("set", set)
+//            intent.putExtra("detail", detail)
+//            intent.putExtra("period", period)
+//            intent.putExtra("count", count)
+//            intent.putExtra("donate", donate)
+
+            val challengeInfo = ChallengeInfo()
+            challengeInfo.title = intent.getStringExtra("title")
+            Log.d("challenge2",challengeInfo.title.toString() )
+
+            challengeInfo.reason = intent.getStringExtra("reason")
+            Log.d("challenge2",challengeInfo.reason.toString() )
+
+            challengeInfo.tobe = intent.getStringExtra("tobe")
+            Log.d("challenge2",challengeInfo.tobe.toString() )
+
+
+
+            Log.d("intent test - title : ", intent.getStringExtra("title").toString())
 
             val data = hashMapOf(
-                "title" to ChallengeInfo("title").toString(),
-                "reason" to ChallengeInfo("reason").toString(),
-                "tobe" to ChallengeInfo("tobe").toString(),
+//                "title" to intent.getStringExtra("title"),
+//                "reason" to intent.getStringExtra("reason"),
+//                "tobe" to intent.getStringExtra("tobe"),
                 "money" to write_money.text.toString(),
                 "set" to write_set.text.toString(),
                 "detail" to write_detail.text.toString(),
@@ -116,10 +124,10 @@ class ChallengeCreateActivity2 :  ChallengeViewModel(){
         }
 
 
-        }
-
-
     }
+
+
+}
 
 
 

@@ -20,12 +20,7 @@ open class ChallengeViewModel : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         db = Firebase.firestore
 
-
-
-
-        fun setData() {
-
-        }
-
     }
+
+
 }
