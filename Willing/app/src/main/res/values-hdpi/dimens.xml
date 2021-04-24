@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="layout_margin">50dp</dimen>
+    <dimen name="title_margin">15dp</dimen>
+    <dimen name="text_margin_top">5dp</dimen>
+    <dimen name="text_margin_side">5dp</dimen>
+    <dimen name="profile_margin">25dp</dimen>
+    <dimen name="profile_update_margin">30dp</dimen>
+
+
 </resources>
