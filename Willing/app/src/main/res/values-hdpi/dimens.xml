@@ -6,6 +6,7 @@
     <dimen name="text_margin_side">5dp</dimen>
     <dimen name="profile_margin">25dp</dimen>
     <dimen name="profile_update_margin">30dp</dimen>
+    <dimen name="line_margin">10dp</dimen>
 
 
 </resources>
