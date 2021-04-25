@@ -166,7 +166,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/sc_dream4"
-                            android:text="가나다라마바사"
+                            android:text="책 읽는 사람 1회"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
@@ -175,7 +175,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/sc_dream4"
-                            android:text="아자차카타파하"
+                            android:text="운동 좋아하는 사람 2회"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
                     </LinearLayout>
