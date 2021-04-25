@@ -1,10 +1,13 @@
 package com.teamgether.willing.view
 
+import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.teamgether.willing.MainActivity
 import com.teamgether.willing.R
 import com.teamgether.willing.viewModel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
@@ -28,7 +31,7 @@ class LoginActivity : LoginViewModel() {
             if (email.isNotBlank() && password.isNotBlank()) {
                 login_warning_email.text = ""
                 login_warning_pwd.text = ""
-                login(email, password,::alertUser,::alertEmail)
+                login(email, password,::alertUser,::alertEmail,::gotoMain)
             } else {
                 if (email.isBlank()) {
                     login_warning_email.setText(R.string.login_warning_null)
@@ -47,6 +50,7 @@ class LoginActivity : LoginViewModel() {
         gotoSignUpBtn.setOnClickListener {
             val nextIntent = Intent(this, SignUpActivity::class.java)
             startActivity(nextIntent)
+            Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
     }
 
@@ -63,5 +67,14 @@ class LoginActivity : LoginViewModel() {
     }
     fun alertUser(){
         alertBuild(R.string.login_wrong_user_title,R.string.login_wrong_user_message,R.string.login_wrong_user_btnText)
+    }
+/*    fun gotoActivity(context: Context,activity:Activity){
+        val nextintent = Intent(context,activity::class.java)
+        startActivity((nextintent))
+    }*/
+    fun gotoMain(){
+        val nextIntent = Intent(this,MainActivity::class.java)
+        startActivity(nextIntent)
+        finish()
     }
 }

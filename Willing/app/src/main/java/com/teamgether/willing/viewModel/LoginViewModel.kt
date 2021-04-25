@@ -29,12 +29,18 @@ open class LoginViewModel : AppCompatActivity() {
 
     }
 
-    fun login(email: String, password: String, alertUser: () -> Unit, alertEmail: () -> Unit) {
+    fun login(
+        email: String,
+        password: String,
+        alertUser: () -> Unit,
+        alertEmail: () -> Unit,
+        gotoMain: () -> Unit
+    ) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.d("login", "성공")
                 val user = auth.currentUser
-                getUserVerification(alertEmail)
+                getUserVerification(alertEmail, gotoMain)
 
                 Log.d("userVerificationin ", user.isEmailVerified.toString())
 
@@ -49,18 +55,20 @@ open class LoginViewModel : AppCompatActivity() {
     //sentAlarm
 
     // email 인증 확인 후 intent
-    fun getUserVerification(alertEmail: () -> Unit) {
+    fun getUserVerification(alertEmail: () -> Unit, gotoMain: () -> Unit) {
         val user = Firebase.auth.currentUser
         if (user.isEmailVerified) {
             Log.d("userVerificationin ", user.isEmailVerified.toString())
             //인텐트
-            val nextIntent = Intent(this, MainActivity::class.java)
+            gotoMain()
+/*            val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
+            finish()*/
+
         } else {
             alertEmail()
             Firebase.auth.signOut()
         }
-
 
 //유저의 db 값이 false인지 판단 후 false면 User에게 Verfication mail을 send하고 true면 메인화면으로 진입할 수 있도록 한다.
 
