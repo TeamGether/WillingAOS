@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.teamgether.willing.Adapter.FeedAdapter
 import com.teamgether.willing.R
 import com.teamgether.willing.model.Feed
@@ -33,15 +34,16 @@ class RecentFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(view.context, 3)
 
         getFeed()
+
     }
 
     private fun getFeed() {
 
-        db.collection("Certification").get()
+        db.collection("Certification").orderBy("timestamp", Query.Direction.DESCENDING).get()
             .addOnSuccessListener { result ->
                 list = arrayListOf()
                 for (document in result) {
-                    var feed: Feed = Feed()
+                    val feed = Feed()
 
                     val picture = document["Imgurl"] as String
                     val id = document["challengeId"] as String

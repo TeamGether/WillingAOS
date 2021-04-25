@@ -1,9 +1,12 @@
 package com.teamgether.willing.Adapter
 
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -13,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.teamgether.willing.R
 import com.teamgether.willing.model.Feed
+import com.teamgether.willing.view.OtherDetailActivity
 
 class FeedAdapter (private var list: MutableList<Feed>): RecyclerView.Adapter<FeedAdapter.ViewHolder>(){
     private val storage: FirebaseStorage = FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
@@ -27,12 +31,26 @@ class FeedAdapter (private var list: MutableList<Feed>): RecyclerView.Adapter<Fe
                 if (task.isSuccessful) {
                     Glide.with(context)
                         .load(task.result)
+                        .override(150, 150)
+                        .centerCrop()
                         .into(CertiImg)
                 } else {
                     Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
+
+            itemView.setOnClickListener{
+                Intent(context, OtherDetailActivity::class.java).apply {
+                    putExtra("challengeId", data.challengeId)
+                    putExtra("imgUrl", data.pictureUrl)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }.run {
+                    context.startActivity(this)
+                    Log.d("Feed! :: " , data.pictureUrl + "")
+                }
+            }
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedAdapter.ViewHolder {
@@ -47,5 +65,6 @@ class FeedAdapter (private var list: MutableList<Feed>): RecyclerView.Adapter<Fe
     override fun onBindViewHolder(holder: FeedAdapter.ViewHolder, position: Int) {
         holder.bind(list[position], holder.CertiImg.context)
     }
+
 
 }

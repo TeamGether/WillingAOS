@@ -52,6 +52,7 @@ class FollowFragment : Fragment() {
                     list.add(feed)
                 }
                 adapter = FeedAdapter(list)
+                adapter.notifyDataSetChanged()
                 recyclerView.adapter = adapter
             }
             .addOnFailureListener { exception ->
