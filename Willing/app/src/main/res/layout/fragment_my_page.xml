@@ -36,7 +36,7 @@
                 android:layout_marginStart="@dimen/profile_margin"
                 android:fontFamily="@font/sc_dream7"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="23sp"
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/menu_btn"
@@ -161,23 +161,10 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/mp_flag_img">
 
-                        <TextView
-                            android:id="@+id/textView5"
+                        <ListView
+                            android:id="@+id/mp_tobe_list"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/sc_dream4"
-                            android:text="책 읽는 사람 1회"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/textView6"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/sc_dream4"
-                            android:text="운동 좋아하는 사람 2회"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -247,7 +234,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout7"
-                android:layout_width="411dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/title_margin"
                 android:weightSum="2"
@@ -284,10 +271,11 @@
                     app:layout_constraintStart_toEndOf="@+id/mp_aloneCh_btn"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <view
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="1.5px"
+                    android:layout_height="3dp"
                     android:layout_marginTop="@dimen/line_margin"
+                    android:background="#595959"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -306,10 +294,10 @@
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent="0.5">
 
-                    <view
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="4px"
-                        android:background="@color/yellow"
+                        android:layout_height="3dp"
+                        android:background="@color/colorPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -336,6 +324,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mp_challenge_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
