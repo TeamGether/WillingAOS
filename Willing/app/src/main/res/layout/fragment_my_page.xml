@@ -319,6 +319,8 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/line_margin"
+                android:layout_marginBottom="@dimen/title_margin"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -328,8 +330,7 @@
                     android:id="@+id/mp_challenge_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/item_challenge_mp"
-                    />
+                    tools:listitem="@layout/item_challenge_mp" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
