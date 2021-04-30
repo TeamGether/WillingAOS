@@ -327,7 +327,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/mp_challenge_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/item_challenge_mp"
+                    />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
