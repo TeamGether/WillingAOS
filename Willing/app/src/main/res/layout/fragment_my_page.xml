@@ -79,7 +79,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/mp_nickName" />
+                        app:layout_constraintTop_toBottomOf="@+id/mp_nickName"
+                        />
 
                     <TextView
                         android:id="@+id/mp_nickName"
@@ -173,9 +174,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/title_margin"
-                    android:layout_marginTop="@dimen/text_margin_top"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <TextView
                         android:id="@+id/mp_follow_tv"
@@ -248,8 +248,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sc_dream5"
-                    android:text="혼자 하는 챌린지"
                     android:textColor="@color/black"
+                    android:text="혼자 하는 챌린지"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/mp_groupCh_btn"
                     app:layout_constraintEnd_toStartOf="@+id/mp_groupCh_btn"
@@ -264,7 +264,6 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sc_dream5"
                     android:text="같이 하는 챌린지"
-                    android:textColor="@color/black"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -330,7 +329,7 @@
                     android:id="@+id/mp_challenge_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/item_challenge_mp" />
+                    tools:listitem="@layout/item_private_mp" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
