@@ -33,12 +33,11 @@
                 android:id="@+id/mp_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/profile_margin"
                 android:fontFamily="@font/sc_dream7"
                 android:textColor="@color/black"
                 android:textSize="23sp"
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/constraintLayout5"
                 app:layout_constraintTop_toBottomOf="@+id/menu_btn"
                 app:layout_constraintVertical_chainStyle="packed"
                 tools:text="@string/mp_title" />
@@ -79,8 +78,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/mp_nickName"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/mp_nickName" />
 
                     <TextView
                         android:id="@+id/mp_nickName"
@@ -130,6 +128,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="112dp"
                     android:layout_marginTop="@dimen/text_margin_top"
+                    android:layout_marginBottom="@dimen/text_margin_top"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayout6"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
@@ -173,9 +172,8 @@
                     android:id="@+id/constraintLayout6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/title_margin"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintStart_toStartOf="@+id/mp_profile_img">
 
                     <TextView
                         android:id="@+id/mp_follow_tv"
