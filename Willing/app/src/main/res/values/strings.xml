@@ -29,12 +29,16 @@
     <string name="login_wrong_user_message">이메일과 비밀번호를 확인해주세요</string>
     <string name="login_wrong_user_btnText">확인</string>
 
-
     <string name="email_verification_title">이메일 확인을 통해 메일 인증을 진행해주세요!</string>
     <string name="email_verification_message">입력하신 메일의 메일함에 들어가 인증 링크를 눌러주세요!</string>
     <string name="email_verification_btnText">확인</string>
 
 
     <string name="ranking_donate">이번달 기부왕</string>
+
+    <string name="mp_title">My Page</string>
+    <string name="mp_profile_update_btn">프로필 수정</string>
+    <string name="mp_follow">팔로우</string>
+    <string name="mp_following">팔로잉</string>
 
 </resources>
