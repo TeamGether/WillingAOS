@@ -11,42 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <TextView
 
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
             android:text="진행중인 목표"
             android:textColor="@color/black"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.109"
+            app:layout_constraintHorizontal_bias="0.049"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-
-        <ListView
-            android:id="@+id/working_list"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            app:layout_constraintBottom_toTopOf="@+id/plus_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <Button
             android:id="@+id/plus_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="332dp"
+            android:layout_marginBottom="12dp"
             android:text="추가하기"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintHorizontal_bias="0.383"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/refresh_btn"
@@ -60,6 +50,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/plus_btn"
             app:layout_constraintVertical_bias="0.965" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_challenge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,13 +6,16 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.database.*
 import com.google.firestore.v1.DocumentTransform
+import com.teamgether.willing.Fragment.ChallengeFragment
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeInfo
 import com.teamgether.willing.viewModel.ChallengeViewModel
 import kotlinx.android.synthetic.main.activity_challenge_create.*
 import kotlinx.android.synthetic.main.activity_challenge_create2.*
+import kotlinx.android.synthetic.main.activity_challenge_list.*
 import java.sql.Types.TIMESTAMP
 
 
@@ -42,15 +45,18 @@ class ChallengeCreateActivity() : ChallengeViewModel() {
         }
 
 
-        val title : String? = write_title.text.toString()
-        val reason : String? = write_reason.text.toString()
-        val tobe : String?= write_tobe.text.toString()
+
+
+
 
 
         nextpage.setOnClickListener {
-
-
             val intent = Intent(this, ChallengeCreateActivity2::class.java)
+
+            val title : String? = write_title.text.toString()
+            val reason : String? = write_reason.text.toString()
+            val tobe : String?= write_tobe.text.toString()
+
 
 //            intent.putExtra("challengeInfo", challengeInfo)
             intent.putExtra("title", title)
@@ -59,6 +65,12 @@ class ChallengeCreateActivity() : ChallengeViewModel() {
             Log.d("challenge1",challengeInfo.reason.toString() )
             intent.putExtra("tobe", tobe)
             Log.d("challenge1",challengeInfo.tobe.toString() )
+
+            var challengeFragment = ChallengeFragment()
+            var bundle = Bundle()
+            this.supportFragmentManager.beginTransaction().commit()
+            bundle.putString("title",title)
+            challengeFragment.arguments = bundle
 
 
             startActivity(intent)

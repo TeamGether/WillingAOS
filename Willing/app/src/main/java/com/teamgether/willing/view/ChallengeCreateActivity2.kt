@@ -64,19 +64,48 @@ class ChallengeCreateActivity2 : ChallengeViewModel() {
 
         }
 
+        var year = resources.getStringArray(R.array.year_list)
+        var adapter4 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, year)
+        year_spinner.adapter = adapter4
+        year_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+
+        }
+
+        var month = resources.getStringArray(R.array.month_list)
+        var adapter5 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, month)
+        month_spinner.adapter = adapter5
+        month_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+
+        }
+
+        var date = resources.getStringArray(R.array.date_list)
+        var adapter6 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,date)
+        month_spinner.adapter = adapter6
+        month_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+
+        }
+
         val money = write_money.text.toString()
         val set = write_set.text.toString()
         val detail = write_detail.text.toString()
 
 
         start_btn.setOnClickListener {
-
-//            intent.putExtra("money", money)
-//            intent.putExtra("set", set)
-//            intent.putExtra("detail", detail)
-//            intent.putExtra("period", period)
-//            intent.putExtra("count", count)
-//            intent.putExtra("donate", donate)
 
             val challengeInfo = ChallengeInfo()
             challengeInfo.title = intent.getStringExtra("title")
@@ -89,19 +118,26 @@ class ChallengeCreateActivity2 : ChallengeViewModel() {
             Log.d("challenge2",challengeInfo.tobe.toString() )
 
 
+            intent.putExtra("count", count)
+            intent.putExtra("doante", donate)
+
+
 
             Log.d("intent test - title : ", intent.getStringExtra("title").toString())
 
             val data = hashMapOf(
-//                "title" to intent.getStringExtra("title"),
-//                "reason" to intent.getStringExtra("reason"),
-//                "tobe" to intent.getStringExtra("tobe"),
+                "title" to intent.getStringExtra("title"),
+                "reason" to intent.getStringExtra("reason"),
+                "tobe" to intent.getStringExtra("tobe"),
                 "money" to write_money.text.toString(),
                 "set" to write_set.text.toString(),
                 "detail" to write_detail.text.toString(),
                 "period" to period_spinner.selectedItem.toString(),
                 "count" to count_spinner.selectedItem.toString(),
-                "doante" to donate_spinner.selectedItem.toString()
+                "doante" to donate_spinner.selectedItem.toString(),
+                "year" to year_spinner.selectedItem.toString(),
+                "month" to month_spinner.selectedItem.toString(),
+                "date" to month_spinner.selectedItem.toString()
 
             )
 
@@ -117,7 +153,8 @@ class ChallengeCreateActivity2 : ChallengeViewModel() {
                 }
 
 
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, ChallengeCheckActivity::class.java)
+            Log.d("intent test - title : ", intent.toString())
             startActivity(intent)
 
 

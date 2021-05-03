@@ -9,7 +9,7 @@ data class ChallengeInfo(
     var group:String = "",
     var money: Int? = 0,
     val set: Int? = 0,
-    val percentage: Int? = 0,
+    val percent: Int? = 0,
     var reason:String ?= "",
     val show:Boolean ?= false,
     val success:Boolean ?= false,

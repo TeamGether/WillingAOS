@@ -1,30 +1,32 @@
 package com.teamgether.willing.Fragment
 
-import android.content.ContentValues.TAG
 import android.content.Intent
+import android.database.DatabaseErrorHandler
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.TextView
 
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.squareup.okhttp.Challenge
 import com.teamgether.willing.R
+import com.teamgether.willing.model.ChallengeInfo
 import com.teamgether.willing.view.GroupChoiceActivity
-import kotlinx.android.synthetic.main.activity_challenge_create.*
+import kotlinx.android.synthetic.main.activity_challenge_list.*
 import kotlinx.android.synthetic.main.fragment_challenge.*
-import kotlinx.android.synthetic.main.fragment_challenge.view.*
+import kotlin.toString as toString1
 
 
 class ChallengeFragment : Fragment() {
 
+    var firestore : FirebaseFirestore? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,52 +35,46 @@ class ChallengeFragment : Fragment() {
 
     }
 
-    val list: MutableList<Challenge> = mutableListOf()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val db = Firebase.firestore
         db.collection("Challenge")
+        val firestore = FirebaseFirestore.getInstance()
 
-        refresh_btn.setOnClickListener {
 
 
+
+        val tv_title = arguments?.getString("title")
+
+
+
+        val challengeList = arrayListOf<ChallengeInfo>()
+        fun notifyDataSetChanged() {
 
         }
+
+
+
+        rv_challenge.layoutManager = LinearLayoutManager(getActivity()?.getApplicationContext(),LinearLayoutManager.VERTICAL,false)
+        rv_challenge.setHasFixedSize(true)
+        rv_challenge.adapter = ChallengeAdapter(challengeList)
+
+        
+
 
         plus_btn.setOnClickListener {
-            var intent = Intent(view.context, GroupChoiceActivity::class.java)
+
+            val intent = Intent(view.context, GroupChoiceActivity::class.java)
             startActivity(intent)
         }
+
+
+
+
     }
 
-    private fun listRefresh() {
-        list.removeAll { true }
-
-        abstract class lstAdp : BaseAdapter() {
-            override fun getCount(): Int {
-                return list.size
-            }
 
 
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
-
-                var view: View? = convertView
-                if (convertView == null) {
-                    view = layoutInflater.inflate(R.layout.fragment_challenge, null)
-                }
-
-                var txt1 = view?.findViewById<TextView>(R.id.working_list)
-
-                txt1?.text = "${list[position].toString()} "
-
-
-                return view
-            }
-
-
-        }
-    }
 }
 
 

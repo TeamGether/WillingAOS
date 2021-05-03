@@ -34,6 +34,7 @@
         <activity android:name=".view.ChallengeCreateActivity" />
 
         <activity android:name=".view.ChallengeCreateActivity2" />
+        <activity android:name=".view.ChallengeCheckActivity" />
 
     </application>
 
