@@ -29,6 +29,13 @@
             {
               "client_id": "335112792876-vdj24qpce8pshlgctcm5s4qs4ptn1vt1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "335112792876-grkakuaohrfeq1sidndpkvhqtm1algae.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.KimSJ.Willing"
+              }
             }
           ]
         }
