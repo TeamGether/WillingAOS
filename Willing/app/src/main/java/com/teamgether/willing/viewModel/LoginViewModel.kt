@@ -40,8 +40,10 @@ open class LoginViewModel : AppCompatActivity() {
             if (task.isSuccessful) {
                 Log.d("login", "성공")
                 val user = auth.currentUser
-                getUserVerification(alertEmail, gotoMain)
-
+                //getUserVerification(alertEmail, gotoMain)
+                val nextIntent = Intent(this, MainActivity::class.java)
+                startActivity(nextIntent)
+                finish()
                 Log.d("userVerificationin ", user.isEmailVerified.toString())
 
             } else {
