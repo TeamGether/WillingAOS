@@ -1,5 +1,6 @@
 package com.teamgether.willing.view
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,17 +8,18 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.teamgether.willing.R
+import com.teamgether.willing.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_challenge_create.*
+import kotlinx.android.synthetic.main.activity_challenge_list.*
 
 
 class ChallengeCreateActivity() : AppCompatActivity() {
 
     private val TAG = "Firestore"
 
-
-
     val items = arrayOf<String>("건강", "공부", "기타")
     val itemBank = arrayOf<String>("카카오뱅크", "농협", "신한","sc제일")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +97,7 @@ class ChallengeCreateActivity() : AppCompatActivity() {
 
             val intent = Intent(this@ChallengeCreateActivity, ChallengeCheck::class.java)
             intent.putExtra("category", selectCategory)
-            Log.d("challenge1", "category :: $category")
+            Log.d("challenge1", "category :: $selectCategory")
             intent.putExtra("title", title)
 
             Log.d("challenge1", "title :: ${title.toString()}")
@@ -119,10 +121,13 @@ class ChallengeCreateActivity() : AppCompatActivity() {
             intent.putExtra("expose", expose)
             Log.d("challenge1", "expose :: $expose")
 
+
+
             startActivity(intent)
         }
 
     }
+
 
 
 }

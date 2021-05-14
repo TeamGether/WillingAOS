@@ -3,6 +3,7 @@ package com.teamgether.willing.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,6 +23,7 @@ class ChallengeCheck : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_challenge_check)
 
 //
@@ -46,6 +48,11 @@ class ChallengeCheck : AppCompatActivity() {
 
 
         )
+
+        title_tv.text = intent.getStringExtra("title")
+        money_tv.text = intent.getStringExtra("money")
+        period_tv.text = intent.getStringExtra("period")
+        account_tv.text = intent.getStringExtra("account")
 
 
         start_btn.setOnClickListener {
