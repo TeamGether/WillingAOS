@@ -29,12 +29,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.GroupChoiceActivity"/>
 
         <activity android:name=".view.ChallengeCreateActivity" />
+        <activity android:name=".view.ChallengeCheck" />
 
-        <activity android:name=".view.ChallengeCreateActivity2" />
-        <activity android:name=".view.ChallengeCheckActivity" />
 
     </application>
 

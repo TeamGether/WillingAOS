@@ -1,87 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name ="money_list">
+
+    <string-array name ="category_list">
         <item>선택</item>
-        <item>1만원</item>
-        <item>2만원</item>
-        <item>3만원</item>
-        <item>5만원</item>
-        <item>10만원</item>
-        <item>15만원</item>
-        <item>20만원</item>
-        <item>30만원</item>
+        <item>건강</item>
+        <item>공부</item>
+        <item>기타</item>
     </string-array>
 
-
-    <string-array name ="period_list">
+    <string-array name ="bank_list">
         <item>선택</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-    </string-array>
-
-    <string-array name ="count_list">
-        <item>선택</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
+        <item>농협</item>
+        <item>카카오</item>
+        <item>기타</item>
     </string-array>
 
 
 
-    <string-array name ="donationCenter_list">
-    <item>선택</item>
-    <item>그린피스</item>
-    <item>월드비전</item>
-    <item>세이브 더 칠드런</item>
-    <item>wwf</item>
-    <item>한국여성재단</item>
-    <item>굿네이버스</item>
-    <item>유니세프</item>
-    <item>초록우산</item>
-    </string-array>
-
-    <string-array name ="year_list">
-        <item>선택</item>
-        <item>2021</item>
-    </string-array>
-
-    <string-array name ="month_list">
-        <item>선택</item>
-        <item>1</item>
-        <item>1</item><item>2</item><item>3</item><item>4</item><item>5</item><item>6</item>
-        <item>7</item><item>8</item><item>9</item><item>10</item><item>11</item><item>12</item>
 
 
-    </string-array>
 
-    <string-array name ="date_list">
-        <item>선택</item>
-        <item>1</item>
-        <item>1</item><item>2</item><item>3</item><item>4</item><item>5</item><item>6</item>
-        <item>7</item><item>8</item><item>9</item><item>10</item><item>11</item><item>12</item>
-    </string-array>
+
 </resources>

@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.teamgether.willing.Fragment.*
 import com.teamgether.willing.databinding.ActivityMainBinding
-import com.teamgether.willing.view.GroupChoiceActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -24,9 +23,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.main = this
-
         binding.mainBottomNavigation.setOnNavigationItemSelectedListener(this)
-
         supportFragmentManager.beginTransaction().add(R.id.main_frameLayout, ChallengeFragment()).commit()
 
     }
