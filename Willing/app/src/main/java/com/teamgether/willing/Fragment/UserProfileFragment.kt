@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.teamgether.willing.R
+import com.teamgether.willing.model.Following
 import com.teamgether.willing.model.UserInfo
 import kotlinx.android.synthetic.main.fragment_my_page.*
 
@@ -32,8 +34,10 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val email = user.email
         val imageUrl = ""
+        val friend = "Following"
         val name = userInfo.name
         getUserData(email)
+        getFriendsCount(friend)
 
     }
 
@@ -51,7 +55,12 @@ class MyPageFragment : Fragment() {
             Log.w("TAG", "Error getting documents: ", exception)
         }
     }
-    fun getFollowerCount(){
 
+    fun getFriendsCount(friend: String) {
+        db.collection(friend).document(user.email).get().addOnSuccessListener { documents ->
+            documents.data?.values?.size
+        }.addOnFailureListener { e ->
+            Log.w("TAG", "getFriendsCount: ", e)
+        }
     }
 }
