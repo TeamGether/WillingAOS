@@ -7,13 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ProfileInfo
 import kotlinx.android.synthetic.main.fragment_user_profile.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class UserProfileFragment : Fragment() {
     private var auth = FirebaseAuth.getInstance()
@@ -38,6 +46,8 @@ class UserProfileFragment : Fragment() {
     val email = "email"
     val tobe = "tobe"
     val profileImg = "profileImg"
+    private val FOLLOWER = "Follower"
+    private val FOLLOWING = "Following"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +60,7 @@ class UserProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mp_profile_img.clipToOutline = true
-        if(user != null){
+        if (user != null) {
             mp_follow_btn.isVisible = false
         }
         getUserData()
@@ -71,6 +81,8 @@ class UserProfileFragment : Fragment() {
                 mp_nickName.text = profileInfo.name
 
                 getProfleImg(profileInfo.profileImg.toString(), this)
+                getFollowFollowingData(FOLLOWER, user.email)
+                getFollowFollowingData(FOLLOWING, user.email)
 
             }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
@@ -91,9 +103,21 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    fun followerCount(){
 
+    fun getFollowFollowingData(collectionName: String, email: String) {
+
+        db.collection(collectionName).document(email).get().addOnSuccessListener { result ->
+            if (collectionName.equals(FOLLOWER)) {
+                val follow = result["follower"] as ArrayList<String>
+                mp_follow_user.text = follow.size.toString()
+
+            } else {
+                val following = result["following"] as ArrayList<String>
+                mp_following_user.text = following.size.toString()
+            }
+
+
+        }
     }
-
 
 }
