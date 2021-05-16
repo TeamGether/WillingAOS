@@ -5,62 +5,95 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
+import com.google.firebase.storage.FirebaseStorage
 import com.teamgether.willing.R
-import com.teamgether.willing.model.Following
-import com.teamgether.willing.model.UserInfo
-import kotlinx.android.synthetic.main.fragment_my_page.*
+import com.teamgether.willing.model.ProfileInfo
+import kotlinx.android.synthetic.main.fragment_user_profile.*
 
-class MyPageFragment : Fragment() {
-
-    val user: FirebaseUser = FirebaseAuth.getInstance().currentUser
+class UserProfileFragment : Fragment() {
+    private var auth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
-    var userInfo = UserInfo()
+    private val storage: FirebaseStorage =
+        FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
+    val user = auth.currentUser
+
+    var profileInfo: ProfileInfo = ProfileInfo(
+        profileImg = "",
+        name = "",
+        email = "",
+        tobeTitleCount = mapOf("tobe" to 0),
+        challengeTitlePercent = mapOf("title" to 0),
+        followCount = 0,
+        followerCount = 0,
+        followStatus = "",
+        isMine = false
+    )
+
+    val name = "name"
+    val email = "email"
+    val tobe = "tobe"
+    val profileImg = "profileImg"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-
-    ): View? {
-        return inflater.inflate(R.layout.fragment_my_page, container, false)
+    ): View {
+        return inflater.inflate(R.layout.fragment_user_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val email = user.email
-        val imageUrl = ""
-        val friend = "Following"
-        val name = userInfo.name
-        getUserData(email)
-        getFriendsCount(friend)
 
+        mp_profile_img.clipToOutline = true
+        if(user != null){
+            mp_follow_btn.isVisible = false
+        }
+        getUserData()
     }
 
-    fun getUserData(email: String) {
-        db.collection("User").whereEqualTo("email", email).get().addOnSuccessListener { documents ->
-            for (document in documents) {
-                userInfo.email = user.email
-                val userdata = documents.toObjects<UserInfo>()
-                userInfo = userdata[0]
+    fun getUserData() {
+        db.collection("User").whereEqualTo("email", user.email).get()
+            .addOnSuccessListener { result ->
+                val document = result.documents[0]
+                Log.d("TAG", "result:${document} ")
+                profileInfo.name = document[name] as String
+                profileInfo.email = document[email] as String
+                profileInfo.profileImg = document[profileImg] as String
+                if (user != null) {
+                    profileInfo.isMine = true
+                }
+                mp_email.text = profileInfo.email
+                mp_nickName.text = profileInfo.name
 
-                mp_email.setText(userInfo.email)
-                mp_nickName.setText(userInfo.name)
+                getProfleImg(profileInfo.profileImg.toString(), this)
+
+            }.addOnFailureListener { exception ->
+                Log.w("TAG", "Error getting documents: ", exception)
             }
-        }.addOnFailureListener { exception ->
-            Log.w("TAG", "Error getting documents: ", exception)
+    }
+
+    fun getProfleImg(data: String, context: UserProfileFragment) {
+        storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Glide.with(context)
+                    .load(task.result)
+                    .override(150, 150)
+                    .centerCrop()
+                    .into(mp_profile_img)
+            } else {
+                Log.d("error", "error:${error("")}")
+            }
         }
     }
 
-    fun getFriendsCount(friend: String) {
-        db.collection(friend).document(user.email).get().addOnSuccessListener { documents ->
-            documents.data?.values?.size
-        }.addOnFailureListener { e ->
-            Log.w("TAG", "getFriendsCount: ", e)
-        }
+    fun followerCount(){
+
     }
+
+
 }
