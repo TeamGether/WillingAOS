@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 return true
             }
             R.id.menu_mypage -> {
-                supportFragmentManager.beginTransaction().replace(R.id.main_frameLayout, MyPageFragment()).commitAllowingStateLoss()
+                supportFragmentManager.beginTransaction().replace(R.id.main_frameLayout, UserProfileFragment()).commitAllowingStateLoss()
                 return true
             }
         }
