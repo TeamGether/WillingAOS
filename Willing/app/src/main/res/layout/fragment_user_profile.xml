@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <data>
-        <variable
-            name="profileInfo"
-            type="com.teamgether.willing.model.ProfileInfo" />
-    </data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -106,7 +102,7 @@
                             android:layout_marginTop="@dimen/text_margin_top"
                             android:layout_marginBottom="@dimen/text_margin_top"
                             android:fontFamily="@font/sc_dream5"
-                            android:text="@{profileInfo.email,default=qwerty_gmail_com}"
+                            android:text="qwerty_gmail_com"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -121,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_margin_top"
                             android:fontFamily="@font/sc_dream5"
-                            android:text="@{profileInfo.name,default= 디폴드값임진짜임}"
+                            android:text="디폴드값임진짜임"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             app:layout_constraintBottom_toTopOf="@+id/mp_email"
@@ -145,25 +141,16 @@
 
                     <ImageView
                         android:id="@+id/mp_profile_img"
-                        android:layout_width="73dp"
-                        android:layout_height="75dp"
-                        android:src="@drawable/user"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/mp_profile_image_view"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_launcher_background"
                         app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
                         app:layout_constraintHorizontal_chainStyle="spread"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/constraintLayout3"
                         app:layout_constraintVertical_bias="0.0" />
-
-                    <Button
-                        android:id="@+id/mp_follow_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:fontFamily="@font/sc_dream4"
-                        android:text="팔로잉중"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -184,7 +171,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/sc_dream5"
-                        android:text="챌린지 모아보기"
+                        android:text="@string/mp_ch_headline"
                         android:textColor="@color/post"
                         android:textSize="22sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -230,7 +217,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/text_margin_side"
                         android:fontFamily="@font/sc_dream5"
-                        android:text="@{profileInfo.followCount,default=100}"
+                        android:text="100"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="@+id/mp_follow_tv"
@@ -243,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/text_margin_side"
                         android:fontFamily="@font/sc_dream5"
-                        android:text="@{profileInfo.followerCount,default=100}"
+                        android:text="100"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="@+id/mp_following_tv"
@@ -264,6 +251,16 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.49" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/mp_follow_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:fontFamily="@font/sc_dream4"
+                    android:text="팔로잉중"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout5"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

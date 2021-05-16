@@ -40,5 +40,6 @@
     <string name="mp_profile_update_btn">프로필 수정</string>
     <string name="mp_follow">팔로우</string>
     <string name="mp_following">팔로잉</string>
+    <string name="mp_ch_headline">챌린지 모아보기</string>
 
 </resources>
