@@ -8,28 +8,28 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
-import com.teamgether.willing.LoadingDialog
+import com.teamgether.willing.Adapter.ChallengeListAdapter
+import com.teamgether.willing.Adapter.FeedAdapter
 import com.teamgether.willing.R
+import com.teamgether.willing.model.ChallengeList
+import com.teamgether.willing.model.Comment
+import com.teamgether.willing.model.Feed
 import com.teamgether.willing.model.ProfileInfo
 import kotlinx.android.synthetic.main.fragment_user_profile.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.item_challenge_mp.*
 
 class UserProfileFragment : Fragment() {
+    private lateinit var list: ArrayList<ChallengeList>
     private var auth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
     private val storage: FirebaseStorage =
         FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
     val user = auth.currentUser
-
     var profileInfo: ProfileInfo = ProfileInfo(
         profileImg = "",
         name = "",
@@ -41,6 +41,8 @@ class UserProfileFragment : Fragment() {
         followStatus = "",
         isMine = false
     )
+
+    private lateinit var adapter: ChallengeListAdapter
 
     val name = "name"
     val email = "email"
@@ -59,18 +61,34 @@ class UserProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mp_profile_img.clipToOutline = true
+        mp_profile_img.clipToOutline = true //프로필 이미지 가장자리 클립
+
         if (user != null) {
             mp_follow_btn.isVisible = false
-        }
+        } //팔로잉버튼 숨기기
+
         getUserData()
+        getChallenge()
     }
 
-    fun getUserData() {
+    private fun getProfleImg(data: String, context: UserProfileFragment) {
+        storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Glide.with(context)
+                    .load(task.result)
+                    .override(150, 150)
+                    .centerCrop()
+                    .into(mp_profile_img)
+            } else {
+                Log.d("error", "error:${error("")}")
+            }
+        }
+    }
+
+    private fun getUserData() {
         db.collection("User").whereEqualTo("email", user.email).get()
             .addOnSuccessListener { result ->
                 val document = result.documents[0]
-                Log.d("TAG", "result:${document} ")
                 profileInfo.name = document[name] as String
                 profileInfo.email = document[email] as String
                 profileInfo.profileImg = document[profileImg] as String
@@ -86,26 +104,37 @@ class UserProfileFragment : Fragment() {
 
             }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
+            } //User info get from firestore db
+    }
+
+    private fun getChallenge() {
+        val challengeList = ChallengeList()
+        val subjectField = "subject"
+        val titleField = "title"
+        val percentField = "percent"
+        db.collection("Challenge").whereEqualTo("UID", user.email).get()
+            .addOnSuccessListener { result ->
+                list = arrayListOf()
+                for (document in result) {
+                    val challenges = ChallengeList()
+                    val subject = document[subjectField] as String
+                    val title = document[titleField] as String
+                    val percent = document[percentField] as Number
+
+                    challenges.subject = subject
+                    challenges.title = title
+                    challenges.percent = percent
+
+                    list.add(challenges)
+//                        data.percent = document[percentField] as Int
+                }
+                adapter = ChallengeListAdapter(list)
+                adapter.notifyDataSetChanged()
+                mp_challenge_list.adapter = adapter
             }
     }
 
-    fun getProfleImg(data: String, context: UserProfileFragment) {
-        storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Glide.with(context)
-                    .load(task.result)
-                    .override(150, 150)
-                    .centerCrop()
-                    .into(mp_profile_img)
-            } else {
-                Log.d("error", "error:${error("")}")
-            }
-        }
-    }
-
-
-    fun getFollowFollowingData(collectionName: String, email: String) {
-
+    private fun getFollowFollowingData(collectionName: String, email: String) {
         db.collection(collectionName).document(email).get().addOnSuccessListener { result ->
             if (collectionName.equals(FOLLOWER)) {
                 val follow = result["follower"] as ArrayList<String>
@@ -115,9 +144,6 @@ class UserProfileFragment : Fragment() {
                 val following = result["following"] as ArrayList<String>
                 mp_following_user.text = following.size.toString()
             }
-
-
         }
     }
-
 }
