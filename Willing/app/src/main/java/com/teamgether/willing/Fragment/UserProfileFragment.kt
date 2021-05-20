@@ -1,29 +1,29 @@
 package com.teamgether.willing.Fragment
 
+import android.app.Activity
+import android.content.Context
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.teamgether.willing.Adapter.ChallengeListAdapter
-import com.teamgether.willing.Adapter.FeedAdapter
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
-import com.teamgether.willing.model.Comment
-import com.teamgether.willing.model.Feed
 import com.teamgether.willing.model.ProfileInfo
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.item_challenge_mp.*
 
 class UserProfileFragment : Fragment() {
+    private lateinit var  activity:Activity
     private lateinit var list: ArrayList<ChallengeList>
     private var auth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
@@ -50,6 +50,13 @@ class UserProfileFragment : Fragment() {
     val profileImg = "profileImg"
     private val FOLLOWER = "Follower"
     private val FOLLOWING = "Following"
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if(context is Activity){
+            activity = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -108,7 +115,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun getChallenge() {
-        val challengeList = ChallengeList()
+        //원래는 다른사람 피드 보면서 그 사람 페이지로 이동할 때 유저가 누구인지에 대해 값을 받아야하지만 아직 연결되지않았기 떄문에 당장은 current User로 받도록 하겠음
         val subjectField = "subject"
         val titleField = "title"
         val percentField = "percent"
@@ -121,14 +128,20 @@ class UserProfileFragment : Fragment() {
                     val title = document[titleField] as String
                     val percent = document[percentField] as Number
 
+                    //if문으로 background color 바꿔주기?
+
+
+
                     challenges.subject = subject
                     challenges.title = title
                     challenges.percent = percent
 
+
+
                     list.add(challenges)
 //                        data.percent = document[percentField] as Int
                 }
-                adapter = ChallengeListAdapter(list)
+                adapter = ChallengeListAdapter(list,activity)
                 adapter.notifyDataSetChanged()
                 mp_challenge_list.adapter = adapter
             }
