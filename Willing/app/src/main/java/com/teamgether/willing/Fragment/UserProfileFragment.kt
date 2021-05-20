@@ -2,13 +2,12 @@ package com.teamgether.willing.Fragment
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.drawable.GradientDrawable
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -19,8 +18,8 @@ import com.teamgether.willing.Adapter.ChallengeListAdapter
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
 import com.teamgether.willing.model.ProfileInfo
+import com.teamgether.willing.view.ChallengeDetailActivity
 import kotlinx.android.synthetic.main.fragment_user_profile.*
-import kotlinx.android.synthetic.main.item_challenge_mp.*
 
 class UserProfileFragment : Fragment() {
     private lateinit var  activity:Activity
@@ -42,7 +41,7 @@ class UserProfileFragment : Fragment() {
         isMine = false
     )
 
-    private lateinit var adapter: ChallengeListAdapter
+    private lateinit var challengeListAdapter: ChallengeListAdapter
 
     val name = "name"
     val email = "email"
@@ -76,6 +75,7 @@ class UserProfileFragment : Fragment() {
 
         getUserData()
         getChallenge()
+
     }
 
     private fun getProfleImg(data: String, context: UserProfileFragment) {
@@ -129,21 +129,16 @@ class UserProfileFragment : Fragment() {
                     val percent = document[percentField] as Number
 
                     //if문으로 background color 바꿔주기?
-
-
-
                     challenges.subject = subject
                     challenges.title = title
                     challenges.percent = percent
 
-
-
                     list.add(challenges)
 //                        data.percent = document[percentField] as Int
+                    challengeListAdapter = ChallengeListAdapter(list,activity)
+                    challengeListAdapter.notifyDataSetChanged()
+                    mp_challenge_list.adapter = challengeListAdapter
                 }
-                adapter = ChallengeListAdapter(list,activity)
-                adapter.notifyDataSetChanged()
-                mp_challenge_list.adapter = adapter
             }
     }
 

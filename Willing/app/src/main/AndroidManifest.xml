@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Willing"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.OtherDetailActivity"></activity>
+        <activity android:name=".view.OtherDetailActivity" />
         <activity android:name=".SplashActivity" />
         <activity android:name=".view.SignUpActivity" />
         <activity android:name=".view.LoginActivity">
@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+        <activity android:name=".view.ChallengeDetailActivity"/>
     </application>
 
 </manifest>

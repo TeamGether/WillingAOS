@@ -1,20 +1,17 @@
 package com.teamgether.willing.Adapter
 
 import android.content.Context
-import android.graphics.drawable.GradientDrawable
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
-import kotlinx.android.synthetic.main.item_challenge_mp.*
+import com.teamgether.willing.view.ChallengeDetailActivity
 
 class ChallengeListAdapter(
     private var challengeList: MutableList<ChallengeList>,
@@ -23,6 +20,7 @@ class ChallengeListAdapter(
     RecyclerView.Adapter<ChallengeListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
+
         var subject = itemView!!.findViewById<TextView>(R.id.mp_ch_subject_tv)
         var progress = itemView!!.findViewById<ProgressBar>(R.id.mp_ch_pg_bar)
         var title = itemView!!.findViewById<TextView>(R.id.mp_challenge_title)
@@ -36,6 +34,11 @@ class ChallengeListAdapter(
             val intPercent = numPercent.toInt()
             progress.progress = intPercent
 
+            itemView.setOnClickListener {
+                val intent = Intent(context, ChallengeDetailActivity::class.java)
+                context.startActivity(intent)
+
+            }
 /*
             val drawable = ContextCompat.getDrawable(chType.context,R.drawable.rounded_square_type) as GradientDrawable
             when (data.subject) {
@@ -66,5 +69,4 @@ class ChallengeListAdapter(
     override fun getItemCount(): Int {
         return challengeList.size
     }
-
 }
