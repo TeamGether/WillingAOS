@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 return true
             }
             R.id.menu_ranking -> {
-                supportFragmentManager.beginTransaction().replace(R.id.main_frameLayout, RankingFragment()).commitAllowingStateLoss()
+                supportFragmentManager.beginTransaction().replace(R.id.main_frameLayout, TrialFragment()).commitAllowingStateLoss()
                 return true
             }
             R.id.menu_feed -> {

@@ -106,7 +106,7 @@ class OtherDetailActivity : AppCompatActivity() {
                 return@addSnapshotListener
             }
             if (value != null && value.exists()) {
-                binding.otherDetailChallenge.text = value["content"].toString()
+                binding.otherDetailChallenge.text = value["title"].toString()
                 binding.otherDetailUsername.text = value["user"].toString()
                 setProfileImg(value["user"].toString())
 
