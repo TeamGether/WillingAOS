@@ -2,7 +2,6 @@ package com.teamgether.willing.Fragment
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +17,6 @@ import com.teamgether.willing.Adapter.ChallengeListAdapter
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
 import com.teamgether.willing.model.ProfileInfo
-import com.teamgether.willing.view.ChallengeDetailActivity
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 
 class UserProfileFragment : Fragment() {
@@ -124,11 +122,14 @@ class UserProfileFragment : Fragment() {
                 list = arrayListOf()
                 for (document in result) {
                     val challenges = ChallengeList()
+                    val documentId = document.id as String
                     val subject = document[subjectField] as String
                     val title = document[titleField] as String
                     val percent = document[percentField] as Number
 
                     //if문으로 background color 바꿔주기?
+                    challenges.challengeId = documentId
+                    Log.d("TAG", "getChallenge: ${challenges.challengeId} ")
                     challenges.subject = subject
                     challenges.title = title
                     challenges.percent = percent

@@ -27,7 +27,6 @@ class ChallengeListAdapter(
         val chType = itemView!!.findViewById<View>(R.id.mp_ch_subject_bg)
 
         fun bind(data: ChallengeList) {
-
             subject.text = data.subject
             title.text = data.title
             val numPercent = data.percent
@@ -35,9 +34,11 @@ class ChallengeListAdapter(
             progress.progress = intPercent
 
             itemView.setOnClickListener {
-                val intent = Intent(context, ChallengeDetailActivity::class.java)
-                context.startActivity(intent)
-
+                Intent(context, ChallengeDetailActivity::class.java).apply {
+                    putExtra("challengeId",data.challengeId)
+                }.run {
+                    context.startActivity(this)
+                }
             }
 /*
             val drawable = ContextCompat.getDrawable(chType.context,R.drawable.rounded_square_type) as GradientDrawable
