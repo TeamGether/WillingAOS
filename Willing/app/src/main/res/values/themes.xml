@@ -13,4 +13,11 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
+    <style name="ButtonCancel">
+        <item name="android:background">@color/slateGrey</item>
+    </style>
+
+    <style name="ButtonSave">
+        <item name="android:background">@color/opportunity</item>
+    </style>
 </resources>

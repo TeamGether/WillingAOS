@@ -40,7 +40,6 @@ class UserProfileFragment : Fragment() {
     )
 
     private lateinit var challengeListAdapter: ChallengeListAdapter
-
     val name = "name"
     val email = "email"
     val tobe = "tobe"
@@ -155,4 +154,8 @@ class UserProfileFragment : Fragment() {
             }
         }
     }
+
+    //profile 수정 시 갤러리, 촬영 등으로 이동할 수 있도록 구현 필요
+    //프로필 수정 상태에 따른 변수 flag 세워서 저장 버튼 visible 관리 하기
+    //콜백 처리 하든 순서를 앞으로 당기든 로딩 늦는거 해결하기
 }
