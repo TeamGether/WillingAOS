@@ -69,10 +69,17 @@ class UserProfileFragment : Fragment() {
         if (user != null) {
             mp_follow_btn.isVisible = false
         } //팔로잉버튼 숨기기
-
         getUserData()
         getChallenge()
 
+        refresh_layout.setOnRefreshListener {
+            getChallenge()
+            challengeListAdapter.notifyDataSetChanged()
+            Log.d("refresh", "Refresh:")
+            // 새로고침 완료시,
+            // 새로고침 아이콘이 사라질 수 있게 isRefreshing = false
+            refresh_layout.isRefreshing = false
+        }
     }
 
     private fun getProfleImg(data: String, context: UserProfileFragment) {
