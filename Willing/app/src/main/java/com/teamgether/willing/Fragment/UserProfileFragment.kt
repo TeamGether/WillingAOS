@@ -1,12 +1,15 @@
 package com.teamgether.willing.Fragment
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -17,16 +20,20 @@ import com.teamgether.willing.Adapter.ChallengeListAdapter
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
 import com.teamgether.willing.model.ProfileInfo
+import com.teamgether.willing.view.ProfileUpdateActivity
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 
 class UserProfileFragment : Fragment() {
-    private lateinit var  activity:Activity
+
+
+    private lateinit var activity: Activity
     private lateinit var list: ArrayList<ChallengeList>
     private var auth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
     private val storage: FirebaseStorage =
         FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
     val user = auth.currentUser
+
     var profileInfo: ProfileInfo = ProfileInfo(
         profileImg = "",
         name = "",
@@ -46,10 +53,11 @@ class UserProfileFragment : Fragment() {
     val profileImg = "profileImg"
     private val FOLLOWER = "Follower"
     private val FOLLOWING = "Following"
+    var profileImgUrl: String = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if(context is Activity){
+        if (context is Activity) {
             activity = context
         }
     }
@@ -64,35 +72,48 @@ class UserProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mp_profile_img.clipToOutline = true //프로필 이미지 가장자리 클립
-
         if (user != null) {
             mp_follow_btn.isVisible = false
         } //팔로잉버튼 숨기기
         getUserData()
         getChallenge()
 
+        mp_profile_update_btn.setOnClickListener {
+            Intent(context, ProfileUpdateActivity::class.java).apply {
+                putExtra("imageUrl",profileImgUrl)
+                Intent.FLAG_ACTIVITY_CLEAR_TASK
+                Intent.FLAG_ACTIVITY_NO_HISTORY
+
+            }.run {
+                context!!.startActivity(this)
+            }
+        }
+
         refresh_layout.setOnRefreshListener {
             getChallenge()
             challengeListAdapter.notifyDataSetChanged()
-            Log.d("refresh", "Refresh:")
-            // 새로고침 완료시,
-            // 새로고침 아이콘이 사라질 수 있게 isRefreshing = false
             refresh_layout.isRefreshing = false
         }
     }
 
-    private fun getProfleImg(data: String, context: UserProfileFragment) {
+
+    private fun getProfileImg(
+        data: String,
+        imageView: ImageView,
+        context: UserProfileFragment
+    ) {
         storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Glide.with(context)
                     .load(task.result)
                     .override(150, 150)
                     .centerCrop()
-                    .into(mp_profile_img)
+                    .into(imageView)
             } else {
-                Log.d("error", "error:${error("")}")
+                Log.e("error", "error:${error("")}")
             }
+            imageView.clipToOutline = true //프로필 이미지 가장자리 클립
+
         }
     }
 
@@ -106,10 +127,15 @@ class UserProfileFragment : Fragment() {
                 if (user != null) {
                     profileInfo.isMine = true
                 }
-                mp_email.text = profileInfo.email
-                mp_nickName.text = profileInfo.name
+                profileImgUrl = profileInfo.profileImg.toString()
 
-                getProfleImg(profileInfo.profileImg.toString(), this)
+                mp_email!!.text = profileInfo.email
+                mp_nickName!!.text = profileInfo.name
+                Log.d("profileImg", "$profileImgUrl ")
+
+                getProfileImg(profileInfo.profileImg.toString(), mp_profile_img, this)
+                Log.d("TAG", "getUserData: ${profileInfo.profileImg}")
+
                 getFollowFollowingData(FOLLOWER, user.email)
                 getFollowFollowingData(FOLLOWING, user.email)
 
@@ -135,14 +161,13 @@ class UserProfileFragment : Fragment() {
 
                     //if문으로 background color 바꿔주기?
                     challenges.challengeId = documentId
-                    Log.d("TAG", "getChallenge: ${challenges.challengeId} ")
                     challenges.subject = subject
                     challenges.title = title
                     challenges.percent = percent
 
                     list.add(challenges)
 //                        data.percent = document[percentField] as Int
-                    challengeListAdapter = ChallengeListAdapter(list,activity)
+                    challengeListAdapter = ChallengeListAdapter(list, activity)
                     challengeListAdapter.notifyDataSetChanged()
                     mp_challenge_list.adapter = challengeListAdapter
                 }
@@ -152,16 +177,23 @@ class UserProfileFragment : Fragment() {
     private fun getFollowFollowingData(collectionName: String, email: String) {
         db.collection(collectionName).document(email).get().addOnSuccessListener { result ->
             if (collectionName.equals(FOLLOWER)) {
-                val follow = result["follower"] as ArrayList<String>
+                val follow = result["follower"] as ArrayList<*>
                 mp_follow_user.text = follow.size.toString()
 
             } else {
-                val following = result["following"] as ArrayList<String>
+                val following = result["following"] as ArrayList<*>
                 mp_following_user.text = following.size.toString()
             }
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        getUserData()
+        Log.d("TAG", "onStart: ${profileInfo.profileImg}")
+
+        getChallenge()
+    }
     //profile 수정 시 갤러리, 촬영 등으로 이동할 수 있도록 구현 필요
     //프로필 수정 상태에 따른 변수 flag 세워서 저장 버튼 visible 관리 하기
     //콜백 처리 하든 순서를 앞으로 당기든 로딩 늦는거 해결하기

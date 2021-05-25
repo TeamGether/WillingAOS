@@ -48,9 +48,6 @@ class ChallengeListAdapter(
                 "기타" -> drawable.setColor(ContextCompat.getColor(chType.context,R.color.account))
             }
 */
-
-            Log.d("TAG", "bind: ${subject.text}")
-
         }
     }
 
