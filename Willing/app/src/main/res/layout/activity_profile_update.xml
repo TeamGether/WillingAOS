@@ -143,6 +143,7 @@
             android:id="@+id/gallery_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/sc_dream4"
             android:text="@string/profile_update_gallery_tv"
             android:textColor="@color/black"
