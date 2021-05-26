@@ -17,19 +17,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.teamgether.willing.Fragment.UserProfileFragment
-import com.teamgether.willing.MainActivity
 import com.teamgether.willing.R
 import kotlinx.android.synthetic.main.activity_profile_update.*
-import kotlinx.android.synthetic.main.fragment_user_profile.*
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
+import kotlinx.coroutines.*
 
 class ProfileUpdateActivity : AppCompatActivity() {
     private val storage: FirebaseStorage =
@@ -61,7 +57,6 @@ class ProfileUpdateActivity : AppCompatActivity() {
 
 
         profile_update_cancel_btn.setOnClickListener {
-            moveActivity()
         }
 
         profile_update_save_btn.setOnClickListener {
@@ -85,12 +80,20 @@ class ProfileUpdateActivity : AppCompatActivity() {
         when (requestCode) {
             CAMERA_CODE -> {
                 for (grant in grantResults) {
-                    if (grant != PackageManager.PERMISSION_GRANTED) Toast.makeText(this, "camera permission ??", Toast.LENGTH_LONG).show()
+                    if (grant != PackageManager.PERMISSION_GRANTED) Toast.makeText(
+                        this,
+                        "camera permission ??",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
             STORAGE_CODE -> {
                 for (grant in grantResults) {
-                    if (grant != PackageManager.PERMISSION_GRANTED) Toast.makeText(this, "storage permission ??", Toast.LENGTH_LONG).show()
+                    if (grant != PackageManager.PERMISSION_GRANTED) Toast.makeText(
+                        this,
+                        "storage permission ??",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -194,12 +197,11 @@ class ProfileUpdateActivity : AppCompatActivity() {
 
     private fun uploadImage() {
         randomFileName()
-        val storageRef = storage.reference.child("profile/${fileName}"+".jpeg")
+        val storageRef = storage.reference.child("profile/${fileName}" + ".jpeg")
         storageRef.putFile(uri!!).addOnSuccessListener {
             Toast.makeText(this, "success", Toast.LENGTH_SHORT).show()
             findDocument()
-            Log.d("image", "profile/${fileName}"+".jpeg")
-            moveActivity()
+            Log.d("TAG", "uploadImage: upload")
         }
     }
 
@@ -216,27 +218,24 @@ class ProfileUpdateActivity : AppCompatActivity() {
     }
 
     private fun updateProfileImgField(documentId: String) {
-        db.collection("User").document(documentId).update("profileImg",
-            "profile/${fileName}"+".jpeg"
+        db.collection("User").document(documentId).update(
+            "profileImg",
+            "profile/${fileName}" + ".jpeg"
         ).addOnSuccessListener {
+            moveActivity()
             Toast.makeText(this, "$uri", Toast.LENGTH_SHORT).show()
-            Log.d("image", "updateProfileImg: $uri")
-
         }.addOnFailureListener {
             Log.e("TAG", "updateUserProfileImg: ${error("")}")
         }
     }
 
 
-
     private fun moveActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        Log.d("TAG", "moveActivity: finish")
+        Intent.FLAG_ACTIVITY_CLEAR_TASK
         finish()
-
-
     }
 
-
 }
-//현재 프래그먼트 위치를 기억하고 이를 다시 불러올 수 있도록 하면 어떨까.
+//fucking
+// corutine

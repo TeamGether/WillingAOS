@@ -187,8 +187,10 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
+        Log.d("TAG", "onStart: ${profileInfo.email}")
+
         getUserData()
         Log.d("TAG", "onStart: ${profileInfo.profileImg}")
 
