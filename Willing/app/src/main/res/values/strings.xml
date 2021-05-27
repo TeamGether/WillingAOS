@@ -2,47 +2,43 @@
     <string name="app_name">Willing</string>
 
     <string name="sign_up_nickName">닉네임</string>
+    <string name="sign_up_check_nickName">닉네임 중복 검사</string>
+
     <string name="sign_up_email">이메일</string>
     <string name="sign_up_pwd">비밀번호</string>
     <string name="sign_up_checkPwd">비밀번호 확인</string>
     <string name="sign_up_donaName">기부명</string>
     <string name="sign_up_signUp_btn">회원가입</string>
 
+    <string name="sign_up_warning_nickName"> 닉네임이 중복되었습니다.</string>
+    <string name="sign_up_warning_spacing"> 띄어쓰기는 허용하지 않습니다.</string>
+    <string name="sign_up_warning_usable"> 사용가능한 닉네임 입니다.</string>
+    <string name="sign_up_warning_pwd"> 비밀번호는 6자리 이상 적어야합니다.</string>
+    <string name="sign_up_warning_chkPwd"> 비밀번호와 비밀번호 확인이 일치하지않습니다.</string>
+    <string name="sign_up_warning_null"> 내용을 채워주세요! </string>
+    <string name="sign_up_warning_checkPlz"> 중복검사를 해주세요.</string>
+    <string name="sign_up_usable">사용가능한 닉네임입니다.</string>
+
     <string name="login_email">이메일</string>
     <string name="login_pwd">비밀번호</string>
     <string name="login_login_btn">로그인</string>
     <string name="login_goto_signUp_btn">회원가입</string>
+    <string name="login_warning_null">내용을 채워주세요!</string>
 
-    <string name="email_verification_alert">가입하신 메일의 인증링크를 눌러 이메일 인증을 마쳐주세요!</string>
-    <string name="email_verification_btn">확인</string>
+    <string name="login_wrong_user_title">잘못된 사용자 정보</string>
+    <string name="login_wrong_user_message">이메일과 비밀번호를 확인해주세요</string>
+    <string name="login_wrong_user_btnText">확인</string>
 
-    <string name="create_goalTitle">어떤 목표를 도전하시나요? </string>
-    <string name="create_goalcount">몇번 도전하시나요 ? </string>
-    <string name="challenge_period">총 도전 기간 </string>
-    <string name="challenge_count">일주일에 도전 횟수 </string>
-    <string name="challenge_money">얼마에 도전하시나요 ? </string>
-    <string name="create_where"> 어디에 돈을 걸건가요 ? </string>
-
-    <string name="challenge_start">시작하기 </string>
-
-    <string name="create_next">다음  </string>
-
-    <string name="create_goalStyle">어떻게 이 목표를 실천할 건가요 ?  </string>
-
-    <string name="create_doAlarm">알람을 켤까요 ?  </string>
-    <string name="create_makePublic">이 목표를 공개 할까요 ?  </string>
-
-    <string name="create_start">시작  </string>
+    <string name="email_verification_title">이메일 확인을 통해 메일 인증을 진행해주세요!</string>
+    <string name="email_verification_message">입력하신 메일의 메일함에 들어가 인증 링크를 눌러주세요!</string>
+    <string name="email_verification_btnText">확인</string>
 
 
+    <string name="ranking_donate">이번달 기부왕</string>
 
-    <string name="challenge_list"> 진행중인 목표  </string>
-
-
-
-
-
-
-
+    <string name="mp_title">My Page</string>
+    <string name="mp_profile_update_btn">프로필 수정</string>
+    <string name="mp_follow">팔로우</string>
+    <string name="mp_following">팔로잉</string>
 
 </resources>

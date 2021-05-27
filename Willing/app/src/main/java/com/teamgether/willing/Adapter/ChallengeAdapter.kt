@@ -1,4 +1,4 @@
-package com.teamgether.willing.Fragment
+package com.teamgether.willing.Adapter
 
 import android.view.LayoutInflater
 import android.view.View

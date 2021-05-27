@@ -16,6 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.teamgether.willing.R
 import com.teamgether.willing.view.ChallengeCreateActivity
+import com.teamgether.willing.view.ChallengeDetail
 import kotlinx.android.synthetic.main.fragment_challenge.*
 
 
@@ -37,23 +38,19 @@ class ChallengeFragment : Fragment() {
         db.collection("Challenge")
 
 
-//
-//        rv_challenge.layoutManager = LinearLayoutManager(getActivity()?.getApplicationContext(),LinearLayoutManager.VERTICAL,false)
-//        rv_challenge.setHasFixedSize(true)
-//        rv_challenge.adapter = ChallengeAdapter(challengeList)
-//
-//
+
         plus_btn.setOnClickListener {
             val intent = Intent(view.context, ChallengeCreateActivity::class.java)
             Log.d(TAG, "intent tttt")
             startActivity(intent)
         }
 
+        refresh_btn.setOnClickListener {
+            val intent = Intent(view.context, ChallengeDetail::class.java)
+            startActivity(intent)
+        }
+
     }
 
 }
-
-
-
-
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string-array name ="category_list">
+        <item>선택</item>
+        <item>건강</item>
+        <item>공부</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name ="bank_list">
+        <item>선택</item>
+        <item>농협</item>
+        <item>카카오</item>
+        <item>기타</item>
+    </string-array>
+
+
+
+
+
+
+
+</resources>

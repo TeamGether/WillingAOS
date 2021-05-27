@@ -26,16 +26,6 @@ class ChallengeCheck : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_challenge_check)
 
-//
-//        val title = intent.getStringExtra("title")
-//        val category = intent.getStringExtra("category")
-//        val period = intent.getStringExtra("period")
-//        val count = intent.getStringExtra("count")
-//        val money = intent.getStringExtra("money")
-//        val bank = intent.getStringExtra("bank")
-//        val account = intent.getStringExtra("account")
-//        val expose = intent.getStringExtra("expose")
-
         val data = hashMapOf(
             "title" to intent.getStringExtra("title"),
             "category" to intent.getStringExtra("category"),
@@ -52,7 +42,7 @@ class ChallengeCheck : AppCompatActivity() {
         title_tv.text = intent.getStringExtra("title")
         money_tv.text = intent.getStringExtra("money")
         period_tv.text = intent.getStringExtra("period")
-        account_tv.text = intent.getStringExtra("account")
+        account_tv.text = intent.getStringExtra("bank") + intent.getStringExtra("account")
 
 
         start_btn.setOnClickListener {
@@ -68,9 +58,6 @@ class ChallengeCheck : AppCompatActivity() {
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
                 }
-
-
-
 
         }
     }

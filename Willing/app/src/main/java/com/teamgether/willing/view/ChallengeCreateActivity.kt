@@ -59,30 +59,30 @@ class ChallengeCreateActivity() : AppCompatActivity() {
 
             var period = ""
             when (period_group.checkedRadioButtonId) {
-                R.id.oneweek -> period = "총 도전 기간 ${oneweek.text}"
-                R.id.twoweek -> period = "총 도전 기간 ${twoweek.text}"
-                R.id.threeweek -> period = "총 도전 기간 ${threeweek.text}"
-                R.id.fourweek -> period = "총 도전 기간 ${fourweek.text}"
+                R.id.oneweek -> period = " ${oneweek.text} 동안"
+                R.id.twoweek -> period = " ${twoweek.text}동안"
+                R.id.threeweek -> period = " ${threeweek.text}동안"
+                R.id.fourweek -> period = " ${fourweek.text}동안"
             }
 
 
 
             var count = ""
             when (count_group.checkedRadioButtonId) {
-                R.id.once -> count = "일주일에 도전 횟수 ${once.text}"
-                R.id.threetimes -> count = "일주일에 도전 횟수${threetimes.text}"
-                R.id.fivetimes -> count = "일주일에 도전 횟수 ${fivetimes.text}"
-                R.id.seventimes -> count = "일주일에 도전 횟수 ${seventimes.text}"
+                R.id.once -> count = " ${once.text} 번 씩 "
+                R.id.threetimes -> count = "${threetimes.text}번 씩"
+                R.id.fivetimes -> count = " ${fivetimes.text}번 씩"
+                R.id.seventimes -> count = " ${seventimes.text}번 씩"
             }
 
 
             var money= ""
             when (money_group.checkedRadioButtonId) {
-                R.id.ten_thousand -> money = "도전금액 ${ten_thousand.text}"
-                R.id.three_thousand -> money = "도전금액 ${three_thousand.text}"
-                R.id.fifty_thousand -> money = "도전금액 ${fifty_thousand.text}"
-                R.id.seventy_thousand -> money = "도전금액 ${seventy_thousand.text}"
-                R.id.hundred_thousand -> money = "도전금액 ${hundred_thousand.text}"
+                R.id.ten_thousand -> money = " ${ten_thousand.text}"
+                R.id.three_thousand -> money = " ${three_thousand.text}"
+                R.id.fifty_thousand -> money = "${fifty_thousand.text}"
+                R.id.seventy_thousand -> money = " ${seventy_thousand.text}"
+                R.id.hundred_thousand -> money = " ${hundred_thousand.text}"
             }
 
 
