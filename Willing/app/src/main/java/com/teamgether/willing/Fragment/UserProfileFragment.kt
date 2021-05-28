@@ -91,7 +91,7 @@ class UserProfileFragment : Fragment() {
                 Intent.FLAG_ACTIVITY_NO_HISTORY
 
             }.run {
-                context!!.startActivity(this)
+                context?.startActivity(this)
             }
         }
 
@@ -124,7 +124,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun getUserData() {
-        db.collection("User").whereEqualTo("email", user.email).get()
+        db.collection("User").whereEqualTo("email", user?.email).get()
             .addOnSuccessListener { result ->
                 val document = result.documents[0]
                 profileInfo.name = document[name] as String
@@ -142,8 +142,9 @@ class UserProfileFragment : Fragment() {
                 getProfileImg(profileInfo.profileImg.toString(), mp_profile_img, this)
                 Log.d("TAG", "getUserData: ${profileInfo.profileImg}")
 
-                getFollowFollowingData(FOLLOWER, user.email)
-                getFollowFollowingData(FOLLOWING, user.email)
+
+                getFollowFollowingData(FOLLOWER, user?.email)
+                getFollowFollowingData(FOLLOWING, user?.email)
 
             }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
@@ -155,7 +156,7 @@ class UserProfileFragment : Fragment() {
         val subjectField = "subject"
         val titleField = "title"
         val percentField = "percent"
-        db.collection("Challenge").whereEqualTo("UID", user.email).get()
+        db.collection("Challenge").whereEqualTo("UID", user?.email).get()
             .addOnSuccessListener { result ->
                 list = arrayListOf()
                 for (document in result) {
@@ -180,8 +181,8 @@ class UserProfileFragment : Fragment() {
             }
     }
 
-    private fun getFollowFollowingData(collectionName: String, email: String) {
-        db.collection(collectionName).document(email).get().addOnSuccessListener { result ->
+    private fun getFollowFollowingData(collectionName: String, email: String?) {
+        db.collection(collectionName).document(email.toString()).get().addOnSuccessListener { result ->
             if (collectionName.equals(FOLLOWER)) {
                 val follow = result["follower"] as ArrayList<*>
                 mp_follow_user.text = follow.size.toString()

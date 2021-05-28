@@ -71,10 +71,10 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
             cheeringCnt.text = data.cheeringCnt.toString()
             questionCnt.text= data.questionCnt.toString()
 
-            val currentUserEmail = FirebaseAuth.getInstance().currentUser.email
+            val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
             var current = ""
             CoroutineScope(Dispatchers.Main).launch {
-                val deferred = getCurrentUser(currentUserEmail).await().documents
+                val deferred = getCurrentUser(currentUserEmail.toString()).await().documents
                 for (data in deferred) {
                     current = data["name"] as String
                 }

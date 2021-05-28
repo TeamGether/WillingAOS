@@ -24,7 +24,7 @@ open class LoginViewModel : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
-        auth.languageCode = "ko"
+//        auth.languageCode = "ko"
 
 
     }
@@ -42,7 +42,7 @@ open class LoginViewModel : AppCompatActivity() {
                 val user = auth.currentUser
                 getUserVerification(alertEmail, gotoMain)
 
-                Log.d("userVerificationin ", user.isEmailVerified.toString())
+                Log.d("userVerificationin ", user?.isEmailVerified.toString())
 
             } else {
                 alertUser()
@@ -57,7 +57,7 @@ open class LoginViewModel : AppCompatActivity() {
     // email 인증 확인 후 intent
     fun getUserVerification(alertEmail: () -> Unit, gotoMain: () -> Unit) {
         val user = Firebase.auth.currentUser
-        if (user.isEmailVerified) {
+        if (user?.isEmailVerified == true) {
             Log.d("userVerificationin ", user.isEmailVerified.toString())
             //인텐트
             gotoMain()

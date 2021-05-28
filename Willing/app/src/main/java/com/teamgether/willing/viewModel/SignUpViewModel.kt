@@ -24,7 +24,7 @@ open class SignUpViewModel : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         db = Firebase.firestore
         auth = Firebase.auth
-        auth.languageCode = "ko"
+//        auth.languageCode = "ko"
 
     }
 
