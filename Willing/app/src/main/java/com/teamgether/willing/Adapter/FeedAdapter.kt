@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -53,7 +51,7 @@ class FeedAdapter (private var list: MutableList<Feed>): RecyclerView.Adapter<Fe
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_feed, parent, false)
         return ViewHolder(view)
     }
@@ -62,9 +60,7 @@ class FeedAdapter (private var list: MutableList<Feed>): RecyclerView.Adapter<Fe
         return list.size
     }
 
-    override fun onBindViewHolder(holder: FeedAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position], holder.CertiImg.context)
     }
-
-
 }

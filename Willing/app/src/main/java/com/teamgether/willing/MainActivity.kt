@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.teamgether.willing.Fragment.*
 import com.teamgether.willing.databinding.ActivityMainBinding
+import com.teamgether.willing.Fragment.FriendsFragment
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 

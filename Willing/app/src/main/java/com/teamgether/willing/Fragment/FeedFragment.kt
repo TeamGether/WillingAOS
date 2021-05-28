@@ -1,121 +1,102 @@
 package com.teamgether.willing.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.gms.tasks.Task
-import com.google.android.material.behavior.SwipeDismissBehavior
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
-import com.teamgether.willing.Adapter.FeedAdapter
-import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
-import com.teamgether.willing.model.Feed
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
+import com.teamgether.willing.databinding.FragmentFeedBinding
+import com.teamgether.willing.viewModel.FeedViewModel
+import com.teamgether.willing.view.OtherDetailActivity
 
 class FeedFragment : Fragment() {
 
     private var current: String = "follow"
-    private lateinit var followBtn: TextView
-    private lateinit var recentBtn: TextView
-    private lateinit var swipeLayout: SwipeRefreshLayout
-    private lateinit var feedList: RecyclerView
-
-    private lateinit var adapter: FeedAdapter
-    private var db = FirebaseFirestore.getInstance()
-    private lateinit var list: ArrayList<Feed>
+    private lateinit var binding: FragmentFeedBinding
+    private lateinit var viewModel: FeedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_feed, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_feed, container, false)
+        viewModel = ViewModelProvider(this).get(FeedViewModel::class.java)
+
+        viewModel.detail.observe(viewLifecycleOwner, Observer {
+            val intent = Intent(context, OtherDetailActivity::class.java).apply {
+                putExtra("pictureUrl", it[1])
+                putExtra("challengeId", it[0])
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+
+            startActivity(intent)
+        })
+
+        binding.lifecycleOwner = this
+        binding.feedViewModel = viewModel
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.feedList.layoutManager = GridLayoutManager(view.context, 3)
+        viewModel.getData(current, binding.feedList)
 
-        init(view)
-
-        followBtn.setOnClickListener {
+        binding.feedFollowBtn.setOnClickListener {
             current = "follow"
-            followBtn.setTextColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
-            recentBtn.setTextColor(ContextCompat.getColor(context!!, R.color.black))
-
-            refresh(view)
+            changeBtnStatus(current, view)
+            viewModel.getData(current,binding.feedList)
         }
-        recentBtn.setOnClickListener {
+
+        binding.feedRecentBtn.setOnClickListener {
             current = "recent"
-            followBtn.setTextColor(ContextCompat.getColor(context!!, R.color.black))
-            recentBtn.setTextColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
-
-            refresh(view)
+            changeBtnStatus(current, view)
+            viewModel.getData(current,binding.feedList)
         }
 
-        refresh(view)
-
-        swipeLayout.setOnRefreshListener {
-            refresh(view)
-            swipeLayout.isRefreshing = false
+        binding.feedSwipeRefreshLayout.setOnRefreshListener {
+            viewModel.getData(current,binding.feedList)
+            binding.feedSwipeRefreshLayout.isRefreshing = false
         }
     }
 
-    private fun refresh(view: View) {
-        val dialog = LoadingDialog(view.context)
-        CoroutineScope(Dispatchers.Main).launch {
-            dialog.show()
-            val deferred = getDataFromFB(current).await().documents
-
-            initData(deferred)
-            dialog.dismiss()
-        }
-    }
-
-    private fun init(view: View) {
-        followBtn = view.findViewById(R.id.feed_followBtn)
-        recentBtn = view.findViewById(R.id.feed_recentBtn)
-        swipeLayout = view.findViewById(R.id.feed_swipeRefreshLayout)
-        feedList = view.findViewById(R.id.feedList)
-
-        followBtn.setTextColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
-        feedList.layoutManager = GridLayoutManager(view.context, 3)
-    }
-
-    suspend fun getDataFromFB(current: String): Task<QuerySnapshot> {
-        if (current.equals("recent")) {
-            return db.collection("Certification").orderBy("timestamp", Query.Direction.DESCENDING).get()
-        } else {
-            return db.collection("Certification").get()
-        }
-    }
-
-    fun initData(task: MutableList<DocumentSnapshot>) {
-        if (task != null) {
-            list = arrayListOf()
-            for (document in task) {
-                val feed = Feed()
-
-                val picture = document["Imgurl"] as String
-                val id = document["challengeId"] as String
-                feed.pictureUrl = picture
-                feed.challengeId = id
-
-                list.add(feed)
+    private fun changeBtnStatus(current: String, view: View) {
+        when (current) {
+            "follow" -> {
+                binding.feedFollowBtn.setTextColor(
+                    ContextCompat.getColor(
+                        view.context,
+                        R.color.colorPrimary
+                    )
+                )
+                binding.feedRecentBtn.setTextColor(
+                    ContextCompat.getColor(
+                        view.context,
+                        R.color.black
+                    )
+                )
             }
-            adapter = FeedAdapter(list)
-            feedList.adapter = adapter
+            "recent" -> {
+                binding.feedRecentBtn.setTextColor(
+                    ContextCompat.getColor(
+                        view.context,
+                        R.color.colorPrimary
+                    )
+                )
+                binding.feedFollowBtn.setTextColor(
+                    ContextCompat.getColor(
+                        view.context,
+                        R.color.black
+                    )
+                )
+            }
         }
     }
 }
