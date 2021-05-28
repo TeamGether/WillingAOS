@@ -14,8 +14,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.okhttp.Dispatcher
-import com.teamgether.willing.Adapter.CommentAdapter
+import com.teamgether.willing.adapters.CommentAdapter
 import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.databinding.ActivityOtherDetailBinding
@@ -157,8 +156,8 @@ class OtherDetailActivity : AppCompatActivity() {
     private fun saveComment(comment: String) {
 
         // 사용자 정보 받아오기
-        val user: FirebaseUser = FirebaseAuth.getInstance().currentUser
-        val email = user.email
+        val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        val email = user?.email
 
         var profileImgUrl: String = ""
         var name: String = ""

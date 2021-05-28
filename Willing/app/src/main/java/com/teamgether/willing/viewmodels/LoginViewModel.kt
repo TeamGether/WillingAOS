@@ -1,21 +1,13 @@
-package com.teamgether.willing.viewModel
+package com.teamgether.willing.viewmodels
 
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextThemeWrapper
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.teamgether.willing.MainActivity
-import com.teamgether.willing.model.UserInfo
-import com.teamgether.willing.view.LoginActivity
-import com.google.firebase.auth.UserInfo as UserInfo1
 
 open class LoginViewModel : AppCompatActivity() {
 
@@ -24,7 +16,7 @@ open class LoginViewModel : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
-        auth.languageCode = "ko"
+        //auth.languageCode = "ko"
 
 
     }
@@ -40,9 +32,11 @@ open class LoginViewModel : AppCompatActivity() {
             if (task.isSuccessful) {
                 Log.d("login", "성공")
                 val user = auth.currentUser
-                getUserVerification(alertEmail, gotoMain)
-
-                Log.d("userVerificationin ", user.isEmailVerified.toString())
+                //getUserVerification(alertEmail, gotoMain)
+                val nextIntent = Intent(this, MainActivity::class.java)
+                startActivity(nextIntent)
+                finish()
+                Log.d("userVerificationin ", user?.isEmailVerified.toString())
 
             } else {
                 alertUser()
@@ -57,17 +51,21 @@ open class LoginViewModel : AppCompatActivity() {
     // email 인증 확인 후 intent
     fun getUserVerification(alertEmail: () -> Unit, gotoMain: () -> Unit) {
         val user = Firebase.auth.currentUser
-        if (user.isEmailVerified) {
-            Log.d("userVerificationin ", user.isEmailVerified.toString())
-            //인텐트
-            gotoMain()
-/*            val nextIntent = Intent(this, MainActivity::class.java)
-            startActivity(nextIntent)
-            finish()*/
+        if (user != null) {
+            if (user.isEmailVerified) {
+                if (user != null) {
+                    Log.d("userVerificationin ", user.isEmailVerified.toString())
+                }
+                //인텐트
+                gotoMain()
+    /*            val nextIntent = Intent(this, MainActivity::class.java)
+                startActivity(nextIntent)
+                finish()*/
 
-        } else {
-            alertEmail()
-            Firebase.auth.signOut()
+            } else {
+                alertEmail()
+                Firebase.auth.signOut()
+            }
         }
 
 //유저의 db 값이 false인지 판단 후 false면 User에게 Verfication mail을 send하고 true면 메인화면으로 진입할 수 있도록 한다.

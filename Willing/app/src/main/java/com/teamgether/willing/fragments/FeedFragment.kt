@@ -1,4 +1,4 @@
-package com.teamgether.willing.Fragment
+package com.teamgether.willing.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.teamgether.willing.R
 import com.teamgether.willing.databinding.FragmentFeedBinding
-import com.teamgether.willing.viewModel.FeedViewModel
+import com.teamgether.willing.viewmodels.FeedViewModel
 import com.teamgether.willing.view.OtherDetailActivity
 
 class FeedFragment : Fragment() {

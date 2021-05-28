@@ -1,4 +1,4 @@
-package com.teamgether.willing.viewModel
+package com.teamgether.willing.viewmodels
 
 import androidx.lifecycle.ViewModel
 

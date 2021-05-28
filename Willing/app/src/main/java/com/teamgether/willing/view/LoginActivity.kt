@@ -1,17 +1,13 @@
 package com.teamgether.willing.view
 
-import android.app.Activity
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.teamgether.willing.MainActivity
 import com.teamgether.willing.R
-import com.teamgether.willing.viewModel.LoginViewModel
+import com.teamgether.willing.viewmodels.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
-import org.w3c.dom.Text
 
 class LoginActivity : LoginViewModel() {
     override fun onCreate(savedInstanceState: Bundle?) {

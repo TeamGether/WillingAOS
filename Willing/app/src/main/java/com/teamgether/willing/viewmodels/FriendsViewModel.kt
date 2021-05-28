@@ -1,11 +1,11 @@
-package com.teamgether.willing.viewModel
+package com.teamgether.willing.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
-import com.teamgether.willing.Adapter.FriendAdapter
+import com.teamgether.willing.adapters.FriendAdapter
 import com.teamgether.willing.firebase.FirebaseFollowService
 import com.teamgether.willing.firebase.FirebaseUserService
 import com.teamgether.willing.model.Friends

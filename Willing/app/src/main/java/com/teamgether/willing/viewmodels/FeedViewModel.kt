@@ -1,9 +1,9 @@
-package com.teamgether.willing.viewModel
+package com.teamgether.willing.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
-import com.teamgether.willing.Adapter.FeedAdapter
+import com.teamgether.willing.adapters.FeedAdapter
 import com.teamgether.willing.firebase.FirebaseFeedService
 import com.teamgether.willing.model.Feed
 import kotlinx.coroutines.launch

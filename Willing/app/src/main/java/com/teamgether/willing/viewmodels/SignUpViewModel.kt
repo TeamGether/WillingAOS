@@ -1,6 +1,5 @@
-package com.teamgether.willing.viewModel
+package com.teamgether.willing.viewmodels
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -10,9 +9,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.teamgether.willing.R
 import com.teamgether.willing.model.UserInfo
-import com.teamgether.willing.view.LoginActivity
 import kotlinx.android.synthetic.main.activity_signup.*
 
 open class SignUpViewModel : AppCompatActivity() {
@@ -24,7 +21,7 @@ open class SignUpViewModel : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         db = Firebase.firestore
         auth = Firebase.auth
-        auth.languageCode = "ko"
+        //auth.languageCode = "ko"
 
     }
 

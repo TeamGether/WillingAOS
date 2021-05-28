@@ -1,4 +1,4 @@
-package com.teamgether.willing.Adapter
+package com.teamgether.willing.adapters
 
 import android.content.Context
 import android.util.Log
@@ -71,12 +71,14 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
             cheeringCnt.text = data.cheeringCnt.toString()
             questionCnt.text= data.questionCnt.toString()
 
-            val currentUserEmail = FirebaseAuth.getInstance().currentUser.email
+            val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
             var current = ""
             CoroutineScope(Dispatchers.Main).launch {
-                val deferred = getCurrentUser(currentUserEmail).await().documents
-                for (data in deferred) {
-                    current = data["name"] as String
+                val deferred = currentUserEmail?.let { getCurrentUser(it).await().documents }
+                if (deferred != null) {
+                    for (data in deferred) {
+                        current = data["name"] as String
+                    }
                 }
             }
 
