@@ -17,11 +17,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.teamgether.willing.Adapter.ChallengeListAdapter
+import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
 import com.teamgether.willing.model.ProfileInfo
 import com.teamgether.willing.view.ProfileUpdateActivity
 import kotlinx.android.synthetic.main.fragment_user_profile.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class UserProfileFragment : Fragment() {
 
@@ -75,12 +80,13 @@ class UserProfileFragment : Fragment() {
         if (user != null) {
             mp_follow_btn.isVisible = false
         } //팔로잉버튼 숨기기
+        showLoadingDialog()
         getUserData()
         getChallenge()
 
         mp_profile_update_btn.setOnClickListener {
             Intent(context, ProfileUpdateActivity::class.java).apply {
-                putExtra("imageUrl",profileImgUrl)
+                putExtra("imageUrl", profileImgUrl)
                 Intent.FLAG_ACTIVITY_CLEAR_TASK
                 Intent.FLAG_ACTIVITY_NO_HISTORY
 
@@ -169,7 +175,7 @@ class UserProfileFragment : Fragment() {
 //                        data.percent = document[percentField] as Int
                     challengeListAdapter = ChallengeListAdapter(list, activity)
                     challengeListAdapter.notifyDataSetChanged()
-                    mp_challenge_list.adapter = challengeListAdapter
+                    mp_challenge_list!!.adapter = challengeListAdapter
                 }
             }
     }
@@ -190,13 +196,23 @@ class UserProfileFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d("TAG", "onStart: ${profileInfo.email}")
-
+        showLoadingDialog()
         getUserData()
         Log.d("TAG", "onStart: ${profileInfo.profileImg}")
 
         getChallenge()
     }
+
     //profile 수정 시 갤러리, 촬영 등으로 이동할 수 있도록 구현 필요
     //프로필 수정 상태에 따른 변수 flag 세워서 저장 버튼 visible 관리 하기
     //콜백 처리 하든 순서를 앞으로 당기든 로딩 늦는거 해결하기
+    // 로딩중 구현
+    private fun showLoadingDialog() {
+        val dialog = LoadingDialog(activity)
+        CoroutineScope(Dispatchers.Main).launch {
+            dialog.show()
+            delay(2000)
+            dialog.dismiss()
+        }
+    }
 }
