@@ -37,7 +37,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sc_dream7"
-                    android:text="@string/mp_title"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"

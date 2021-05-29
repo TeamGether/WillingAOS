@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import kotlinx.android.synthetic.main.activity_profile_update.*
 import java.io.FileOutputStream
@@ -60,6 +61,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
         }
 
         profile_update_save_btn.setOnClickListener {
+            showLoadingDialog()
             uploadImage()
         }
 
@@ -77,6 +79,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             CAMERA_CODE -> {
                 for (grant in grantResults) {
@@ -232,6 +235,15 @@ class ProfileUpdateActivity : AppCompatActivity() {
             Toast.makeText(this, "$uri", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
             Log.e("TAG", "updateUserProfileImg: ${error("")}")
+        }
+    }
+
+    private fun showLoadingDialog() {
+        val dialog = LoadingDialog(this)
+        CoroutineScope(Dispatchers.Main).launch {
+            dialog.show()
+            delay(1500)
+            dialog.dismiss()
         }
     }
 

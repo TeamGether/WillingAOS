@@ -16,7 +16,7 @@ import com.teamgether.willing.databinding.FragmentFeedBinding
 import com.teamgether.willing.viewModel.FeedViewModel
 import com.teamgether.willing.view.OtherDetailActivity
 
-class FeedFragment : Fragment() {
+class  FeedFragment : Fragment() {
 
     private var current: String = "follow"
     private lateinit var binding: FragmentFeedBinding

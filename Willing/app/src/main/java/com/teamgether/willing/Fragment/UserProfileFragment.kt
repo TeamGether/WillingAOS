@@ -1,6 +1,5 @@
 package com.teamgether.willing.Fragment
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -29,16 +28,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class UserProfileFragment : Fragment() {
-
-
     private lateinit var activity: Activity
     private lateinit var list: ArrayList<ChallengeList>
     private var auth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
     private val storage: FirebaseStorage =
         FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
-    val user = auth.currentUser
-
+    private val currentUser = auth.currentUser
+    private var userEmail: String? = ""
+    var isMine: Boolean = false
     var profileInfo: ProfileInfo = ProfileInfo(
         profileImg = "",
         name = "",
@@ -76,9 +74,22 @@ class UserProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        userEmail = this.arguments?.getString("userEmail")
+//        userEmail = currentUser?.email // 만약 값이 넘어오면 여기다가 다시 덮어씌울 것.
+        //값을 받는 부분 여기에~~~~~~~~
+//        userEmail = "skycat0212@jejunu.ac.kr"
 
-        if (user != null) {
+        if (userEmail.equals(currentUser?.email)) {
+            isMine = true
+        }
+
+        if (isMine) {
             mp_follow_btn.isVisible = false
+            mp_title.setText(R.string.mp_title)
+
+        } else {
+            mp_profile_update_btn.isVisible = false
+            mp_title.setText(R.string.up_title)
         } //팔로잉버튼 숨기기
         showLoadingDialog()
         getUserData()
@@ -132,13 +143,13 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun getUserData() {
-        db.collection("User").whereEqualTo("email", user?.email).get()
+        db.collection("User").whereEqualTo("email", userEmail).get()
             .addOnSuccessListener { result ->
                 val document = result.documents[0]
                 profileInfo.name = document[name] as String
                 profileInfo.email = document[email] as String
                 profileInfo.profileImg = document[profileImg] as String
-                if (user != null) {
+                if (currentUser != null) {
                     profileInfo.isMine = true
                 }
                 profileImgUrl = profileInfo.profileImg.toString()
@@ -151,8 +162,8 @@ class UserProfileFragment : Fragment() {
                 Log.d("TAG", "getUserData: ${profileInfo.profileImg}")
 
 
-                getFollowFollowingData(FOLLOWER, user?.email)
-                getFollowFollowingData(FOLLOWING, user?.email)
+                getFollowFollowingData(FOLLOWER, userEmail)
+                getFollowFollowingData(FOLLOWING, userEmail)
 
             }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
@@ -164,7 +175,7 @@ class UserProfileFragment : Fragment() {
         val subjectField = "subject"
         val titleField = "title"
         val percentField = "percent"
-        db.collection("Challenge").whereEqualTo("UID", user?.email).get()
+        db.collection("Challenge").whereEqualTo("UID", userEmail).get()
             .addOnSuccessListener { result ->
                 list = arrayListOf()
                 for (document in result) {
@@ -233,4 +244,5 @@ class UserProfileFragment : Fragment() {
             dialog.dismiss()
         }
     }
+
 }

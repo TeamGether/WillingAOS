@@ -20,6 +20,7 @@ import com.google.firebase.auth.UserInfo as UserInfo1
 open class LoginViewModel : AppCompatActivity() {
 
     lateinit var auth: FirebaseAuth
+    var userEmail:String =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,7 @@ open class LoginViewModel : AppCompatActivity() {
         password: String,
         alertUser: () -> Unit,
         alertEmail: () -> Unit,
-        gotoMain: () -> Unit
+        gotoMain: (email:String) -> Unit
     ) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -55,12 +56,14 @@ open class LoginViewModel : AppCompatActivity() {
     //sentAlarm
 
     // email 인증 확인 후 intent
-    fun getUserVerification(alertEmail: () -> Unit, gotoMain: () -> Unit) {
+    fun getUserVerification(alertEmail: () -> Unit, gotoMain: (email:String) -> Unit) {
         val user = Firebase.auth.currentUser
         if (user?.isEmailVerified == true) {
             Log.d("userVerificationin ", user.isEmailVerified.toString())
             //인텐트
-            gotoMain()
+            userEmail = user.email.toString()
+
+            gotoMain(userEmail)
 /*            val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
             finish()*/
