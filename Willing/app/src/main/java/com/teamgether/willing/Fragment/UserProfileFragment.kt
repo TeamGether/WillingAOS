@@ -108,19 +108,27 @@ class UserProfileFragment : Fragment() {
         imageView: ImageView,
         context: UserProfileFragment
     ) {
-        storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Glide.with(context)
-                    .load(task.result)
-                    .override(150, 150)
-                    .centerCrop()
-                    .into(imageView)
-            } else {
-                Log.e("error", "error:${error("")}")
-            }
-            imageView.clipToOutline = true //프로필 이미지 가장자리 클립
+        if (data.isEmpty() or data.isBlank()) {
+            imageView.setImageResource(
+                R.drawable.ic_launcher_foreground
+            )
+        } else {
+            storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Glide.with(context)
+                        .load(task.result)
+                        .override(150, 150)
+                        .centerCrop()
+                        .into(imageView)
+                } else {
+                    Log.e("error", "error:${error("")}")
+                }
+                imageView.clipToOutline = true //프로필 이미지 가장자리 클립
 
+            }
         }
+
+
     }
 
     private fun getUserData() {
@@ -182,16 +190,25 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun getFollowFollowingData(collectionName: String, email: String?) {
-        db.collection(collectionName).document(email.toString()).get().addOnSuccessListener { result ->
-            if (collectionName.equals(FOLLOWER)) {
-                val follow = result["follower"] as ArrayList<*>
-                mp_follow_user.text = follow.size.toString()
+        db.collection(collectionName).document(email.toString()).get()
+            .addOnSuccessListener { result ->
+                if (collectionName.equals(FOLLOWER)) {
+                    val follow = result["follower"] as ArrayList<*>?
+                    if (follow.isNullOrEmpty()) {
+                        mp_follow_user.text = "0"
+                    } else {
+                        mp_follow_user.text = follow.size.toString()
+                    }
 
-            } else {
-                val following = result["following"] as ArrayList<*>
-                mp_following_user.text = following.size.toString()
+                } else {
+                    val following = result["following"] as ArrayList<*>?
+                    if (following.isNullOrEmpty()) {
+                        mp_following_user.text = "0"
+                    } else {
+                        mp_following_user.text = following.size.toString()
+                    }
+                }
             }
-        }
     }
 
     override fun onResume() {

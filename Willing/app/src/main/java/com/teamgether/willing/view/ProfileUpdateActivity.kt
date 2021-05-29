@@ -149,18 +149,24 @@ class ProfileUpdateActivity : AppCompatActivity() {
         imageView: ImageView,
         context: Context
     ) {
-        storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Glide.with(context)
-                    .load(task.result)
-                    .override(150, 150)
-                    .centerCrop()
-                    .into(imageView)
-            } else {
-                Log.e("error", "error:${error("")}")
-            }
-            imageView.clipToOutline = true //프로필 이미지 가장자리 클립
+        if (data.isEmpty() or data.isBlank()) {
+            imageView.setImageResource(
+                R.drawable.ic_launcher_foreground
+            )
+        } else {
+            storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Glide.with(context)
+                        .load(task.result)
+                        .override(150, 150)
+                        .centerCrop()
+                        .into(imageView)
+                } else {
+                    Log.e("error", "error:${error("")}")
+                }
+                imageView.clipToOutline = true //프로필 이미지 가장자리 클립
 
+            }
         }
     }
 
