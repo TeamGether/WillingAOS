@@ -11,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,11 +27,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<TrialAdapter.ViewHolder>() {
-    private val storage: FirebaseStorage = FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
+    private val storage: FirebaseStorage =
+        FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
     private val storageRef: StorageReference = storage.reference
     private var db = FirebaseFirestore.getInstance()
 
-    inner class ViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
+    inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
         var profileImg: ImageView = itemView!!.findViewById(R.id.item_trial_userProfile)
         var userName: TextView = itemView!!.findViewById(R.id.item_trial_userName)
         var timestamp: TextView = itemView!!.findViewById(R.id.item_trial_timestamp)
@@ -45,11 +48,13 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
                 if (task.isSuccessful) {
                     Glide.with(context)
                         .load(task.result)
-                        .override(30,30)
+                        .format(DecodeFormat.PREFER_ARGB_8888)
+                        .override(30, 30)
                         .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(profileImg)
                 } else {
-                    Log.d("TrialAdapter !!" , task.exception.toString())
+                    Log.d("TrialAdapter !!", task.exception.toString())
                 }
             }
 
@@ -57,19 +62,17 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
                 if (task.isSuccessful) {
                     Glide.with(context)
                         .load(task.result)
-                        .override(150,150)
-                        .centerCrop()
                         .into(img)
                 } else {
-                    Log.d("TrialAdapter !!" , task.exception.toString())
+                    Log.d("TrialAdapter !!", task.exception.toString())
                 }
             }
 
-            userName.text= data.userName
-            timestamp.text = data.timestamp
+            userName.text = data.userName
+            timestamp.text = "${data.timestamp}"
             content.text = data.content
             cheeringCnt.text = data.cheeringCnt.toString()
-            questionCnt.text= data.questionCnt.toString()
+            questionCnt.text = data.questionCnt.toString()
 
             val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
             var current = ""
@@ -80,16 +83,18 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
                         current = data["name"] as String
                     }
                 }
-            }
 
-            cheeringBtn.setOnClickListener {
-                cheeringCnt.text = refreshCount(data.imgId.toString(), "cheering", current, context).toString()
-                notifyDataSetChanged()
-            }
+                cheeringBtn.setOnClickListener {
+                    cheeringCnt.text =
+                        refreshCount(data.imgId.toString(), "cheering", current, context).toString()
+                    notifyDataSetChanged()
+                }
 
-            questionBtn.setOnClickListener {
-                questionCnt.text= refreshCount(data.imgId.toString(), "question", current, context).toString()
-                notifyDataSetChanged()
+                questionBtn.setOnClickListener {
+                    questionCnt.text =
+                        refreshCount(data.imgId.toString(), "question", current, context).toString()
+                    notifyDataSetChanged()
+                }
             }
         }
     }
@@ -142,17 +147,18 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
 
                 array.add(username)
 
-                db.collection("Certification").document(documentId).update(flag, array).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        if (flag.equals("cheering")) {
-                            Toast.makeText(context, "응원을 남겼습니다!", Toast.LENGTH_SHORT).show()
+                db.collection("Certification").document(documentId).update(flag, array)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            if (flag.equals("cheering")) {
+                                Toast.makeText(context, "응원을 남겼습니다!", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "의문을 표했습니다!", Toast.LENGTH_SHORT).show()
+                            }
                         } else {
-                            Toast.makeText(context, "의문을 표했습니다!", Toast.LENGTH_SHORT).show()
+                            Log.e("TrialAdapter !!", task.exception.toString())
                         }
-                    } else {
-                        Log.e("TrialAdapter !!", task.exception.toString())
                     }
-                }
             }
 
         }
@@ -160,11 +166,11 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
     }
 
     private suspend fun getCurrentUser(current: String): Task<QuerySnapshot> {
-        return db.collection("User").whereEqualTo("email",current).get()
+        return db.collection("User").whereEqualTo("email", current).get()
     }
 
-    private suspend fun getArray(imgId: String) : Task<QuerySnapshot> {
-        return db.collection("Certification").whereEqualTo("Imgurl", imgId).get()
+    private suspend fun getArray(imgId: String): Task<QuerySnapshot> {
+        return db.collection("Certification").whereEqualTo("imgUrl", imgId).get()
     }
 
     override fun getItemCount(): Int {

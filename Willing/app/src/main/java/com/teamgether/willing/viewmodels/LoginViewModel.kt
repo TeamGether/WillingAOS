@@ -17,8 +17,6 @@ open class LoginViewModel : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
         //auth.languageCode = "ko"
-
-
     }
 
     fun login(
@@ -32,10 +30,8 @@ open class LoginViewModel : AppCompatActivity() {
             if (task.isSuccessful) {
                 Log.d("login", "성공")
                 val user = auth.currentUser
-                //getUserVerification(alertEmail, gotoMain)
-                val nextIntent = Intent(this, MainActivity::class.java)
-                startActivity(nextIntent)
-                finish()
+                getUserVerification(alertEmail, gotoMain)
+
                 Log.d("userVerificationin ", user?.isEmailVerified.toString())
 
             } else {
@@ -58,17 +54,25 @@ open class LoginViewModel : AppCompatActivity() {
                 }
                 //인텐트
                 gotoMain()
-    /*            val nextIntent = Intent(this, MainActivity::class.java)
+                /*            val nextIntent = Intent(this, MainActivity::class.java)
                 startActivity(nextIntent)
                 finish()*/
+                if (user?.isEmailVerified == true) {
+                    Log.d("userVerificationin ", user.isEmailVerified.toString())
+                    //인텐트
+                    gotoMain()
+/*            val nextIntent = Intent(this, MainActivity::class.java)
+            startActivity(nextIntent)
+            finish()*/
 
-            } else {
-                alertEmail()
-                Firebase.auth.signOut()
+                } else {
+                    alertEmail()
+                    Firebase.auth.signOut()
+                }
             }
-        }
 
 //유저의 db 값이 false인지 판단 후 false면 User에게 Verfication mail을 send하고 true면 메인화면으로 진입할 수 있도록 한다.
 
+        }
     }
 }

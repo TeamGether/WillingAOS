@@ -19,11 +19,12 @@ class FriendsViewModel(application: Application): AndroidViewModel(application) 
     private val FOLLOWING = "Following"
 
     fun loadData(recyclerView: RecyclerView) {
+        list = arrayListOf()
         viewModelScope.launch {
             val current = FirebaseUserService.getCurrentUser()
 
-            val followers = FirebaseFollowService.getFollow("Follower", current) as ArrayList<String>
-            val followings = FirebaseFollowService.getFollow("Following", current) as ArrayList<String>
+            val followers = FirebaseFollowService.getFollow("Follow", current, "follower")
+            val followings = FirebaseFollowService.getFollow("Follow", current, "following")
 
             for (follower in followers) {
                 for (following in followings) {

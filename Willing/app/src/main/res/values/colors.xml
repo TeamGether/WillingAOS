@@ -13,5 +13,14 @@
     <color name="red">#CF5C60</color>
     <color name="purple">#717ECD</color>
     <color name="green">#4AB471</color>
-
+    <color name="progress">#CF6C60</color>
+    <color name="anchorNavy">#344A5F</color>
+    <color name="primaryBlue">#2A94D6</color>
+    <color name="slateGrey">#F0F1F2</color>
+    <color name="post">#5AC5DF</color>
+    <color name="thanks">#CF5C60</color>
+    <color name="task">#4AB471</color>
+    <color name="opportunity">#F3AE4E</color>
+    <color name="event">#D96383</color>
+    <color name="account">#717ECD</color>
 </resources>

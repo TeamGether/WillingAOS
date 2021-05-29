@@ -2,6 +2,7 @@ package com.teamgether.willing.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,22 +26,22 @@ class ChallengeDetailActivity : AppCompatActivity() {
         binding.challengeDetail = this
         binding.detailList.layoutManager = GridLayoutManager(this, 3)
 
-        val id = intent.getStringExtra("id")
-
+        val id = intent.getStringExtra("challengeId")
+        Log.d("!!!!!!!Detail!!!!", "id :: $id")
         if (id != null) {
             //챌린지 정보 불러오기
             db.collection("Challenge").document(id).get()
                 .addOnSuccessListener { result ->
                     val title = result["title"] as String
-                    val money = result["money"] as String
-                    val totalWeek = result["total_week"]
-                    val perWeek = result["per_week"]
+                    val money = result["price"] as Long
+                    val totalWeek = result["term"]
+                    val perWeek = result["cntPerWeek"]
 
-                    val bank = result["bank"]
-                    val account = result["account"]
+                    val bank = result["targetBank"]
+                    val account = result["targetAccount"]
 
                     binding.titleTvd.text = title
-                    binding.moneyTvd.text = money
+                    binding.moneyTvd.text = "$money"
                     binding.periodTvd.text = "$totalWeek 주간 $perWeek 번씩"
                     binding.accountTvd.text = "$bank $account"
                 }
@@ -52,14 +53,14 @@ class ChallengeDetailActivity : AppCompatActivity() {
                     val documents = result.documents
 
                     for (document in documents) {
-                        val model = Certifi(document["Imgurl"].toString(), document["timestamp"].toString())
+                        val model =
+                            Certifi(document["imgUrl"].toString(), document["timestamp"].toString())
                         list.add(model)
                     }
                     adapter = CertifiAdapter(list)
                     binding.detailList.adapter = adapter
                 }
         }
-
 
     }
 }

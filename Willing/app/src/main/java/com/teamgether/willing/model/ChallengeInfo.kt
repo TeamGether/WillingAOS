@@ -1,18 +1,16 @@
 package com.teamgether.willing.model
 
 data class ChallengeInfo(
-    var id : String = "",
-    var title: String ?= "",
-    var category: String ?= "",
-    var count: Int = 0,
-    var bank: String? = "",
-    var account: Int = 0,
-    var money: Int = 0,
-    var email: String? = "",
-    var per_week : Int = 0,
-    var percent : Int = 0,
-    var show : Boolean = true,
-    var success : Boolean = true,
-    var total_count : Int = 0,
-    var total_week : Int = 0
+    var UID : String? = "",
+    var cntPerWeek : Int = 0,
+    var didFinish : Boolean = false,
+    var didSuccess : Boolean = false,
+    var percent : Long = 0,
+    var price : Int = 0,
+    var show : Boolean = false,
+    var subject : String? = "",
+    var targetAccount : String? = "",
+    var targetBank : String? = "",
+    var term : Int = 0,
+    var title : String? = "",
 )

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.teamgether.willing.Fragment.UserProfileFragment
 import com.teamgether.willing.fragments.*
 import com.teamgether.willing.databinding.ActivityMainBinding
 import com.teamgether.willing.fragments.FriendsFragment
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 return true
             }
             R.id.menu_mypage -> {
-                supportFragmentManager.beginTransaction().replace(R.id.main_frameLayout, MyPageFragment()).commitAllowingStateLoss()
+                supportFragmentManager.beginTransaction().replace(R.id.main_frameLayout, UserProfileFragment()).commitAllowingStateLoss()
                 return true
             }
         }

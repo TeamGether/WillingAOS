@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.firestore.FirebaseFirestore
 import com.teamgether.willing.MainActivity
@@ -23,21 +24,23 @@ class ChallengeCheckActivity : AppCompatActivity() {
         binding.check = this
 
         val challengeInfo = ChallengeInfo()
-        challengeInfo.title = intent.getStringExtra("title")
-        challengeInfo.account = intent.getIntExtra("account", 0)
-        challengeInfo.bank = intent.getStringExtra("bank")
-        challengeInfo.category = intent.getStringExtra("category")
-        challengeInfo.count = intent.getIntExtra("count", 0)
-        challengeInfo.money = intent.getIntExtra("money", 0)
-        challengeInfo.per_week = intent.getIntExtra("per_week", 0)
-        challengeInfo.percent = intent.getIntExtra("percent", 0)
+        challengeInfo.UID = intent.getStringExtra("UID")
+        challengeInfo.cntPerWeek = intent.getIntExtra("cntPerWeek", 0)
+        challengeInfo.didFinish = intent.getBooleanExtra("didFinish", false)
+        challengeInfo.didSuccess = intent.getBooleanExtra("didSuccess", false)
+        challengeInfo.percent = intent.getLongExtra("percent", 0)
+        challengeInfo.price = intent.getIntExtra("price", 0)
         challengeInfo.show = intent.getBooleanExtra("show", false)
-        challengeInfo.total_count = intent.getIntExtra("total_count", 0)
-        challengeInfo.total_week = intent.getIntExtra("total_week", 0)
+        challengeInfo.subject = intent.getStringExtra("subject")
+        challengeInfo.targetAccount = intent.getStringExtra("targetAccount")
+        challengeInfo.targetBank = intent.getStringExtra("targetBank")
+        challengeInfo.term = intent.getIntExtra("term", 0)
+        challengeInfo.title = intent.getStringExtra("title")
 
         binding.startBtn.setOnClickListener {
             db.collection("Challenge").add(challengeInfo)
                 .addOnSuccessListener {
+                    Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@ChallengeCheckActivity, MainActivity::class.java))
                     finish()
                 }

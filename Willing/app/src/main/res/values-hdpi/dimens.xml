@@ -7,6 +7,8 @@
     <dimen name="profile_margin">25dp</dimen>
     <dimen name="profile_update_margin">30dp</dimen>
     <dimen name="line_margin">10dp</dimen>
+    <dimen name="mp_item_margin">18dp</dimen>
+    <dimen name="progress_margin">13dp</dimen>
 
 
 </resources>
