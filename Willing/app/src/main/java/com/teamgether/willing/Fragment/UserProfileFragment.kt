@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -83,8 +84,8 @@ class UserProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         userEmail = this.arguments?.getString("userEmail")
         Log.d("TAG", "argument: $userEmail")
-//        userEmail = currentUser?.email // 만약 값이 넘어오면 여기다가 다시 덮어씌울 것.
-        userEmail = "mr_magnet@naver.com"
+        userEmail = currentUser?.email // 만약 값이 넘어오면 여기다가 다시 덮어씌울 것.
+        // userEmail = "mr_magnet@naver.com"
         //값을 받는 부분 여기에~~~~~~~~
 
 
@@ -145,27 +146,18 @@ class UserProfileFragment : Fragment() {
         imageView: ImageView,
         context: UserProfileFragment
     ) {
-        if (data.isEmpty() or data.isBlank()) {
-            imageView.setImageResource(
-                R.drawable.ic_launcher_foreground
-            )
-        } else {
-            storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Glide.with(context)
-                        .load(task.result)
-                        .override(150, 150)
-                        .centerCrop()
-                        .into(imageView)
-                } else {
-                    Log.e("error", "error:${error("")}")
-                }
-                imageView.clipToOutline = true //프로필 이미지 가장자리 클립
-
+        storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Glide.with(context)
+                    .load(task.result)
+                    .override(150, 150)
+                    .centerCrop()
+                    .into(imageView)
+            } else {
+                Log.e("error", "error:${error("")}")
             }
+            imageView.clipToOutline = true //프로필 이미지 가장자리 클립
         }
-
-
     }
 
     private fun getUserData() {
@@ -181,6 +173,7 @@ class UserProfileFragment : Fragment() {
                 profileInfo.name = document[nameField] as String
                 profileInfo.email = document[emailField] as String
                 profileInfo.profileImg = document[profileImg] as String
+
                 if (currentUser != null) {
                     profileInfo.isMine = true
                 }
@@ -190,17 +183,15 @@ class UserProfileFragment : Fragment() {
                 mp_nickName!!.text = profileInfo.name
                 Log.d("profileImg", "$profileImgUrl ")
 
-                getProfileImg(profileInfo.profileImg.toString(), mp_profile_img, this)
+                getProfileImg(profileImgUrl, mp_profile_img, this)
                 Log.d("TAG", "getUserData: ${profileInfo.profileImg}")
                 getFollowData(userEmail.toString())
                 getFollowStatus()
-
 
             }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
             } //User info get from firestore db
     }
-
     private fun getChallenge() {
         //원래는 다른사람 피드 보면서 그 사람 페이지로 이동할 때 유저가 누구인지에 대해 값을 받아야하지만 아직 연결되지않았기 떄문에 당장은 current User로 받도록 하겠음
         val subjectField = "subject"
@@ -294,10 +285,10 @@ class UserProfileFragment : Fragment() {
                 Log.d("TAG", "followUserListAF: $followingList")
                 db.collection("Follow").document(currentUser?.email.toString())
                     .update("following", followingList).addOnSuccessListener {
-                    Log.d("TAG", "followingUser: 성공성공성공")
-                    getFollowData(userEmail.toString())
-                    getFollowStatus()
-                }
+                        Log.d("TAG", "followingUser: 성공성공성공")
+                        getFollowData(userEmail.toString())
+                        getFollowStatus()
+                    }
             }
 
         db.collection("Follow").document(userEmail.toString()).get()
@@ -308,10 +299,10 @@ class UserProfileFragment : Fragment() {
                 Log.d("TAG", "followUserAF: $followerList")
                 db.collection("Follow").document(userEmail.toString())
                     .update("follower", followerList).addOnSuccessListener {
-                    Log.d("TAG", "followerUser: 성공성공성공")
-                    getFollowData(userEmail.toString())
-                    getFollowStatus()
-                }
+                        Log.d("TAG", "followerUser: 성공성공성공")
+                        getFollowData(userEmail.toString())
+                        getFollowStatus()
+                    }
             }
 
 //        db.collection("Follow").document(userEmail.toString()).update("follower"))
