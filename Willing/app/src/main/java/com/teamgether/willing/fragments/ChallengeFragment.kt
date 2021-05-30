@@ -44,13 +44,22 @@ class ChallengeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvChallenge.layoutManager = LinearLayoutManager(view.context)
+        getChallengeList()
 
         // 챌린지 개설 버튼
         binding.plusBtn.setOnClickListener {
             startActivity(Intent(view.context, ChallengeCreateActivity::class.java))
         }
 
-        //챌린지 목록 불러오기
+        binding.challengeSwipe.setOnRefreshListener {
+            getChallengeList()
+            binding.challengeSwipe.isRefreshing = false
+        }
+
+    }
+
+    //챌린지 목록 불러오기
+    private fun getChallengeList() {
         list = arrayListOf()
         CoroutineScope(Dispatchers.Main).launch {
 
@@ -79,7 +88,7 @@ class ChallengeFragment : Fragment() {
     }
 
     private suspend fun getData(current : String?): Task<QuerySnapshot> {
-        return db.collection("Challenge").whereEqualTo("UID", current).get()
+        return db.collection("Challenge").whereEqualTo("uid", current).get()
     }
 
 }

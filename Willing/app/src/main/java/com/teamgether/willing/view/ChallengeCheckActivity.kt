@@ -11,6 +11,7 @@ import com.teamgether.willing.MainActivity
 import com.teamgether.willing.R
 import com.teamgether.willing.databinding.ActivityChallengeCheckBinding
 import com.teamgether.willing.model.ChallengeInfo
+import kotlinx.android.synthetic.main.activity_challenge_check.*
 
 class ChallengeCheckActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChallengeCheckBinding
@@ -20,11 +21,13 @@ class ChallengeCheckActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_challenge_check)
 
+
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_challenge_check)
         binding.check = this
 
         val challengeInfo = ChallengeInfo()
-        challengeInfo.UID = intent.getStringExtra("UID")
+        challengeInfo.uid = intent.getStringExtra("uid")
         challengeInfo.cntPerWeek = intent.getIntExtra("cntPerWeek", 0)
         challengeInfo.didFinish = intent.getBooleanExtra("didFinish", false)
         challengeInfo.didSuccess = intent.getBooleanExtra("didSuccess", false)
@@ -36,6 +39,14 @@ class ChallengeCheckActivity : AppCompatActivity() {
         challengeInfo.targetBank = intent.getStringExtra("targetBank")
         challengeInfo.term = intent.getIntExtra("term", 0)
         challengeInfo.title = intent.getStringExtra("title")
+
+
+        title_tv.setText(challengeInfo.title)
+        money_tv.setText(challengeInfo.price.toString())
+        period_tv.setText(challengeInfo.term.toString())
+        val checkAccount = "${challengeInfo.targetBank} ${challengeInfo.targetAccount}"
+        account_tv.setText(checkAccount)
+
 
         binding.startBtn.setOnClickListener {
             db.collection("Challenge").add(challengeInfo)

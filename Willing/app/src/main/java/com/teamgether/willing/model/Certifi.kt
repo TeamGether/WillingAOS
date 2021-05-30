@@ -1,6 +1,10 @@
 package com.teamgether.willing.model
 
 data class Certifi(
-    val imgUrl : String,
-    val timestamp : String
+    var imgUrl : String? = "",
+    var timestamp : String? = "",
+    var challengeId : String? = "",
+    var cheering : ArrayList<String>? = null,
+    var question : ArrayList<String>? = null,
+    var userName : String? = ""
 )

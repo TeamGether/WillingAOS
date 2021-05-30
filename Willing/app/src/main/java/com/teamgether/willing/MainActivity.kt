@@ -3,12 +3,14 @@ package com.teamgether.willing
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.teamgether.willing.Fragment.UserProfileFragment
 import com.teamgether.willing.fragments.*
 import com.teamgether.willing.databinding.ActivityMainBinding
 import com.teamgether.willing.fragments.FriendsFragment
+import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         binding.main = this
 
         binding.mainBottomNavigation.setOnNavigationItemSelectedListener(this)
+
+        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),1)
 
         supportFragmentManager.beginTransaction().add(R.id.main_frameLayout, ChallengeFragment()).commit()
     }

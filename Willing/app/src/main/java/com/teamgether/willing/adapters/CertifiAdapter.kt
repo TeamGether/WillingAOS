@@ -20,15 +20,17 @@ class CertifiAdapter(val certifiList: ArrayList<Certifi>) : RecyclerView.Adapter
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView = itemView.findViewById<ImageView>(R.id.item_certifi_img)
         fun bind(data: Certifi, context: Context) {
-            storageRef.child(data.imgUrl).downloadUrl.addOnCompleteListener{ task ->
-                if (task.isSuccessful) {
-                    Glide.with(context)
-                        .load(task.result)
-                        .override(500,500)
-                        .centerCrop()
-                        .into(imageView)
-                } else {
-                    Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
+            data.imgUrl?.let {
+                storageRef.child(it).downloadUrl.addOnCompleteListener{ task ->
+                    if (task.isSuccessful) {
+                        Glide.with(context)
+                            .load(task.result)
+                            .override(500,500)
+                            .centerCrop()
+                            .into(imageView)
+                    } else {
+                        Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

@@ -15,8 +15,8 @@
         tools:context=".view.ChallengeDetailActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="390dp"
-            android:layout_height="642dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -27,9 +27,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout11"
                 android:layout_width="384dp"
-                android:layout_height="205dp"
+                android:layout_height="255dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="28dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -43,8 +43,8 @@
                     android:layout_marginStart="56dp"
                     android:layout_marginTop="24dp"
                     android:text="도전 내용"
-                    android:textSize="20sp"
                     android:textColor="@color/black"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -69,8 +69,8 @@
                     android:layout_marginTop="8dp"
                     android:text="도전 금액"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -94,8 +94,8 @@
                     android:layout_marginTop="8dp"
                     android:text="도전 기간"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -119,8 +119,8 @@
                     android:layout_marginStart="56dp"
                     android:text="도전계좌"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView9"
@@ -140,24 +140,36 @@
                     app:layout_constraintTop_toBottomOf="@+id/period_tvd"
                     app:layout_constraintVertical_bias="0.195" />
 
+
                 <View
                     android:id="@+id/view4"
                     android:layout_width="350dp"
-                    android:layout_height="1sp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="64dp"
                     android:background="#000000"
                     android:backgroundTint="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.529"
+                    app:layout_constraintHorizontal_bias="0.176"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <ImageView
+                    android:id="@+id/upload_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/constraintLayout11"
+                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout11"
+                    app:layout_constraintHorizontal_bias="0.095"
+                    app:layout_constraintStart_toStartOf="@+id/constraintLayout11"
+                    app:layout_constraintTop_toBottomOf="@+id/view4"
+                    app:srcCompat="@drawable/add" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="361dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -165,14 +177,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout11">
 
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/detail_list"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_certifi" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

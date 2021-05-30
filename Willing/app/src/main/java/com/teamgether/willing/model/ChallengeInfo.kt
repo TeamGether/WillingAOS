@@ -1,7 +1,7 @@
 package com.teamgether.willing.model
 
 data class ChallengeInfo(
-    var UID : String? = "",
+    var uid : String? = "",
     var cntPerWeek : Int = 0,
     var didFinish : Boolean = false,
     var didSuccess : Boolean = false,
