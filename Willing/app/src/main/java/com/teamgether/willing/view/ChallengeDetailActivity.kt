@@ -64,7 +64,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_challenge_detail)
         binding.challengeDetail = this
-        binding.detailList.layoutManager = GridLayoutManager(this, 3)
+        binding.detailList.layoutManager = GridLayoutManager(this, 4)
 
         uid = FirebaseAuth.getInstance().currentUser?.uid
         fbStorage = FirebaseStorage.getInstance()
