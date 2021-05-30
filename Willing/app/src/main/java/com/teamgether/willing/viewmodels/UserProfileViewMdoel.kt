@@ -1,4 +1,4 @@
-package com.teamgether.willing.viewModel
+package com.teamgether.willing.viewmodels
 
 import android.app.Application
 import android.util.Log

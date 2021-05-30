@@ -1,11 +1,11 @@
-package com.teamgether.willing.viewModel
+package com.teamgether.willing.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
-import com.teamgether.willing.Adapter.FriendAdapter
+import com.teamgether.willing.adapters.FriendAdapter
 import com.teamgether.willing.firebase.FirebaseFollowService
 import com.teamgether.willing.firebase.FirebaseUserService
 import com.teamgether.willing.model.Friends
@@ -19,11 +19,12 @@ class FriendsViewModel(application: Application): AndroidViewModel(application) 
     private val FOLLOWING = "Following"
 
     fun loadData(recyclerView: RecyclerView) {
+        list = arrayListOf()
         viewModelScope.launch {
             val current = FirebaseUserService.getCurrentUser()
 
-            val followers = FirebaseFollowService.getFollow("Follower", current) as ArrayList<String>
-            val followings = FirebaseFollowService.getFollow("Following", current) as ArrayList<String>
+            val followers = FirebaseFollowService.getFollow("Follow", current, "follower")
+            val followings = FirebaseFollowService.getFollow("Follow", current, "following")
 
             for (follower in followers) {
                 for (following in followings) {

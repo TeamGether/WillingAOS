@@ -6,13 +6,13 @@
     <data>
         <variable
             name="feedViewModel"
-            type="com.teamgether.willing.viewModel.FeedViewModel" />
+            type="com.teamgether.willing.viewmodels.FeedViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Fragment.FeedFragment">
+        tools:context=".fragments.FeedFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

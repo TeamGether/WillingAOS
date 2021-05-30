@@ -6,7 +6,7 @@
     <data>
         <variable
             name="feedViewModel"
-            type="com.teamgether.willing.viewModel.FeedViewModel" />
+            type="com.teamgether.willing.viewmodels.FeedViewModel" />
 
         <variable
             name="pos"

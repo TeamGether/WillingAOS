@@ -1,4 +1,4 @@
-package com.teamgether.willing.Fragment
+package com.teamgether.willing.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +14,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
-import com.teamgether.willing.Adapter.TrialAdapter
+import com.teamgether.willing.adapters.TrialAdapter
 import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.model.Trial
@@ -65,17 +65,19 @@ class TrialFragment : Fragment() {
             for (data in certification) {
                 val trial = Trial()
 
-                val imgId = data["Imgurl"] as String
-                val timestamp = data["timestamp"] as String
+                val imgId = data["imgUrl"] as String
+                val timestamp = data["timestamp"] as Long
                 val cheerCnt = data["cheering"] as ArrayList<String>
                 val questionCnt = data["question"] as ArrayList<String>
                 challengeId = data["challengeId"] as String
 
                 val challengeInfo = getChallengeData(challengeId).await()
                 val content = challengeInfo["title"] as String
-                val name = challengeInfo["user"] as String
+                val name = challengeInfo["UID"]
 
-                val userInfo = getUserProfile(name).await().documents
+                Log.d("!!!!!!!!!!!!!!", "${challengeInfo["title"]} !!! ${challengeInfo["UID"]}")
+
+                val userInfo = getUserProfile(name.toString()).await().documents
                 var username = ""
                 var profileImg = ""
                 for (data in userInfo) {
@@ -113,7 +115,7 @@ class TrialFragment : Fragment() {
 
     // 챌린지 정보에 있는 사용자 이름 바탕으로 사용자 정보 불러오기
     private suspend fun getUserProfile(userName: String): Task<QuerySnapshot> {
-        return db.collection("User").whereEqualTo("name", userName).get()
+        return db.collection("User").whereEqualTo("email", userName).get()
     }
 
 

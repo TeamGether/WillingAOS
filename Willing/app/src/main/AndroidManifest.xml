@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -14,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Willing"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.ChallengeCheckActivity"></activity>
+        <activity android:name=".view.ChallengeCreateActivity" />
+        <activity android:name=".view.ChallengeDetailActivity" />
         <activity android:name=".view.OtherDetailActivity" />
         <activity android:name=".SplashActivity" />
         <activity android:name=".view.SignUpActivity" />
@@ -25,7 +29,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".view.ChallengeDetailActivity" />
         <activity android:name=".view.ProfileUpdateActivity"/>
 
     </application>

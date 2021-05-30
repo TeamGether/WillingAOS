@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import com.teamgether.willing.R
-import com.teamgether.willing.viewModel.SignUpViewModel
+import com.teamgether.willing.viewmodels.SignUpViewModel
 import kotlinx.android.synthetic.main.activity_signup.*
 
 class SignUpActivity : SignUpViewModel() {

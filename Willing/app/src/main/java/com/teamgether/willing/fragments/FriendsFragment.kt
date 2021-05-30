@@ -1,4 +1,4 @@
-package com.teamgether.willing.Fragment
+package com.teamgether.willing.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.teamgether.willing.R
 import com.teamgether.willing.databinding.FragmentFriendsBinding
-import com.teamgether.willing.viewModel.FriendsViewModel
+import com.teamgether.willing.viewmodels.FriendsViewModel
 
 class FriendsFragment : Fragment() {
 

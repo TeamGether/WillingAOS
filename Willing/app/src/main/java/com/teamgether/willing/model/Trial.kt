@@ -5,7 +5,7 @@ data class Trial(
     var profileImg: String? = "",
     var userName: String? = "",
     var content: String? = "",
-    var timestamp: String? = "",
+    var timestamp: Long? = 0,
     var servertime: Long = 0,
     var cheeringCnt: Long = 0,
     var questionCnt: Long = 0

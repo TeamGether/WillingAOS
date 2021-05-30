@@ -14,8 +14,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.okhttp.Dispatcher
-import com.teamgether.willing.Adapter.CommentAdapter
+import com.teamgether.willing.adapters.CommentAdapter
 import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.databinding.ActivityOtherDetailBinding
@@ -107,8 +106,7 @@ class OtherDetailActivity : AppCompatActivity() {
             }
             if (value != null && value.exists()) {
                 binding.otherDetailChallenge.text = value["title"].toString()
-                binding.otherDetailUsername.text = value["user"].toString()
-                setProfileImg(value["user"].toString())
+                setProfileImg(value["UID"].toString())
 
             } else {
                 Toast.makeText(this@OtherDetailActivity, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
@@ -118,7 +116,7 @@ class OtherDetailActivity : AppCompatActivity() {
 
     // 해당 인증사진 타임스탬프 받아오기
     private fun setTimeStamp() {
-        db.collection("Certification").whereEqualTo("Imgurl", imgUrl).get()
+        db.collection("Certification").whereEqualTo("imgUrl", imgUrl).get()
             .addOnSuccessListener { result ->
                 val data = result.documents[0]["timestamp"].toString()
                 binding.otherDetailTimesetamp.text = data
@@ -131,8 +129,9 @@ class OtherDetailActivity : AppCompatActivity() {
     // 사용자 프로필 사진 받아오기
     private fun setProfileImg(userName: String) {
         var img = ""
-        db.collection("User").whereEqualTo("name", userName).get()
+        db.collection("User").whereEqualTo("email", userName).get()
             .addOnSuccessListener { result ->
+                binding.otherDetailUsername.text = result.documents[0]["name"].toString()
                 img = result.documents[0]["profileImg"] as String
                 storageRef.child(img).downloadUrl.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -157,8 +156,8 @@ class OtherDetailActivity : AppCompatActivity() {
     private fun saveComment(comment: String) {
 
         // 사용자 정보 받아오기
-        val user: FirebaseUser = FirebaseAuth.getInstance().currentUser
-        val email = user.email
+        val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        val email = user?.email
 
         var profileImgUrl: String = ""
         var name: String = ""

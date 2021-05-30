@@ -1,4 +1,4 @@
-package com.teamgether.willing.Adapter
+package com.teamgether.willing.adapters
 
 import android.content.Context
 import android.content.Intent
