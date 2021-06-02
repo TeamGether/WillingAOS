@@ -38,12 +38,15 @@
 
     <string name="up_title">Profile</string>
     <string name="mp_title">My Page</string>
+    <string name="mp_doing_challenge_list">진행중인 챌린지</string>
+    <string name="mp_finish_challenge_list">종료된 챌린지</string>
     <string name="mp_profile_update_btn">프로필 수정</string>
     <string name="mp_follower">팔로워</string>
     <string name="mp_following">팔로잉</string>
     <string name="mp_not_follow">팔로우</string>
     <string name="mp_did_follow">팔로잉중</string>
-    <string name="mp_ch_headline">챌린지 모아보기</string>
+    <string name="mp_ch_hl_ing">진행중인 챌린지</string>
+    <string name="mp_ch_hl_fin">종료된 챌린지</string>
     <string name="profile_update_tv">프로필 사진 변경</string>
     <string name="profile_update_gallery_tv">앨범에서 선택</string>
     <string name="profile_update_camera_tv">사진 촬영</string>

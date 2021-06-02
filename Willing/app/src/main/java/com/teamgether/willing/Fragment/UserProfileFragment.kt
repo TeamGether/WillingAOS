@@ -1,5 +1,6 @@
 package com.teamgether.willing.Fragment
 
+import ProfileChallengePagerAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -15,7 +16,10 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.collection.LLRBNode
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +38,10 @@ import kotlinx.coroutines.launch
 import javax.xml.parsers.ParserConfigurationException
 
 class UserProfileFragment : Fragment() {
+
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager2
+
     private lateinit var activity: Activity
     private lateinit var list: ArrayList<ChallengeList>
 
@@ -66,6 +74,11 @@ class UserProfileFragment : Fragment() {
 
     var profileImgUrl: String = ""
 
+    companion object {
+        fun newInstance(): UserProfileFragment = UserProfileFragment()
+    }
+
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Activity) {
@@ -77,15 +90,36 @@ class UserProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_user_profile, container, false)
+
+        var view: View = inflater.inflate(R.layout.fragment_user_profile, container, false)
+        tabLayout = view.findViewById(R.id.tab_layout)
+        viewPager = view.findViewById(R.id.mp_challenge_pager)
+        val adapter = ProfileChallengePagerAdapter(this)
+        viewPager.adapter = adapter
+        val tabName = arrayOf<String>("진헹중인 챌린지", "종료된 챌린지")
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabName[position].toString()
+        }.attach()
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                viewPager.currentItem = tab!!.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         userEmail = this.arguments?.getString("userEmail")
         Log.d("TAG", "argument: $userEmail")
         userEmail = currentUser?.email // 만약 값이 넘어오면 여기다가 다시 덮어씌울 것.
-        // userEmail = "mr_magnet@naver.com"
+//        userEmail = "mr_magnet@naver.com"
         //값을 받는 부분 여기에~~~~~~~~
 
 
@@ -104,7 +138,7 @@ class UserProfileFragment : Fragment() {
         } //팔로잉버튼 숨기기
         showLoadingDialog()
         getUserData()
-        getChallenge()
+//        getChallenge()
 
         mp_profile_update_btn.setOnClickListener {
             Intent(context, ProfileUpdateActivity::class.java).apply {
@@ -117,28 +151,20 @@ class UserProfileFragment : Fragment() {
             }
         }
         mp_follow_btn.setOnClickListener {
-
             if (isFollow) {
                 unfollowUser()
             } else {
                 followUser()
             }
         }
-        refresh_layout.setOnRefreshListener {
-            getChallenge()
-            challengeListAdapter.notifyDataSetChanged()
-            refresh_layout.isRefreshing = false
-        }
+
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("TAG", "onStart: ${profileInfo.email}")
         showLoadingDialog()
         getUserData()
-        Log.d("TAG", "onStart: ${profileInfo.profileImg}")
-
-        getChallenge()
+//        getChallenge()
     }
 
     private fun getProfileImg(
@@ -192,8 +218,8 @@ class UserProfileFragment : Fragment() {
                 Log.w("TAG", "Error getting documents: ", exception)
             } //User info get from firestore db
     }
-    private fun getChallenge() {
-        //원래는 다른사람 피드 보면서 그 사람 페이지로 이동할 때 유저가 누구인지에 대해 값을 받아야하지만 아직 연결되지않았기 떄문에 당장은 current User로 받도록 하겠음
+
+/*    private fun getChallenge() {
         val subjectField = "subject"
         val titleField = "title"
         val percentField = "percent"
@@ -220,7 +246,7 @@ class UserProfileFragment : Fragment() {
                     mp_challenge_list!!.adapter = challengeListAdapter
                 }
             }
-    }
+    }*/
 
     private fun getFollowData(email: String) {
         db.collection("Follow").document(email).get().addOnSuccessListener { result ->
@@ -285,7 +311,6 @@ class UserProfileFragment : Fragment() {
                 Log.d("TAG", "followUserListAF: $followingList")
                 db.collection("Follow").document(currentUser?.email.toString())
                     .update("following", followingList).addOnSuccessListener {
-                        Log.d("TAG", "followingUser: 성공성공성공")
                         getFollowData(userEmail.toString())
                         getFollowStatus()
                     }
@@ -299,7 +324,6 @@ class UserProfileFragment : Fragment() {
                 Log.d("TAG", "followUserAF: $followerList")
                 db.collection("Follow").document(userEmail.toString())
                     .update("follower", followerList).addOnSuccessListener {
-                        Log.d("TAG", "followerUser: 성공성공성공")
                         getFollowData(userEmail.toString())
                         getFollowStatus()
                     }
