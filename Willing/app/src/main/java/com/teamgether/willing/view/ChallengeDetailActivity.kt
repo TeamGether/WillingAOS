@@ -11,12 +11,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -25,12 +28,14 @@ import com.teamgether.willing.adapters.CertifiAdapter
 import com.teamgether.willing.R
 import com.teamgether.willing.databinding.ActivityChallengeDetailBinding
 import com.teamgether.willing.model.Certifi
+import com.teamgether.willing.model.ChallengeInfo
 import kotlinx.android.synthetic.main.activity_challenge_detail.*
 import kotlinx.android.synthetic.main.item_certifi.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.lang.Math.ceil
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -71,21 +76,42 @@ class ChallengeDetailActivity : AppCompatActivity() {
         storageRef = fbStorage!!.getReference()
 
 
-
         upload_btn.setOnClickListener {
 
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
             startActivityForResult(photoPickerIntent, pickImageFromAlbum)
 
+
         }
 
-
+/*
+            1. 챌린지 아이디에 속해있는 uid가 현재 로그인하고 있는 유저인지 체크
+            2. 유저가 다르다면 도전계좌 계좌정보 사진 업로드 버튼을 View.GONE 으로 안보이게 함
+            3. 같은 유저라면 View.VISIBLE로 내용 넣어주기
+             */
         id = intent.getStringExtra("challengeId")
         Log.d("!!!!!!!Detail!!!!", "id :: $id")
         if (id != null) {
-            upload(id!!)
+            CoroutineScope(Dispatchers.Main).launch {
+                val result = getChallenge(id!!)
+                val email = result["uid"] as String
+
+                if (email == uid) {
+                    textView8.setVisibility(View.VISIBLE)
+                    account_tvd.setVisibility(View.VISIBLE)
+                    upload_btn.setVisibility(View.VISIBLE)
+                    upload(id!!)
+                } else {
+                    textView8.setVisibility(View.GONE)
+                    account_tvd.setVisibility(View.GONE)
+                    upload_btn.setVisibility(View.GONE)
+                }
+            }
         }
+
+
+
 
     }
 
@@ -153,18 +179,31 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
             val title = result["title"] as String
             val money = result["price"] as Long
-            val totalWeek = result["term"]
-            val perWeek = result["cntPerWeek"]
-            val bank = result["targetBank"]
-            val account = result["targetAccount"]
+            val totalWeek = result["term"] as Long
+            val perWeek = result["cntPerWeek"] as Long
+            val bank = result["targetBank"] as String
+            val account = result["targetAccount"] as String
 
             binding.titleTvd.text = title
             binding.moneyTvd.text = "$money"
             binding.periodTvd.text = "$totalWeek 주간 $perWeek 번씩"
             binding.accountTvd.text = "$bank $account"
 
+
             // 인증 사진 목록 불러오기
             val documents = getCertification(id).documents
+
+            //챌린지 퍼센트 계산
+            val size = documents.size
+            val percent : Long  = (100 * size / (perWeek * totalWeek))
+
+            db.collection("Challenge").document(id).update("percent", percent).addOnSuccessListener {
+                Log.d("DetailActivity !!", "$percent is saved")
+            }.addOnFailureListener {
+                Log.e("DetailActivity !!", it.message.toString())
+            }
+
+
             list = arrayListOf()
             for (document in documents) {
                 val model =
@@ -178,6 +217,8 @@ class ChallengeDetailActivity : AppCompatActivity() {
         }
 
     }
+
+
 
     private suspend fun getUserName(email : String?): QuerySnapshot {
         return db.collection("User").whereEqualTo("email", email).get().await()
