@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.teamgether.willing.Adapter.ChallengeListAdapter
@@ -20,7 +21,7 @@ class ProfileChallengeFinishFragment : Fragment() {
     private lateinit var challengeListAdapter: ChallengeListAdapter
     private lateinit var activity: Activity
 
-    private var userEmail: String? = ""
+    private var userEmail: String = ""
     private var auth = FirebaseAuth.getInstance()
     private val currentUser = auth.currentUser
     private var db = FirebaseFirestore.getInstance()
@@ -44,13 +45,11 @@ class ProfileChallengeFinishFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_finish_challenge, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userEmail = this.arguments?.getString("userEmail")
-        Log.d("TAG", "argument: $userEmail")
-        userEmail = currentUser?.email // 만약 값이 넘어오면 여기다가 다시 덮어씌울 것.
-//        userEmail = "mr_magnet@naver.com"
+        userEmail = UserProfileFragment.uid
 
         getChallenge()
         refresh_layout.setOnRefreshListener {

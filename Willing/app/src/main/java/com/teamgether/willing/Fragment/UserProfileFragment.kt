@@ -5,15 +5,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -21,7 +18,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.collection.LLRBNode
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.teamgether.willing.Adapter.ChallengeListAdapter
@@ -35,7 +31,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.xml.parsers.ParserConfigurationException
 
 class UserProfileFragment : Fragment() {
 
@@ -57,7 +52,6 @@ class UserProfileFragment : Fragment() {
     private var userName: String = ""
     var isMine: Boolean = false
     private var isFollow = false
-
     var profileInfo: ProfileInfo = ProfileInfo(
         profileImg = "",
         name = "",
@@ -69,15 +63,13 @@ class UserProfileFragment : Fragment() {
         followStatus = "",
         isMine = false
     )
-
     private lateinit var challengeListAdapter: ChallengeListAdapter
 
     var profileImgUrl: String = ""
 
     companion object {
-        fun newInstance(): UserProfileFragment = UserProfileFragment()
+        var uid: String = ""
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -90,17 +82,18 @@ class UserProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        var view: View = inflater.inflate(R.layout.fragment_user_profile, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_user_profile, container, false)
         tabLayout = view.findViewById(R.id.tab_layout)
         viewPager = view.findViewById(R.id.mp_challenge_pager)
         val adapter = ProfileChallengePagerAdapter(this)
         viewPager.adapter = adapter
         val tabName = arrayOf<String>("진헹중인 챌린지", "종료된 챌린지")
 
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = tabName[position].toString()
+            tab.text = tabName[position]
         }.attach()
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 viewPager.currentItem = tab!!.position
@@ -114,12 +107,9 @@ class UserProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         userEmail = this.arguments?.getString("userEmail")
-        Log.d("TAG", "argument: $userEmail")
 
-        //값을 받는 부분 여기에~~~~~~~~
+        uid = userEmail.toString()
 
 
         if (userEmail.equals(currentUser?.email)) {
@@ -206,10 +196,8 @@ class UserProfileFragment : Fragment() {
 
                 mp_email!!.text = profileInfo.email
                 mp_nickName!!.text = profileInfo.name
-                Log.d("profileImg", "$profileImgUrl ")
 
                 getProfileImg(profileImgUrl, mp_profile_img, this)
-                Log.d("TAG", "getUserData: ${profileInfo.profileImg}")
                 getFollowData(userEmail.toString())
                 getFollowStatus()
 
@@ -369,7 +357,10 @@ class UserProfileFragment : Fragment() {
         getFollowData(userEmail.toString())
         getFollowStatus()
     }
-    //following -> 내가 팔로우 하는 거
-    //follower -> 다른 사람이 나한테 한 거
-    //follow -> following하는 행위
-}//challenge 비공개인거 안불러오는 구문 추가
+
+    private fun setEmailAtProfile(fragment: Fragment, email: String) {
+        val bundle = Bundle()
+        bundle.putString("profileKey", email)
+        fragment.arguments = bundle
+    }
+}

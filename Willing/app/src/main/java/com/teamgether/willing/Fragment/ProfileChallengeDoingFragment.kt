@@ -19,11 +19,11 @@ class ProfileChallengeDoingFragment : Fragment() {
     private lateinit var list: ArrayList<ChallengeList>
     private lateinit var challengeListAdapter: ChallengeListAdapter
     private lateinit var activity: Activity
-
-    private var userEmail: String? = ""
+    private var userEmail: String = ""
     private var auth = FirebaseAuth.getInstance()
     private val currentUser = auth.currentUser
     private var db = FirebaseFirestore.getInstance()
+
 
     companion object {
         fun newInstance(): ProfileChallengeDoingFragment = ProfileChallengeDoingFragment()
@@ -47,10 +47,7 @@ class ProfileChallengeDoingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userEmail = this.arguments?.getString("userEmail")
-        Log.d("TAG", "argument: $userEmail")
-        userEmail = currentUser?.email // 만약 값이 넘어오면 여기다가 다시 덮어씌울 것.
-//        userEmail = "mr_magnet@naver.com"
+        userEmail = UserProfileFragment.uid
 
         getChallenge()
         refresh_layout.setOnRefreshListener {
@@ -66,7 +63,8 @@ class ProfileChallengeDoingFragment : Fragment() {
         val titleField = "title"
         val percentField = "percent"
 
-        db.collection("Challenge").whereEqualTo("uid", userEmail).whereEqualTo("show",true).whereEqualTo("didFinish",false).get()
+        db.collection("Challenge").whereEqualTo("uid", userEmail).whereEqualTo("show", true)
+            .whereEqualTo("didFinish", false).get()
             .addOnSuccessListener { result ->
                 list = arrayListOf()
                 for (document in result) {

@@ -67,7 +67,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private fun setEmailAtProfile(fragment: Fragment, email:String) {
         val bundle = Bundle()
         bundle.putString("userEmail",email)
-
         fragment.arguments = bundle
     }
 
