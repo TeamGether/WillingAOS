@@ -14,8 +14,6 @@ class LoginActivity : LoginViewModel() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        var isChecked: Boolean = false
-
         finishLoginBtn.setOnClickListener {
             val email = login_email.text.toString()
             val password = login_pwd.text.toString()
@@ -27,7 +25,7 @@ class LoginActivity : LoginViewModel() {
             if (email.isNotBlank() && password.isNotBlank()) {
                 login_warning_email.text = ""
                 login_warning_pwd.text = ""
-                login(email, password,::alertUser,::alertEmail,::gotoMain)
+                login(email, password, ::alertUser, ::alertEmail, ::gotoMain)
             } else {
                 if (email.isBlank()) {
                     login_warning_email.setText(R.string.login_warning_null)
@@ -50,7 +48,7 @@ class LoginActivity : LoginViewModel() {
         }
     }
 
-    fun alertBuild(setTitle:Int,setMessage:Int,setButton:Int) {
+    fun alertBuild(setTitle: Int, setMessage: Int, setButton: Int) {
         val builder = AlertDialog.Builder(this)
             .setTitle(setTitle)
             .setMessage(setMessage)
@@ -58,18 +56,26 @@ class LoginActivity : LoginViewModel() {
             }
         builder.show()
     }
-    fun alertEmail(){
-        alertBuild(R.string.email_verification_title,R.string.email_verification_message,R.string.email_verification_btnText)
+
+    fun alertEmail() {
+        alertBuild(
+            R.string.email_verification_title,
+            R.string.email_verification_message,
+            R.string.email_verification_btnText
+        )
     }
-    fun alertUser(){
-        alertBuild(R.string.login_wrong_user_title,R.string.login_wrong_user_message,R.string.login_wrong_user_btnText)
+
+    fun alertUser() {
+        alertBuild(
+            R.string.login_wrong_user_title,
+            R.string.login_wrong_user_message,
+            R.string.login_wrong_user_btnText
+        )
     }
-/*    fun gotoActivity(context: Context,activity:Activity){
-        val nextintent = Intent(context,activity::class.java)
-        startActivity((nextintent))
-    }*/
-    fun gotoMain(){
-        val nextIntent = Intent(this,MainActivity::class.java)
+
+    fun gotoMain(email:String) {
+        val nextIntent = Intent(this, MainActivity::class.java)
+        nextIntent.putExtra("email",email)
         startActivity(nextIntent)
         finish()
     }

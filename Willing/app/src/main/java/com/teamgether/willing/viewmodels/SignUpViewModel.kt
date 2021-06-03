@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_signup.*
 
 open class SignUpViewModel : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
-
+    val defaultImgUrl = "profile/default_profile.jpeg"
     lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,13 +25,12 @@ open class SignUpViewModel : AppCompatActivity() {
 
     }
 
-    fun createUser(email: String, password: String,name: String,donationName: String,startActivity:()->Unit) {
+    fun createUser(email: String, password: String,name: String,tobe: String,profileImg: String,startActivity:()->Unit) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     startToast("회원가입 성공")
-                    setData(name, email, donationName,startActivity)
-
+                    setData(name, email,tobe,profileImg ,startActivity)
                 } else {
                     startToast("회원가입 실패")
                 }
@@ -42,8 +41,8 @@ open class SignUpViewModel : AppCompatActivity() {
             }
     }
 
-    private fun setData(name: String, email: String, donationName: String,startActivity:()->Unit) {
-        val userInfo = UserInfo(name, email, donationName)
+    private fun setData(name: String, email: String,tobe:String ,profileImg:String, startActivity:()->Unit) {
+        val userInfo = UserInfo(name, email,tobe,profileImg)
 
         db.collection("User").add(userInfo).addOnSuccessListener {
             startToast("데이터 추가 성공")

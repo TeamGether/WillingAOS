@@ -31,7 +31,6 @@ class OtherDetailActivity : AppCompatActivity() {
     private var challengeId: String = ""
     private var imgUrl: String = ""
     private lateinit var binding: ActivityOtherDetailBinding
-
     private var db = FirebaseFirestore.getInstance()
     private val storage: FirebaseStorage =
         FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")

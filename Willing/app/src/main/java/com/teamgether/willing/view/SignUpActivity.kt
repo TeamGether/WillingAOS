@@ -48,16 +48,17 @@ class SignUpActivity : SignUpViewModel() {
             val password = signup_pw.text.toString()
             val checkPassword = signup_cpw.text.toString()
             val name = signup_nickName.text.toString()
-            val donationName = signup_dona.text.toString()
+            val tobe = ""
+            val profileImg = "profile/default_profile.jpeg"
 
 
-            if (email.isNotBlank() && password.isNotBlank() && checkPassword.isNotBlank() && name.isNotBlank() && donationName.isNotBlank()
+            if (email.isNotBlank() && password.isNotBlank() && checkPassword.isNotBlank() && name.isNotBlank()
             ) {
                 if (password.length >= 6) {
                     sign_up_warning_pwd.text = ""
                     if (password == checkPassword) {
                         sign_up_warning_chkPwd.text = ""
-                        createUser(email, password, name, donationName, ::startActivity)
+                        createUser(email, password, name, tobe, profileImg, ::startActivity)
                     } else {
                         sign_up_warning_chkPwd.setText(R.string.sign_up_warning_chkPwd)
                     }
@@ -70,8 +71,7 @@ class SignUpActivity : SignUpViewModel() {
                 sign_up_warning_email.text = ""
                 sign_up_warning_pwd.text = ""
                 sign_up_warning_chkPwd.text = ""
-                sign_up_warning_dona.text = ""
-            } else {
+              } else {
                 if (email.isBlank()) {
                     sign_up_warning_email.setText(R.string.sign_up_warning_null)
                 } else {
@@ -91,11 +91,6 @@ class SignUpActivity : SignUpViewModel() {
                     sign_up_warning_chkPwd.setText(R.string.sign_up_warning_null)
                 } else {
                     sign_up_warning_chkPwd.text = ""
-                }
-                if (donationName.isBlank()) {
-                    sign_up_warning_dona.setText(R.string.sign_up_warning_null)
-                } else {
-                    sign_up_warning_dona.text = ""
                 }
             }
 
