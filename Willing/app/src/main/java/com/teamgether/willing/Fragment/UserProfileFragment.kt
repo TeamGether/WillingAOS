@@ -118,8 +118,7 @@ class UserProfileFragment : Fragment() {
 
         userEmail = this.arguments?.getString("userEmail")
         Log.d("TAG", "argument: $userEmail")
-        userEmail = currentUser?.email // 만약 값이 넘어오면 여기다가 다시 덮어씌울 것.
-//        userEmail = "mr_magnet@naver.com"
+
         //값을 받는 부분 여기에~~~~~~~~
 
 
