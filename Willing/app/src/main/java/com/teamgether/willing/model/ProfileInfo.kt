@@ -9,5 +9,5 @@ data class ProfileInfo(
     var followerCount: Int = 0,
     var followCount: Int =0,
     var followStatus:String = "",
-    var isMine:Boolean = true
+    var isMine:Boolean = false
 )

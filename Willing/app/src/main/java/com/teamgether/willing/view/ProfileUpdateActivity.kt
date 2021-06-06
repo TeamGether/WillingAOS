@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import kotlinx.android.synthetic.main.activity_profile_update.*
 import java.io.FileOutputStream
@@ -60,6 +61,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
         }
 
         profile_update_save_btn.setOnClickListener {
+            showLoadingDialog()
             uploadImage()
         }
 
@@ -150,18 +152,24 @@ class ProfileUpdateActivity : AppCompatActivity() {
         imageView: ImageView,
         context: Context
     ) {
-        storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Glide.with(context)
-                    .load(task.result)
-                    .override(150, 150)
-                    .centerCrop()
-                    .into(imageView)
-            } else {
-                Log.e("error", "error:${error("")}")
-            }
-            imageView.clipToOutline = true //프로필 이미지 가장자리 클립
+        if (data.isEmpty() or data.isBlank()) {
+            imageView.setImageResource(
+                R.drawable.ic_launcher_foreground
+            )
+        } else {
+            storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Glide.with(context)
+                        .load(task.result)
+                        .override(150, 150)
+                        .centerCrop()
+                        .into(imageView)
+                } else {
+                    Log.e("error", "error:${error("")}")
+                }
+                imageView.clipToOutline = true //프로필 이미지 가장자리 클립
 
+            }
         }
     }
 
@@ -227,6 +235,15 @@ class ProfileUpdateActivity : AppCompatActivity() {
             Toast.makeText(this, "$uri", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
             Log.e("TAG", "updateUserProfileImg: ${error("")}")
+        }
+    }
+
+    private fun showLoadingDialog() {
+        val dialog = LoadingDialog(this)
+        CoroutineScope(Dispatchers.Main).launch {
+            dialog.show()
+            delay(1500)
+            dialog.dismiss()
         }
     }
 

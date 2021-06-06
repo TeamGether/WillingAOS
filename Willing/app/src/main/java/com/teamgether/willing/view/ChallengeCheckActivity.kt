@@ -21,8 +21,6 @@ class ChallengeCheckActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_challenge_check)
 
-
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_challenge_check)
         binding.check = this
 
@@ -41,11 +39,11 @@ class ChallengeCheckActivity : AppCompatActivity() {
         challengeInfo.title = intent.getStringExtra("title")
 
 
-        title_tv.setText(challengeInfo.title)
-        money_tv.setText(challengeInfo.price.toString())
-        period_tv.setText(challengeInfo.term.toString())
+        title_tv.text = challengeInfo.title
+        money_tv.text = challengeInfo.price.toString()
+        period_tv.text = challengeInfo.term.toString()
         val checkAccount = "${challengeInfo.targetBank} ${challengeInfo.targetAccount}"
-        account_tv.setText(checkAccount)
+        account_tv.text = checkAccount
 
 
         binding.startBtn.setOnClickListener {

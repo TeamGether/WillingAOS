@@ -12,6 +12,7 @@ import com.teamgether.willing.MainActivity
 open class LoginViewModel : AppCompatActivity() {
 
     lateinit var auth: FirebaseAuth
+    var userEmail: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,7 @@ open class LoginViewModel : AppCompatActivity() {
         password: String,
         alertUser: () -> Unit,
         alertEmail: () -> Unit,
-        gotoMain: () -> Unit
+        gotoMain: (email: String) -> Unit
     ) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -45,34 +46,23 @@ open class LoginViewModel : AppCompatActivity() {
     //sentAlarm
 
     // email 인증 확인 후 intent
-    fun getUserVerification(alertEmail: () -> Unit, gotoMain: () -> Unit) {
+    fun getUserVerification(alertEmail: () -> Unit, gotoMain: (email: String) -> Unit) {
         val user = Firebase.auth.currentUser
-        if (user != null) {
-            if (user.isEmailVerified) {
-                if (user != null) {
-                    Log.d("userVerificationin ", user.isEmailVerified.toString())
-                }
-                //인텐트
-                gotoMain()
-                /*            val nextIntent = Intent(this, MainActivity::class.java)
-                startActivity(nextIntent)
-                finish()*/
-                if (user?.isEmailVerified == true) {
-                    Log.d("userVerificationin ", user.isEmailVerified.toString())
-                    //인텐트
-                    gotoMain()
+
+        if (user?.isEmailVerified == true) {
+            Log.d("userVerificationin ", user.isEmailVerified.toString())
+            //인텐트
+            userEmail = user.email.toString()
+
+            gotoMain(userEmail)
 /*            val nextIntent = Intent(this, MainActivity::class.java)
             startActivity(nextIntent)
             finish()*/
 
-                } else {
-                    alertEmail()
-                    Firebase.auth.signOut()
-                }
-            }
-
-//유저의 db 값이 false인지 판단 후 false면 User에게 Verfication mail을 send하고 true면 메인화면으로 진입할 수 있도록 한다.
-
+        } else {
+            alertEmail()
+            Firebase.auth.signOut()
         }
     }
+//유저의 db 값이 false인지 판단 후 false면 User에게 Verfication mail을 send하고 true면 메인화면으로 진입할 수 있도록 한다.
 }

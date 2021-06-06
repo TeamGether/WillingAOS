@@ -23,7 +23,7 @@
                 app:layout_constraintVertical_chainStyle="packed">
 
                 <ImageView
-                    android:id="@+id/menu_btn"
+                    android:id="@+id/mp_menu_btn"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="@dimen/title_margin"
@@ -36,13 +36,13 @@
                     android:id="@+id/mp_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
                     android:fontFamily="@font/sc_dream7"
-                    android:text="@string/mp_title"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout5"
-                    app:layout_constraintTop_toBottomOf="@+id/menu_btn"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,7 +102,6 @@
                             android:layout_marginTop="@dimen/text_margin_top"
                             android:layout_marginBottom="@dimen/text_margin_top"
                             android:fontFamily="@font/sc_dream5"
-                            android:text="qwerty_gmail_com"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -117,7 +116,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_margin_top"
                             android:fontFamily="@font/sc_dream5"
-                            android:text="디폴드값임진짜임"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             app:layout_constraintBottom_toTopOf="@+id/mp_email"
@@ -154,42 +152,6 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout7"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/line_margin"
-                    android:weightSum="2"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
-
-                    <TextView
-                        android:id="@+id/mp_groupCh_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/sc_dream5"
-                        android:text="@string/mp_ch_headline"
-                        android:textColor="@color/post"
-                        android:textSize="22sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:layout_marginTop="@dimen/line_margin"
-                        android:background="@color/post"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/mp_groupCh_btn" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout6"
@@ -204,7 +166,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/sc_dream5"
-                        android:text="@string/mp_follow"
+                        android:text="@string/mp_follower"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -212,12 +174,11 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/mp_follow_user"
+                        android:id="@+id/mp_follower_user"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/text_margin_side"
                         android:fontFamily="@font/sc_dream5"
-                        android:text="100"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="@+id/mp_follow_tv"
@@ -230,7 +191,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/text_margin_side"
                         android:fontFamily="@font/sc_dream5"
-                        android:text="100"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="@+id/mp_following_tv"
@@ -247,7 +207,7 @@
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/mp_follow_user"
+                        app:layout_constraintStart_toEndOf="@+id/mp_follower_user"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.49" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -257,7 +217,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:fontFamily="@font/sc_dream4"
-                    android:text="팔로잉중"
+                    android:text="@string/mp_not_follow"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout5"
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
@@ -271,40 +231,31 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout8">
 
-                <View
-                    android:id="@+id/view3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/slateGrey"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/refresh_layout"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/mp_challenge_list"
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tab_layout"
+                        app:tabMode="fixed"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/line_margin"
-                        android:layout_marginBottom="@dimen/line_margin"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0"
-                        tools:listitem="@layout/item_challenge_mp" />
+                        android:layout_height="wrap_content" />
 
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/mp_challenge_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+
+
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
