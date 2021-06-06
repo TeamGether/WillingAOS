@@ -23,4 +23,8 @@
     <style name="ButtonChallenge">
         <item name="android:background">@color/white</item>
     </style>
+    <style name="ButtonFork">
+        <item name="android:background">@color/opportunity</item>
+        <item name="cornerRadius">20dp</item>
+    </style>
 </resources>

@@ -8,25 +8,25 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.squareup.okhttp.Challenge
 import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.adapters.CertifiAdapter
 import com.teamgether.willing.R
 import com.teamgether.willing.databinding.ActivityChallengeDetailBinding
 import com.teamgether.willing.model.Certifi
+import com.teamgether.willing.model.ChallengeInfo
 import kotlinx.android.synthetic.main.activity_challenge_detail.*
-import kotlinx.android.synthetic.main.item_certifi.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,26 +37,27 @@ import kotlin.collections.ArrayList
 
 class ChallengeDetailActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityChallengeDetailBinding
+    private lateinit var binding: ActivityChallengeDetailBinding
     private val db = FirebaseFirestore.getInstance()
-    private lateinit var list : ArrayList<Certifi>
-    private lateinit var adapter : CertifiAdapter
-    private var id : String? = ""
-
+    private lateinit var list: ArrayList<Certifi>
+    private lateinit var adapter: CertifiAdapter
+    private var challengeId: String = ""
+    private var userEmail: String = ""
     private val storage: FirebaseStorage =
         FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
 
 
-    private var uid : String? = null
+    private var uid: String? = null
     private var auth = FirebaseAuth.getInstance()
     val user = auth.currentUser
 
-    var storageRef : StorageReference? = null
+    var storageRef: StorageReference? = null
 
     var pickImageFromAlbum = 0
     var fbStorage: FirebaseStorage? = null
     var uriPhoto: Uri? = null
 
+    private var isMine: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +71,21 @@ class ChallengeDetailActivity : AppCompatActivity() {
         fbStorage = FirebaseStorage.getInstance()
         storageRef = fbStorage!!.getReference()
 
+        challengeId = intent.getStringExtra("challengeId").toString()
+//        Log.d("!!!!!!!Detail!!!!", "id :: $challengeId")
+        if (challengeId != null) {
+            upload(challengeId!!)
+        }
 
+        getUid(challengeId)
+
+
+
+
+
+        ch_detail_fork_btn.setOnClickListener {
+            moveActivity()
+        }
 
         upload_btn.setOnClickListener {
 
@@ -79,44 +94,65 @@ class ChallengeDetailActivity : AppCompatActivity() {
             startActivityForResult(photoPickerIntent, pickImageFromAlbum)
 
         }
-
-
-        id = intent.getStringExtra("challengeId")
-        Log.d("!!!!!!!Detail!!!!", "id :: $id")
-        if (id != null) {
-            upload(id!!)
-        }
-
     }
 
+    private fun getUid(cid: String) {
+        var challengeInfo = ChallengeInfo()
+        db.collection("Challenge").document(cid).get().addOnSuccessListener { result ->
+            challengeInfo.uid = result["uid"] as String
+            Log.d("TAG", "getUid: ${challengeInfo.uid}")
+            userEmail = challengeInfo.uid.toString()
+            Log.d("TAG", "challengeInfoUid: $userEmail ")
+            if (userEmail == user?.email.toString()) {
+                isMine = true
+                setUI()
+            }
+        }
+    }
+    private fun setUI(){
+        if (isMine) {
+            ch_detail_profile_cl.isVisible = false
+//            Log.d("TAG", "onCreate: $isMine")
+
+        } else {
+            ch_detail_account_cl.isVisible = false
+            upload_btn.isVisible = false
+        }
+    }
+
+    private fun moveActivity(){
+        val intent = Intent(this, ChallengeCreateActivity::class.java)
+        intent.putExtra("challengeId",challengeId)
+        startActivity(intent)
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == pickImageFromAlbum) {
             if (resultCode == Activity.RESULT_OK) {
                 uriPhoto = data?.data
-                Log.d("!!!!!!!!!", "$uriPhoto !!")
+//                Log.d("!!!!!!!!!", "$uriPhoto !!")
 
                 if (ContextCompat.checkSelfPermission(
                         this,
                         Manifest.permission.READ_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    funImageUpload(id, uriPhoto)
+                    funImageUpload(challengeId, uriPhoto)
                 }
             }
 
         }
     }
 
-    private fun funImageUpload(challengeId : String?, uri: Uri?) {
+
+    private fun funImageUpload(challengeId: String?, uri: Uri?) {
         var timeStamp = SimpleDateFormat("yyyyMMddHHmm").format(Date())
-        var imgFileName = "IMAGE"+ timeStamp+ "_.png"
+        var imgFileName = "IMAGE" + timeStamp + "_.png"
         var storageRef = fbStorage?.reference?.child("certification")?.child(imgFileName)
 
         storageRef?.putFile(uri!!)?.addOnSuccessListener {
-            Toast.makeText(this,"upload",Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(this, "upload", Toast.LENGTH_SHORT).show()
 
             val certifi = Certifi()
             certifi.imgUrl = "certification/$imgFileName"
@@ -143,7 +179,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun upload(id : String){
+    private fun upload(id: String) {
         val dialog = LoadingDialog(this)
         CoroutineScope(Dispatchers.Main).launch {
             dialog.show()
@@ -179,15 +215,15 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
     }
 
-    private suspend fun getUserName(email : String?): QuerySnapshot {
+    private suspend fun getUserName(email: String?): QuerySnapshot {
         return db.collection("User").whereEqualTo("email", email).get().await()
     }
 
-    private suspend fun getChallenge(id : String): DocumentSnapshot {
+    private suspend fun getChallenge(id: String): DocumentSnapshot {
         return db.collection("Challenge").document(id).get().await()
     }
 
-    private suspend fun getCertification(id : String): QuerySnapshot {
+    private suspend fun getCertification(id: String): QuerySnapshot {
         return db.collection("Certification").whereEqualTo("challengeId", id).get().await()
     }
 }

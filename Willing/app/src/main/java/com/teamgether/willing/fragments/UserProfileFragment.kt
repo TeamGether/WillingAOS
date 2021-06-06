@@ -328,10 +328,4 @@ class UserProfileFragment : Fragment() {
         getFollowData(userEmail.toString())
         getFollowStatus()
     }
-
-    private fun setEmailAtProfile(fragment: Fragment, email: String) {
-        val bundle = Bundle()
-        bundle.putString("profileKey", email)
-        fragment.arguments = bundle
-    }
 }

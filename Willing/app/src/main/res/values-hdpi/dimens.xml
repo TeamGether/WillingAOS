@@ -4,7 +4,9 @@
     <dimen name="title_margin">15dp</dimen>
     <dimen name="text_margin_top">5dp</dimen>
     <dimen name="text_margin_side">5dp</dimen>
+    <dimen name="ch_const_margin">8dp</dimen>
     <dimen name="profile_margin">25dp</dimen>
+    <dimen name="ch_detail_margin">25dp</dimen>
     <dimen name="profile_update_margin">30dp</dimen>
     <dimen name="line_margin">10dp</dimen>
     <dimen name="mp_item_margin">18dp</dimen>
