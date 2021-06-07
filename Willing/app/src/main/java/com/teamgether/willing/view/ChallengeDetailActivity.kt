@@ -79,9 +79,12 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
         getUid(challengeId)
 
-
-
-
+        //다른 사람 프로필로 이동 구현하기
+        ch_detail_img.setOnClickListener {
+            val intent = Intent(this,ProfileActivity::class.java)
+            intent.putExtra("userEmail",userEmail)
+            startActivity(intent)
+        }
 
         ch_detail_fork_btn.setOnClickListener {
             moveActivity()
