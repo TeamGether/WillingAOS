@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.teamgether.willing.Fragment.UserProfileFragment
 import com.teamgether.willing.fragments.*
 import com.teamgether.willing.databinding.ActivityMainBinding
@@ -17,6 +18,8 @@ import java.util.jar.Manifest
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
+
+
     private var userEmail: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,21 +61,17 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
             R.id.menu_mypage -> {
                 userEmail = intent.getStringExtra("email").toString()
-                val fragment = UserProfileFragment()
-                setEmailAtProfile(fragment,userEmail)
 
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frameLayout, fragment).commitAllowingStateLoss()
+                    .replace(R.id.main_frameLayout,UserProfileFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("userEmail", userEmail)
+                        }
+                    }).commitAllowingStateLoss()
                 return true
             }
         }
         return false
-    }
-
-    private fun setEmailAtProfile(fragment: Fragment, email:String) {
-        val bundle = Bundle()
-        bundle.putString("userEmail",email)
-        fragment.arguments = bundle
     }
 
 }

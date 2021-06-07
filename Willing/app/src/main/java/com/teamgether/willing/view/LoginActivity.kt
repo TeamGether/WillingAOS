@@ -79,4 +79,5 @@ class LoginActivity : LoginViewModel() {
         startActivity(nextIntent)
         finish()
     }
+
 }
