@@ -20,8 +20,10 @@
         <activity android:name=".view.ChallengeDetailActivity" />
         <activity android:name=".view.OtherDetailActivity" />
         <activity android:name=".SplashActivity" />
-        <activity android:name=".view.SignUpActivity" />
-        <activity android:name=".view.LoginActivity">
+        <activity android:name=".view.SignUpActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".view.LoginActivity"
+            android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
