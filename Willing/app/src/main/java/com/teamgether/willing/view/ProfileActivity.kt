@@ -1,6 +1,7 @@
 package com.teamgether.willing.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.teamgether.willing.Fragment.UserProfileFragment
@@ -17,24 +18,14 @@ class ProfileActivity : AppCompatActivity() {
         if (intent.hasExtra("userEmail")) {
             userEmail = intent.getStringExtra("userEmail").toString()
         }else{
-            userEmail = " "
+            userEmail = ""
         }
 
-
-        //DetailActivity에서 UserEmail 받아오는거
-        supportFragmentManager.beginTransaction().replace(R.id.profile_fl, UserProfileFragment()).commit()
-        //profile_fl에 fragment 세팅해둠
-
-        //fragment에 UserEmail 넘겨주는 거
-        userEmail = intent.getStringExtra("email").toString()
-        val fragment = UserProfileFragment()
-        setEmailAtProfile(fragment,userEmail)
-
-    }
-    private fun setEmailAtProfile(fragment: Fragment, email:String) {
-        val bundle = Bundle()
-        bundle.putString("userEmail",email)
-
-        fragment.arguments = bundle
+        if(!userEmail.isNullOrEmpty()){
+            Log.d("TAG", "profileActivity: $userEmail")
+            supportFragmentManager.beginTransaction().replace(R.id.profile_fl, UserProfileFragment().apply {
+                arguments =Bundle().apply { putString("userEmail",userEmail) }
+            }).commit()
+        }
     }
 }

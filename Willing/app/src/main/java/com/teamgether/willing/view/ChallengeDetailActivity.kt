@@ -8,11 +8,13 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.okhttp.Challenge
+import com.teamgether.willing.Fragment.UserProfileFragment
 import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.adapters.CertifiAdapter
 import com.teamgether.willing.R
@@ -79,9 +82,12 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
         getUid(challengeId)
 
-
-
-
+        //다른 사람 프로필로 이동 구현하기
+        ch_detail_img.setOnClickListener {
+            val intent = Intent(this,ProfileActivity::class.java)
+            intent.putExtra("userEmail",userEmail)
+            startActivity(intent)
+        }
 
         ch_detail_fork_btn.setOnClickListener {
             moveActivity()
@@ -93,30 +99,6 @@ class ChallengeDetailActivity : AppCompatActivity() {
             photoPickerIntent.type = "image/*"
             startActivityForResult(photoPickerIntent, pickImageFromAlbum)
 
-        }
-    }
-
-    private fun getUid(cid: String) {
-        var challengeInfo = ChallengeInfo()
-        db.collection("Challenge").document(cid).get().addOnSuccessListener { result ->
-            challengeInfo.uid = result["uid"] as String
-            Log.d("TAG", "getUid: ${challengeInfo.uid}")
-            userEmail = challengeInfo.uid.toString()
-            Log.d("TAG", "challengeInfoUid: $userEmail ")
-            if (userEmail == user?.email.toString()) {
-                isMine = true
-                setUI()
-            }
-        }
-    }
-    private fun setUI(){
-        if (isMine) {
-            ch_detail_profile_cl.isVisible = false
-//            Log.d("TAG", "onCreate: $isMine")
-
-        } else {
-            ch_detail_account_cl.isVisible = false
-            upload_btn.isVisible = false
         }
     }
 
@@ -209,10 +191,64 @@ class ChallengeDetailActivity : AppCompatActivity() {
             }
             adapter = CertifiAdapter(list)
             binding.detailList.adapter = adapter
-
             dialog.dismiss()
         }
+    }
 
+    private fun getUid(cid: String) {
+        val challengeInfo = ChallengeInfo()
+        db.collection("Challenge").document(cid).get().addOnSuccessListener { result ->
+            challengeInfo.uid = result["uid"] as String
+            Log.d("TAG", "getUid: ${challengeInfo.uid}")
+            userEmail = challengeInfo.uid.toString()
+            Log.d("TAG", "challengeInfoUid: $userEmail ")
+            if (userEmail == user?.email.toString()) {
+                isMine = true
+                setUI()
+            }else{
+                setUI()
+            }
+        }
+    }
+    private fun setUI(){
+        if (isMine) {
+            ch_detail_profile_cl.isVisible = false
+        } else {
+            ch_detail_account_cl.isVisible = false
+            upload_btn.isVisible = false
+            getUserData(userEmail)
+        }
+    }
+
+    private fun getUserData(uid:String){
+        db.collection("User").whereEqualTo("email",uid).get().addOnSuccessListener {
+            result ->
+            val document = result.documents[0]
+            val userName = document["name"] as String?
+            val profileImg = document["profileImg"] as String?
+
+            ch_detail_name_tv.text = userName
+            getProfileImg(profileImg.toString(),ch_detail_img,this)
+        }
+    }
+
+    private fun getProfileImg(
+        data: String,
+        imageView: ImageView,
+        context: ChallengeDetailActivity
+    ) {
+        storage.reference.child(data).downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Glide.with(context)
+                    .load(task.result)
+                    .override(150, 150)
+                    .centerCrop()
+                    .into(imageView)
+            } else {
+                Log.e("error", "error:${error("")}")
+            }
+            imageView.clipToOutline = true //프로필 이미지 가장자리 클립
+        }
     }
 
     private suspend fun getUserName(email: String?): QuerySnapshot {

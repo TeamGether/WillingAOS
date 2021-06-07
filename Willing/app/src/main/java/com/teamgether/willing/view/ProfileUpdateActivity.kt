@@ -58,6 +58,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
 
 
         profile_update_cancel_btn.setOnClickListener {
+            cancel()
         }
 
         profile_update_save_btn.setOnClickListener {
@@ -253,7 +254,9 @@ class ProfileUpdateActivity : AppCompatActivity() {
         Intent.FLAG_ACTIVITY_CLEAR_TASK
         finish()
     }
+    private fun cancel() {
+        finish()
+    }
 
 }
-//fucking
-// corutine
+

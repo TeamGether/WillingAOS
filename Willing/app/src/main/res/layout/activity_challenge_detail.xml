@@ -50,11 +50,12 @@
                         android:id="@+id/ch_detail_img"
                         android:layout_width="55dp"
                         android:layout_height="55dp"
+                        android:background="@drawable/mp_profile_image_view"
+                        android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0"
-                        app:srcCompat="@drawable/user" />
+                        app:layout_constraintVertical_bias="0.0" />
 
                     <TextView
                         android:id="@+id/ch_detail_name_tv"
@@ -63,7 +64,7 @@
                         android:layout_marginStart="@dimen/mp_item_margin"
                         android:fontFamily="@font/sc_dream5"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/ch_detail_img"
                         app:layout_constraintTop_toTopOf="parent" />

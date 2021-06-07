@@ -63,7 +63,6 @@ class UserProfileFragment : Fragment() {
         followStatus = "",
         isMine = false
     )
-    private lateinit var challengeListAdapter: ChallengeListAdapter
 
     var profileImgUrl: String = ""
 
@@ -109,24 +108,31 @@ class UserProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         userEmail = this.arguments?.getString("userEmail")
 
-        uid = userEmail.toString()
-
-
-        if (userEmail.equals(currentUser?.email)) {
-            isMine = true
+        if(userEmail.isNullOrEmpty()){
+//            Log.d("TAG", "onViewCreated: null ")
+        }else{
+            if (userEmail.equals(currentUser?.email)) {
+                isMine = true
+            }
         }
+
+        uid = userEmail.toString()
 
         if (isMine) {
             mp_follow_btn.isVisible = false
             mp_title.setText(R.string.mp_title)
 
+            showLoadingDialog()
+            getUserData(userEmail.toString())
         } else {
             mp_profile_update_btn.isVisible = false
             mp_menu_btn.isVisible = false
             mp_title.setText(R.string.up_title)
+
+            showLoadingDialog()
+            getUserData(userEmail.toString())
         } //팔로잉버튼 숨기기
-        showLoadingDialog()
-        getUserData()
+
 //        getChallenge()
 
         mp_profile_update_btn.setOnClickListener {
@@ -152,7 +158,7 @@ class UserProfileFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         showLoadingDialog()
-        getUserData()
+        getUserData(uid)
 //        getChallenge()
     }
 
@@ -175,19 +181,17 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun getUserData() {
+    private fun getUserData(uid:String) {
         val nameField = "name"
         val emailField = "email"
-        val tobeField = "tobe"
         val profileImg = "profileImg"
 
-
-        db.collection("User").whereEqualTo("email", userEmail).get()
+        db.collection("User").whereEqualTo("email", uid).get()
             .addOnSuccessListener { result ->
                 val document = result.documents[0]
-                profileInfo.name = document[nameField] as String
-                profileInfo.email = document[emailField] as String
-                profileInfo.profileImg = document[profileImg] as String
+                profileInfo.name = (document[nameField] as String?).toString()
+                profileInfo.email = (document[emailField] as String?).toString()
+                profileInfo.profileImg = document[profileImg] as String?
 
                 if (currentUser != null) {
                     profileInfo.isMine = true
