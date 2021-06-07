@@ -1,16 +1,16 @@
 package com.teamgether.willing.Fragment
 
 import ProfileChallengePagerAdapter
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
+import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -108,9 +108,9 @@ class UserProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         userEmail = this.arguments?.getString("userEmail")
 
-        if(userEmail.isNullOrEmpty()){
+        if (userEmail.isNullOrEmpty()) {
 //            Log.d("TAG", "onViewCreated: null ")
-        }else{
+        } else {
             if (userEmail.equals(currentUser?.email)) {
                 isMine = true
             }
@@ -133,7 +133,9 @@ class UserProfileFragment : Fragment() {
             getUserData(userEmail.toString())
         } //팔로잉버튼 숨기기
 
-//        getChallenge()
+        mp_menu_btn.setOnClickListener {
+            showPopUp(mp_popup_menu_view)
+        }
 
         mp_profile_update_btn.setOnClickListener {
             Intent(context, ProfileUpdateActivity::class.java).apply {
@@ -162,6 +164,23 @@ class UserProfileFragment : Fragment() {
 //        getChallenge()
     }
 
+    private fun showPopUp(v: View) {
+        val popupMenu = PopupMenu(activity, v)
+        val inflater: MenuInflater = popupMenu.menuInflater
+        inflater.inflate(R.menu.setting_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_account -> {
+                    true
+
+                }
+
+            }
+            true
+        }
+        popupMenu.show()
+    }
+
     private fun getProfileImg(
         data: String,
         imageView: ImageView,
@@ -181,7 +200,7 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun getUserData(uid:String) {
+    private fun getUserData(uid: String) {
         val nameField = "name"
         val emailField = "email"
         val profileImg = "profileImg"

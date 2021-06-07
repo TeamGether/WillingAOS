@@ -51,5 +51,12 @@
     <string name="profile_update_gallery_tv">앨범에서 선택</string>
     <string name="profile_update_camera_tv">사진 촬영</string>
     <string name="ch_detail_fork">포크하기</string>
+    <string name="menu_account">계좌 등록</string>
+    <string name="menu_notify">알림 설정</string>
+    <string name="menu_app_info">어플 정보</string>
+    <string name="menu_question">문의 하기</string>
+    <string name="menu_sign_out">로그아웃</string>
+    <string name="menu_delete_user">회원 탈퇴</string>
+
 
 </resources>
