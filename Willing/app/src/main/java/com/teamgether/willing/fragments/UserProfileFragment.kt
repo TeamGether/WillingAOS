@@ -185,7 +185,7 @@ class UserProfileFragment : Fragment() {
         val nameField = "name"
         val emailField = "email"
         val profileImg = "profileImg"
-        
+
         db.collection("User").whereEqualTo("email", uid).get()
             .addOnSuccessListener { result ->
                 val document = result.documents[0]
