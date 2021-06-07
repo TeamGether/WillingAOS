@@ -79,10 +79,6 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
         getUid(challengeId)
 
-
-
-
-
         ch_detail_fork_btn.setOnClickListener {
             moveActivity()
         }
@@ -189,10 +185,10 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
             val title = result["title"] as String
             val money = result["price"] as Long
-            val totalWeek = result["term"]
-            val perWeek = result["cntPerWeek"]
-            val bank = result["targetBank"]
-            val account = result["targetAccount"]
+            val totalWeek = result["term"] as Long
+            val perWeek = result["cntPerWeek"] as Long
+            val bank = result["targetBank"] as String
+            val account = result["targetAccount"] as String
 
             binding.titleTvd.text = title
             binding.moneyTvd.text = "$money"
@@ -201,6 +197,16 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
             // 인증 사진 목록 불러오기
             val documents = getCertification(id).documents
+
+            val size = documents.size
+            val percent : Long  = (100 * size / (perWeek * totalWeek))
+
+            db.collection("Challenge").document(id).update("percent", percent).addOnSuccessListener {
+                Log.d("DetailActivity !!", "$percent is saved")
+            }.addOnFailureListener {
+                Log.e("DetailActivity !!", it.message.toString())
+            }
+
             list = arrayListOf()
             for (document in documents) {
                 val model =
@@ -209,6 +215,9 @@ class ChallengeDetailActivity : AppCompatActivity() {
             }
             adapter = CertifiAdapter(list)
             binding.detailList.adapter = adapter
+
+            //
+
 
             dialog.dismiss()
         }

@@ -6,7 +6,10 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CheckedTextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isEmpty
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,6 +19,7 @@ import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.databinding.ActivityChallengeCreateBinding
 import com.teamgether.willing.model.ChallengeInfo
+import kotlinx.android.synthetic.main.activity_challenge_create.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -89,19 +93,40 @@ class ChallengeCreateActivity : AppCompatActivity() {
                 R.id.close -> show = false
             }
 
-            moveActivity(
-                title,
-                cntPerWeek,
-                show,
-                targetAccount,
-                percent,
-                subject,
-                targetBank,
-                price,
-                term,
-                email
-            )
+//            moveActivity(
+//                title,
+//                cntPerWeek,
+//                show,
+//                targetAccount,
+//                percent,
+//                subject,
+//                targetBank,
+//                price,
+//                term,
+//                email
+//            )
+
+            if(title.isNotEmpty()&& targetAccount.isNotEmpty()){
+                moveActivity(title, cntPerWeek, show,
+                    targetAccount,
+                    percent,
+                    subject,
+                    targetBank,
+                    price,
+                    term,
+                    email)
+            }else {
+                Toast.makeText(this,"비어있는 값을 채우세요", Toast.LENGTH_SHORT).show()
+                Log.d("TAG", "challenge: 널체크!!! ")
+
+            }
+
+
+
         }
+
+
+
     }
 
     private fun setUpCategorySpinner() {
@@ -181,6 +206,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
         intent.putExtra("term", term)
         intent.putExtra("uid", email)
         startActivity(intent)
+
     }
 
     private fun getForkStatus() {
@@ -233,18 +259,22 @@ class ChallengeCreateActivity : AppCompatActivity() {
         binding.categorySpinner.setSelection(categoryPos)
         binding.writeTitle.setText(challengeInfo.title)
         Log.d("TAG", "challenge: ${challengeInfo.cntPerWeek} ")
+
+        once.isChecked=true
         when (challengeInfo.cntPerWeek) {
             1 -> binding.countGroup.check(binding.once.id)
             3 -> binding.countGroup.check(binding.threetimes.id)
             5 -> binding.countGroup.check(binding.fivetimes.id)
             7 -> binding.countGroup.check(binding.seventimes.id)
         }
+        oneweek.isChecked = true
         when (challengeInfo.term) {
             1 -> binding.periodGroup.check(binding.oneweek.id)
             2 -> binding.periodGroup.check(binding.twoweek.id)
             3 -> binding.periodGroup.check(binding.threeweek.id)
             4 -> binding.periodGroup.check(binding.fourweek.id)
         }
+        ten_thousand.isChecked = true
         when (challengeInfo.price) {
             10000 -> binding.moneyGroup.check(binding.tenThousand.id)
             30000 -> binding.moneyGroup.check(binding.threeThousand.id)

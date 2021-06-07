@@ -41,7 +41,7 @@ class ChallengeCheckActivity : AppCompatActivity() {
 
         title_tv.text = challengeInfo.title
         money_tv.text = challengeInfo.price.toString()
-        period_tv.text = challengeInfo.term.toString()
+        period_tv.text = challengeInfo.term.toString() + "주"
         val checkAccount = "${challengeInfo.targetBank} ${challengeInfo.targetAccount}"
         account_tv.text = checkAccount
 
