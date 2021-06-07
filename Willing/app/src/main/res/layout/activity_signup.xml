@@ -5,172 +5,171 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/wings" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/layout_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintVertical_chainStyle="packed">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/sign_up_warning_nickName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/sc_dream3"
-            app:layout_constraintBottom_toTopOf="@+id/sign_up_check_nickName_btn"
-            app:layout_constraintEnd_toEndOf="@+id/sign_up_check_nickName_btn"
-            app:layout_constraintStart_toStartOf="@+id/sign_up_check_nickName_btn"
-            app:layout_constraintTop_toBottomOf="@+id/signup_nickName" />
+            android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/signup_nickName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:fontFamily="@font/sc_dream3"
-            android:hint="@string/sign_up_nickName"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toTopOf="@+id/sign_up_warning_nickName"
-            app:layout_constraintEnd_toEndOf="@+id/sign_up_warning_nickName"
-            app:layout_constraintStart_toStartOf="@+id/sign_up_warning_nickName"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/profile_margin">
 
-        <Button
-            android:id="@+id/sign_up_check_nickName_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sc_dream6"
-            android:text="@string/sign_up_check_nickName"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/signup_email"
-            app:layout_constraintEnd_toEndOf="@+id/signup_email"
-            app:layout_constraintStart_toStartOf="@+id/signup_email"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_warning_nickName" />
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    android:layout_marginTop="@dimen/layout_margin"
+                    app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/wings" />
 
-        <Button
-            android:id="@+id/finishSignUpBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sc_dream6"
-            android:text="@string/sign_up_signUp_btn"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_warning_dona" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
-        <EditText
-            android:id="@+id/signup_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:fontFamily="@font/sc_dream3"
-            android:hint="@string/sign_up_email"
-            android:inputType="textEmailAddress"
-            app:layout_constraintBottom_toTopOf="@+id/sign_up_warning_email"
-            app:layout_constraintEnd_toEndOf="@+id/sign_up_warning_email"
-            app:layout_constraintStart_toStartOf="@+id/sign_up_warning_email"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_check_nickName_btn" />
+                    <TextView
+                        android:id="@+id/sign_up_warning_nickName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sc_dream3"
+                        app:layout_constraintBottom_toTopOf="@+id/sign_up_check_nickName_btn"
+                        app:layout_constraintEnd_toEndOf="@+id/sign_up_check_nickName_btn"
+                        app:layout_constraintStart_toStartOf="@+id/sign_up_check_nickName_btn"
+                        app:layout_constraintTop_toBottomOf="@+id/signup_nickName" />
 
-        <TextView
-            android:id="@+id/sign_up_warning_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sc_dream3"
-            app:layout_constraintBottom_toTopOf="@+id/signup_pw"
-            app:layout_constraintEnd_toEndOf="@+id/signup_pw"
-            app:layout_constraintStart_toStartOf="@+id/signup_pw"
-            app:layout_constraintTop_toBottomOf="@+id/signup_email" />
+                    <EditText
+                        android:id="@+id/signup_nickName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:fontFamily="@font/sc_dream3"
+                        android:hint="@string/sign_up_nickName"
+                        android:inputType="textPersonName"
+                        app:layout_constraintBottom_toTopOf="@+id/sign_up_warning_nickName"
+                        app:layout_constraintEnd_toEndOf="@+id/sign_up_warning_nickName"
+                        app:layout_constraintStart_toStartOf="@+id/sign_up_warning_nickName"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
 
-        <EditText
-            android:id="@+id/signup_pw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:fontFamily="@font/sc_dream3"
-            android:hint="@string/sign_up_pwd"
-            android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/sign_up_warning_pwd"
-            app:layout_constraintEnd_toEndOf="@+id/sign_up_warning_pwd"
-            app:layout_constraintStart_toStartOf="@+id/sign_up_warning_pwd"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_warning_email" />
+                    <Button
+                        android:id="@+id/finishSignUpBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_margin_top"
+                        android:fontFamily="@font/sc_dream6"
+                        android:text="@string/sign_up_signUp_btn"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sign_up_warning_chkPwd" />
 
-        <TextView
-            android:id="@+id/sign_up_warning_pwd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sc_dream3"
-            app:layout_constraintBottom_toTopOf="@+id/signup_cpw"
-            app:layout_constraintEnd_toEndOf="@+id/signup_cpw"
-            app:layout_constraintStart_toStartOf="@+id/signup_cpw"
-            app:layout_constraintTop_toBottomOf="@+id/signup_pw" />
+                    <Button
+                        android:id="@+id/sign_up_check_nickName_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sc_dream6"
+                        android:text="@string/sign_up_check_nickName"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toTopOf="@+id/signup_email"
+                        app:layout_constraintEnd_toEndOf="@+id/signup_email"
+                        app:layout_constraintStart_toStartOf="@+id/signup_email"
+                        app:layout_constraintTop_toBottomOf="@+id/sign_up_warning_nickName" />
 
-        <EditText
-            android:id="@+id/signup_cpw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:fontFamily="@font/sc_dream3"
-            android:hint="@string/sign_up_checkPwd"
-            android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/sign_up_warning_chkPwd"
-            app:layout_constraintEnd_toEndOf="@+id/sign_up_warning_chkPwd"
-            app:layout_constraintStart_toStartOf="@+id/sign_up_warning_chkPwd"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_warning_pwd" />
+                    <EditText
+                        android:id="@+id/signup_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_margin_side"
+                        android:ems="10"
+                        android:fontFamily="@font/sc_dream3"
+                        android:hint="@string/sign_up_email"
+                        android:inputType="textEmailAddress"
+                        app:layout_constraintBottom_toTopOf="@+id/sign_up_warning_email"
+                        app:layout_constraintEnd_toEndOf="@+id/sign_up_warning_email"
+                        app:layout_constraintStart_toStartOf="@+id/sign_up_warning_email"
+                        app:layout_constraintTop_toBottomOf="@+id/sign_up_check_nickName_btn" />
 
-        <TextView
-            android:id="@+id/sign_up_warning_chkPwd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sc_dream3"
-            app:layout_constraintBottom_toTopOf="@+id/signup_dona"
-            app:layout_constraintEnd_toEndOf="@+id/signup_dona"
-            app:layout_constraintStart_toStartOf="@+id/signup_dona"
-            app:layout_constraintTop_toBottomOf="@+id/signup_cpw" />
+                    <TextView
+                        android:id="@+id/sign_up_warning_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sc_dream3"
+                        app:layout_constraintBottom_toTopOf="@+id/signup_pw"
+                        app:layout_constraintEnd_toEndOf="@+id/signup_pw"
+                        app:layout_constraintStart_toStartOf="@+id/signup_pw"
+                        app:layout_constraintTop_toBottomOf="@+id/signup_email" />
 
-        <EditText
-            android:id="@+id/signup_dona"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:fontFamily="@font/sc_dream3"
-            android:hint="@string/sign_up_donaName"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toTopOf="@+id/sign_up_warning_dona"
-            app:layout_constraintEnd_toEndOf="@+id/sign_up_warning_dona"
-            app:layout_constraintStart_toStartOf="@+id/sign_up_warning_dona"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_warning_chkPwd" />
+                    <EditText
+                        android:id="@+id/signup_pw"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_margin_side"
+                        android:ems="10"
+                        android:fontFamily="@font/sc_dream3"
+                        android:hint="@string/sign_up_pwd"
+                        android:inputType="textPassword"
+                        app:layout_constraintBottom_toTopOf="@+id/sign_up_warning_pwd"
+                        app:layout_constraintEnd_toEndOf="@+id/sign_up_warning_pwd"
+                        app:layout_constraintStart_toStartOf="@+id/sign_up_warning_pwd"
+                        app:layout_constraintTop_toBottomOf="@+id/sign_up_warning_email" />
 
-        <TextView
-            android:id="@+id/sign_up_warning_dona"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sc_dream3"
-            app:layout_constraintBottom_toTopOf="@+id/finishSignUpBtn"
-            app:layout_constraintEnd_toEndOf="@+id/finishSignUpBtn"
-            app:layout_constraintStart_toStartOf="@+id/finishSignUpBtn"
-            app:layout_constraintTop_toBottomOf="@+id/signup_dona" />
+                    <TextView
+                        android:id="@+id/sign_up_warning_pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sc_dream3"
+                        app:layout_constraintBottom_toTopOf="@+id/signup_cpw"
+                        app:layout_constraintEnd_toEndOf="@+id/signup_cpw"
+                        app:layout_constraintStart_toStartOf="@+id/signup_cpw"
+                        app:layout_constraintTop_toBottomOf="@+id/signup_pw" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <EditText
+                        android:id="@+id/signup_cpw"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_margin_side"
+                        android:ems="10"
+                        android:fontFamily="@font/sc_dream3"
+                        android:hint="@string/sign_up_checkPwd"
+                        android:inputType="textPassword"
+                        app:layout_constraintBottom_toTopOf="@+id/sign_up_warning_chkPwd"
+                        app:layout_constraintEnd_toEndOf="@+id/sign_up_warning_chkPwd"
+                        app:layout_constraintStart_toStartOf="@+id/sign_up_warning_chkPwd"
+                        app:layout_constraintTop_toBottomOf="@+id/sign_up_warning_pwd" />
+
+                    <TextView
+                        android:id="@+id/sign_up_warning_chkPwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sc_dream3"
+                        app:layout_constraintBottom_toTopOf="@+id/finishSignUpBtn"
+                        app:layout_constraintEnd_toEndOf="@+id/finishSignUpBtn"
+                        app:layout_constraintStart_toStartOf="@+id/finishSignUpBtn"
+                        app:layout_constraintTop_toBottomOf="@+id/signup_cpw" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
