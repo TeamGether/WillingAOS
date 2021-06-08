@@ -1,16 +1,16 @@
 package com.teamgether.willing.Fragment
 
 import ProfileChallengePagerAdapter
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
+import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -25,12 +25,14 @@ import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
 import com.teamgether.willing.model.ProfileInfo
+import com.teamgether.willing.view.LoginActivity
 import com.teamgether.willing.view.ProfileUpdateActivity
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.system.exitProcess
 
 class UserProfileFragment : Fragment() {
 
@@ -108,9 +110,9 @@ class UserProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         userEmail = this.arguments?.getString("userEmail")
 
-        if(userEmail.isNullOrEmpty()){
+        if (userEmail.isNullOrEmpty()) {
 //            Log.d("TAG", "onViewCreated: null ")
-        }else{
+        } else {
             if (userEmail.equals(currentUser?.email)) {
                 isMine = true
             }
@@ -133,7 +135,9 @@ class UserProfileFragment : Fragment() {
             getUserData(userEmail.toString())
         } //팔로잉버튼 숨기기
 
-//        getChallenge()
+        mp_menu_btn.setOnClickListener {
+            showPopUp(mp_popup_menu_view)
+        }
 
         mp_profile_update_btn.setOnClickListener {
             Intent(context, ProfileUpdateActivity::class.java).apply {
@@ -162,6 +166,23 @@ class UserProfileFragment : Fragment() {
 //        getChallenge()
     }
 
+    private fun showPopUp(v: View) {
+        val popupMenu = PopupMenu(activity, v)
+        val inflater: MenuInflater = popupMenu.menuInflater
+        inflater.inflate(R.menu.setting_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_sign_out -> {
+                    signOut()
+                    true
+                }
+
+            }
+            true
+        }
+        popupMenu.show()
+    }
+
     private fun getProfileImg(
         data: String,
         imageView: ImageView,
@@ -181,7 +202,7 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun getUserData(uid:String) {
+    private fun getUserData(uid: String) {
         val nameField = "name"
         val emailField = "email"
         val profileImg = "profileImg"
@@ -331,5 +352,12 @@ class UserProfileFragment : Fragment() {
             }
         getFollowData(userEmail.toString())
         getFollowStatus()
+    }
+
+    private fun signOut() {
+        auth.signOut()
+        val intent = Intent(activity, LoginActivity::class.java)
+        startActivity(intent)
+        activity.finish()
     }
 }
