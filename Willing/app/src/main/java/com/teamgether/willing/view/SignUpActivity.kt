@@ -18,9 +18,11 @@ class SignUpActivity : SignUpViewModel() {
         this.isDuplicate = temp
         if (isDuplicate) {
             sign_up_warning_nickName.setText(R.string.sign_up_warning_nickName)
+            sign_up_warning_nickName.setTextColor(getColor(R.color.red))
             btn_off(R.id.finishSignUpBtn)
         } else {
             sign_up_warning_nickName.setText(R.string.sign_up_warning_usable)
+            sign_up_warning_nickName.setTextColor(getColor(R.color.green))
             btn_on(R.id.finishSignUpBtn)
         }
     }
@@ -36,9 +38,11 @@ class SignUpActivity : SignUpViewModel() {
 
             if (name.isBlank()) {
                 sign_up_warning_nickName.setText(R.string.sign_up_warning_null)
+                sign_up_warning_nickName.setTextColor(getColor(R.color.red))
             } else {
                 if (name.contains(" ")) {
                     sign_up_warning_nickName.setText(R.string.sign_up_warning_spacing)
+                    sign_up_warning_nickName.setTextColor(getColor(R.color.red))
                 } else {
                     nickNameCheck(name, ::setDuplicate)
                 }
@@ -63,10 +67,13 @@ class SignUpActivity : SignUpViewModel() {
                         createUser(email, password, name, profileImg, ::startActivity)
                     } else {
                         sign_up_warning_chkPwd.setText(R.string.sign_up_warning_chkPwd)
+                        sign_up_warning_chkPwd.setTextColor(getColor(R.color.red))
+
                     }
                 } else {
                     sign_up_warning_chkPwd.text = ""
                     sign_up_warning_pwd.setText(R.string.sign_up_warning_pwd)
+                    sign_up_warning_pwd.setTextColor(getColor(R.color.red))
                     //경고문: 6자리 이상
                 }
                 sign_up_warning_nickName.text = ""
@@ -76,21 +83,28 @@ class SignUpActivity : SignUpViewModel() {
               } else {
                 if (email.isBlank()) {
                     sign_up_warning_email.setText(R.string.sign_up_warning_null)
+                    sign_up_warning_email.setTextColor(getColor(R.color.red))
+
                 } else {
                     sign_up_warning_email.text = ""
                 }
                 if (name.isBlank()) {
                     sign_up_warning_nickName.setText(R.string.sign_up_warning_null)
+                    sign_up_warning_nickName.setTextColor(getColor(R.color.red))
                 } else {
                     sign_up_warning_nickName.text = ""
                 }
                 if (password.isBlank()) {
                     sign_up_warning_pwd.setText(R.string.sign_up_warning_null)
+                    sign_up_warning_pwd.setTextColor(getColor(R.color.red))
+
                 } else {
                     sign_up_warning_pwd.text = ""
                 }
                 if (checkPassword.isBlank()) {
                     sign_up_warning_chkPwd.setText(R.string.sign_up_warning_null)
+                    sign_up_warning_chkPwd.setTextColor(getColor(R.color.red))
+
                 } else {
                     sign_up_warning_chkPwd.text = ""
                 }
