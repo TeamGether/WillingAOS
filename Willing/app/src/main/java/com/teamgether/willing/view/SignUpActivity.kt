@@ -1,31 +1,37 @@
 package com.teamgether.willing.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import com.teamgether.willing.R
 import com.teamgether.willing.viewmodels.SignUpViewModel
 import kotlinx.android.synthetic.main.activity_signup.*
+import kotlinx.android.synthetic.main.fragment_user_profile.*
 
 class SignUpActivity : SignUpViewModel() {
     var isDuplicate = false
-
     @JvmName("setDuplicate1")
     fun setDuplicate(temp: Boolean) {
         this.isDuplicate = temp
+        if (isDuplicate) {
+            sign_up_warning_nickName.setText(R.string.sign_up_warning_nickName)
+            btn_off(R.id.finishSignUpBtn)
+        } else {
+            sign_up_warning_nickName.setText(R.string.sign_up_warning_usable)
+            btn_on(R.id.finishSignUpBtn)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-
-
         sign_up_check_nickName_btn.setOnClickListener {
             val name = signup_nickName.text.toString()
             Log.d("button", isDuplicate.toString())
-            nickNameCheck(name, ::setDuplicate)
 
 
             if (name.isBlank()) {
@@ -34,11 +40,7 @@ class SignUpActivity : SignUpViewModel() {
                 if (name.contains(" ")) {
                     sign_up_warning_nickName.setText(R.string.sign_up_warning_spacing)
                 } else {
-                    if (isDuplicate) {
-                        sign_up_warning_nickName.setText(R.string.sign_up_warning_nickName)
-                    } else {
-                        sign_up_warning_nickName.setText(R.string.sign_up_warning_usable)
-                    }
+                    nickNameCheck(name, ::setDuplicate)
                 }
             }
         }
@@ -48,7 +50,6 @@ class SignUpActivity : SignUpViewModel() {
             val password = signup_pw.text.toString()
             val checkPassword = signup_cpw.text.toString()
             val name = signup_nickName.text.toString()
-            val tobe = ""
             val profileImg = "profile/default_profile.jpeg"
 
 
@@ -58,7 +59,8 @@ class SignUpActivity : SignUpViewModel() {
                     sign_up_warning_pwd.text = ""
                     if (password == checkPassword) {
                         sign_up_warning_chkPwd.text = ""
-                        createUser(email, password, name, tobe, profileImg, ::startActivity)
+                        btn_on(R.id.finishSignUpBtn)
+                        createUser(email, password, name, profileImg, ::startActivity)
                     } else {
                         sign_up_warning_chkPwd.setText(R.string.sign_up_warning_chkPwd)
                     }
@@ -93,10 +95,7 @@ class SignUpActivity : SignUpViewModel() {
                     sign_up_warning_chkPwd.text = ""
                 }
             }
-
-
             //이메일 발송이 들어가야함.
-
         }
 
     }
@@ -107,13 +106,14 @@ class SignUpActivity : SignUpViewModel() {
         startActivity(nextIntent)
     }
 
-    internal fun btn_on(btn: Button) {
-        btn.isEnabled = true
+    private fun btn_on(btn: Int) {
+        findViewById<Button>(btn).isEnabled = true
     }
 
-    internal fun btn_off(btn: Button) {
-        btn.isEnabled = false
+    internal fun btn_off(btn: Int) {
+        findViewById<Button>(btn).isEnabled = false
     }
+
 
 
 }

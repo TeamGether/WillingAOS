@@ -9,8 +9,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.model.UserInfo
 import kotlinx.android.synthetic.main.activity_signup.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 open class SignUpViewModel : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
@@ -25,12 +30,18 @@ open class SignUpViewModel : AppCompatActivity() {
 
     }
 
-    fun createUser(email: String, password: String,name: String,tobe: String,profileImg: String,startActivity:()->Unit) {
+    fun createUser(
+        email: String,
+        password: String,
+        name: String,
+        profileImg: String,
+        startActivity: () -> Unit
+    ) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     startToast("회원가입 성공")
-                    setData(name, email,tobe,profileImg ,startActivity)
+                    setData(name, email, profileImg, startActivity)
                 } else {
                     startToast("회원가입 실패")
                 }
@@ -41,42 +52,48 @@ open class SignUpViewModel : AppCompatActivity() {
             }
     }
 
-    private fun setData(name: String, email: String,tobe:String ,profileImg:String, startActivity:()->Unit) {
-        val userInfo = UserInfo(name, email,tobe,profileImg)
+    private fun setData(
+        name: String,
+        email: String,
+        profileImg: String,
+        startActivity: () -> Unit
+    ) {
+        val userInfo = UserInfo(name, email, profileImg)
 
         db.collection("User").add(userInfo).addOnSuccessListener {
             startToast("데이터 추가 성공")
-            sendEmail(email,startActivity)
+            sendEmail(email, startActivity)
 
         }.addOnFailureListener {
             startToast("데이터 추가 실패..")
         }
     }
 
-    fun nickNameCheck(name: String,  setDuplicate: (Boolean) -> Unit) {
+    fun nickNameCheck(name: String, setDuplicate: (Boolean) -> Unit) {
         sign_up_warning_nickName.text = ""
-
-
-        db.collection("User").whereEqualTo("name", name)
-            .get()
-            .addOnSuccessListener {
-                setDuplicate(true)
+        db.collection("User").whereEqualTo("name", name).get()
+            .addOnSuccessListener { result ->
+                if (result.isEmpty) {
+                    setDuplicate(false)
+                } else {
+                    setDuplicate(true)
+                }
             }
     }
 
 
-    private fun sendEmail(email: String,startActivity:()->Unit){
+    private fun sendEmail(email: String, startActivity: () -> Unit) {
         val user = Firebase.auth.currentUser
 
         user!!.sendEmailVerification()
             .addOnCompleteListener { task ->
-                if(task.isSuccessful){
+                if (task.isSuccessful) {
                     val userInfo = UserInfo()
                     Log.d("emailSend", " 성공")
                     Log.d("result", user.isEmailVerified.toString())
                     startActivity()
 
-               }
+                }
             }
     }
 
