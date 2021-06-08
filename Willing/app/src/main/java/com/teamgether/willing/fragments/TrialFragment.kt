@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class TrialFragment : Fragment() {
-/*
+
     private var db = FirebaseFirestore.getInstance()
     private lateinit var list: ArrayList<Trial>
     private lateinit var adapter: TrialAdapter
@@ -117,6 +117,6 @@ class TrialFragment : Fragment() {
     private suspend fun getUserProfile(userName: String): Task<QuerySnapshot> {
         return db.collection("User").whereEqualTo("email", userName).get()
     }
-*/
-}
 
+
+}

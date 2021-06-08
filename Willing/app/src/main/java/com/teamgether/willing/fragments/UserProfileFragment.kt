@@ -1,16 +1,16 @@
 package com.teamgether.willing.Fragment
 
 import ProfileChallengePagerAdapter
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
+import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -25,12 +25,14 @@ import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
 import com.teamgether.willing.model.ProfileInfo
+import com.teamgether.willing.view.LoginActivity
 import com.teamgether.willing.view.ProfileUpdateActivity
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.system.exitProcess
 
 class UserProfileFragment : Fragment() {
 
@@ -63,7 +65,6 @@ class UserProfileFragment : Fragment() {
         followStatus = "",
         isMine = false
     )
-    private lateinit var challengeListAdapter: ChallengeListAdapter
 
     var profileImgUrl: String = ""
 
@@ -109,25 +110,34 @@ class UserProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         userEmail = this.arguments?.getString("userEmail")
 
-        uid = userEmail.toString()
-
-
-        if (userEmail.equals(currentUser?.email)) {
-            isMine = true
+        if (userEmail.isNullOrEmpty()) {
+//            Log.d("TAG", "onViewCreated: null ")
+        } else {
+            if (userEmail.equals(currentUser?.email)) {
+                isMine = true
+            }
         }
+
+        uid = userEmail.toString()
 
         if (isMine) {
             mp_follow_btn.isVisible = false
             mp_title.setText(R.string.mp_title)
 
+            showLoadingDialog()
+            getUserData(userEmail.toString())
         } else {
             mp_profile_update_btn.isVisible = false
             mp_menu_btn.isVisible = false
             mp_title.setText(R.string.up_title)
+
+            showLoadingDialog()
+            getUserData(userEmail.toString())
         } //팔로잉버튼 숨기기
-        showLoadingDialog()
-        getUserData()
-//        getChallenge()
+
+        mp_menu_btn.setOnClickListener {
+            showPopUp(mp_popup_menu_view)
+        }
 
         mp_profile_update_btn.setOnClickListener {
             Intent(context, ProfileUpdateActivity::class.java).apply {
@@ -152,8 +162,25 @@ class UserProfileFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         showLoadingDialog()
-        getUserData()
+        getUserData(uid)
 //        getChallenge()
+    }
+
+    private fun showPopUp(v: View) {
+        val popupMenu = PopupMenu(activity, v)
+        val inflater: MenuInflater = popupMenu.menuInflater
+        inflater.inflate(R.menu.setting_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_sign_out -> {
+                    signOut()
+                    true
+                }
+
+            }
+            true
+        }
+        popupMenu.show()
     }
 
     private fun getProfileImg(
@@ -175,19 +202,17 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun getUserData() {
+    private fun getUserData(uid: String) {
         val nameField = "name"
         val emailField = "email"
-        val tobeField = "tobe"
         val profileImg = "profileImg"
 
-
-        db.collection("User").whereEqualTo("email", userEmail).get()
+        db.collection("User").whereEqualTo("email", uid).get()
             .addOnSuccessListener { result ->
                 val document = result.documents[0]
-                profileInfo.name = document[nameField] as String
-                profileInfo.email = document[emailField] as String
-                profileInfo.profileImg = document[profileImg] as String
+                profileInfo.name = (document[nameField] as String?).toString()
+                profileInfo.email = (document[emailField] as String?).toString()
+                profileInfo.profileImg = document[profileImg] as String?
 
                 if (currentUser != null) {
                     profileInfo.isMine = true
@@ -327,5 +352,12 @@ class UserProfileFragment : Fragment() {
             }
         getFollowData(userEmail.toString())
         getFollowStatus()
+    }
+
+    private fun signOut() {
+        auth.signOut()
+        val intent = Intent(activity, LoginActivity::class.java)
+        startActivity(intent)
+        activity.finish()
     }
 }
