@@ -25,12 +25,14 @@ import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
 import com.teamgether.willing.model.ProfileInfo
+import com.teamgether.willing.view.LoginActivity
 import com.teamgether.willing.view.ProfileUpdateActivity
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.system.exitProcess
 
 class UserProfileFragment : Fragment() {
 
@@ -170,9 +172,9 @@ class UserProfileFragment : Fragment() {
         inflater.inflate(R.menu.setting_menu, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.menu_account -> {
+                R.id.menu_sign_out -> {
+                    signOut()
                     true
-
                 }
 
             }
@@ -350,5 +352,12 @@ class UserProfileFragment : Fragment() {
             }
         getFollowData(userEmail.toString())
         getFollowStatus()
+    }
+
+    private fun signOut() {
+        auth.signOut()
+        val intent = Intent(activity, LoginActivity::class.java)
+        startActivity(intent)
+        activity.finish()
     }
 }
