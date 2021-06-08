@@ -62,7 +62,6 @@ class ProfileUpdateActivity : AppCompatActivity() {
         }
 
         profile_update_save_btn.setOnClickListener {
-            showLoadingDialog()
             uploadImage()
         }
 
@@ -110,7 +109,11 @@ class ProfileUpdateActivity : AppCompatActivity() {
                 REQUEST_GET_IMAGE -> {
                     try {
                         uri = data?.data
-                        profile_update_img.setImageURI(uri)
+                        Glide.with(this)
+                            .load(uri)
+                            .override(150, 150)
+                            .centerCrop()
+                            .into(profile_update_img)
                     } catch (e: Exception) {
                     }
                 }
@@ -118,7 +121,11 @@ class ProfileUpdateActivity : AppCompatActivity() {
                     if (data?.extras?.get("data") != null) {
                         val img = data.extras?.get("data") as Bitmap
                         uri = saveFile(randomFileName(), "image/jpeg", img)
-                        profile_update_img.setImageURI(uri)
+                        Glide.with(this)
+                            .load(uri)
+                            .override(150, 150)
+                            .centerCrop()
+                            .into(profile_update_img)
                     }
                 }
             }
@@ -212,6 +219,8 @@ class ProfileUpdateActivity : AppCompatActivity() {
             Toast.makeText(this, "success", Toast.LENGTH_SHORT).show()
             findDocument()
             Log.d("TAG", "uploadImage: upload")
+        }.addOnFailureListener {
+            Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -236,15 +245,6 @@ class ProfileUpdateActivity : AppCompatActivity() {
             Toast.makeText(this, "$uri", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
             Log.e("TAG", "updateUserProfileImg: ${error("")}")
-        }
-    }
-
-    private fun showLoadingDialog() {
-        val dialog = LoadingDialog(this)
-        CoroutineScope(Dispatchers.Main).launch {
-            dialog.show()
-            delay(1500)
-            dialog.dismiss()
         }
     }
 
