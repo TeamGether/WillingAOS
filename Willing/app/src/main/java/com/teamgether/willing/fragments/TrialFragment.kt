@@ -73,9 +73,7 @@ class TrialFragment : Fragment() {
 
                 val challengeInfo = getChallengeData(challengeId).await()
                 val content = challengeInfo["title"] as String
-                val name = challengeInfo["UID"]
-
-                Log.d("!!!!!!!!!!!!!!", "${challengeInfo["title"]} !!! ${challengeInfo["UID"]}")
+                val name = challengeInfo["uid"] as String
 
                 val userInfo = getUserProfile(name.toString()).await().documents
                 var username = ""

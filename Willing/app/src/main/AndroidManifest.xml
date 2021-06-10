@@ -15,7 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Willing"
         android:usesCleartextTraffic="true">
+<<<<<<< HEAD
         <activity android:name=".view.ChallengeCheckActivity" />
+=======
+        <activity android:name=".view.ChallengeCheckActivity"/>
+>>>>>>> feature/message
         <activity android:name=".view.ChallengeCreateActivity" />
         <activity android:name=".view.ChallengeDetailActivity" />
         <activity android:name=".view.OtherDetailActivity" />
@@ -33,6 +37,22 @@
         <activity android:name=".view.ProfileUpdateActivity"/>
         <activity android:name=".view.ProfileActivity"/>
 
+<<<<<<< HEAD
+=======
+        <service android:name=".firebase.FirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service android:name=".firebase.FirebaseInstanceService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+    </application>
+>>>>>>> feature/message
 
     </application>
 

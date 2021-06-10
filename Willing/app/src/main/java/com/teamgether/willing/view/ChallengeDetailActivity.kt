@@ -138,7 +138,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
             val certifi = Certifi()
             certifi.imgUrl = "certification/$imgFileName"
-            certifi.timestamp = timeStamp
+            certifi.timestamp = timeStamp.toLong()
             certifi.challengeId = challengeId
             certifi.cheering = arrayListOf()
             certifi.question = arrayListOf()
@@ -186,7 +186,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
             list = arrayListOf()
             for (document in documents) {
                 val model =
-                    Certifi(document["imgUrl"].toString(), document["timestamp"].toString())
+                    Certifi(document["imgUrl"].toString(), document["timestamp"] as Long)
                 list.add(model)
             }
             adapter = CertifiAdapter(list)

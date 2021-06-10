@@ -20,4 +20,15 @@ object FirebaseFeedService {
             emptyList()
         }
     }
+
+    suspend fun getFollowFeeds(name : String) : List<DocumentSnapshot> {
+        val db = FirebaseFirestore.getInstance()
+        return try {
+            db.collection("Certification").whereEqualTo("userName",name).orderBy("timestamp", Query.Direction.DESCENDING)
+                .get().await().documents
+        } catch (e: Exception) {
+            Log.e(TAG, "Error :: "+ e)
+            emptyList()
+        }
+    }
 }
