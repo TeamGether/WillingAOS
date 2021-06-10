@@ -5,8 +5,10 @@ import android.Manifest.permission.CAMERA
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission_group.STORAGE
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -14,9 +16,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.SyncStateContract
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -24,6 +30,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.internal.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -44,6 +51,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -71,8 +79,8 @@ class ChallengeDetailActivity : AppCompatActivity() {
     var uriPhoto: Uri? = null
 
     val REQUEST_IMAGE_CAPTURE = 1
-    val CAMERA_CODE = 0
-    val STORAGE_CODE = 0
+    val CAMERA_CODE = 44
+    val STORAGE_CODE = 66
     lateinit var currentPhotoPath : String
     val REQUEST_TAKE_PHOTO = 22
 
@@ -91,8 +99,9 @@ class ChallengeDetailActivity : AppCompatActivity() {
         fbStorage = FirebaseStorage.getInstance()
         storageRef = fbStorage!!.getReference()
 
+
+
         challengeId = intent.getStringExtra("challengeId").toString()
-//        Log.d("!!!!!!!Detail!!!!", "id :: $challengeId")
         if (challengeId != null) {
             upload(challengeId!!)
         }
@@ -106,20 +115,80 @@ class ChallengeDetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
         ch_detail_fork_btn.setOnClickListener {
             moveActivity()
         }
 
+
+        //갤러리에서 시진 선택하는 버튼
         upload_btn.setOnClickListener {
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = MediaStore.Images.Media.CONTENT_TYPE
             photoPickerIntent.type = "image/*"
-            startActivityForResult(photoPickerIntent, pickImageFromAlbum)
-
+            //startActivityForResult(photoPickerIntent, pickImageFromAlbum)
+            getContent.launch(photoPickerIntent)
         }
 
+        //카메라로 이동하는 버튼
         uplaod_camera_btn.setOnClickListener {
-            captureCamera()
+//            captureCamera()
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            getContent.launch(takePictureIntent)
         }
+    }
+
+    private val getContent =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == RESULT_OK) {
+                Log.d("!!!!!!!!!!!", "${result.data?.data?.javaClass?.name}")
+                Log.d("!!!!!!!!!!!", "${result.data?.extras?.get("data")?.javaClass?.name}")
+                if (result.data?.data != null) {
+                    funImageUpload(challengeId, result.data?.data)
+                } else {
+                    if (result.data?.extras?.get("data") != null) {
+                        val img = result.data?.extras?.get("data") as Bitmap
+                        val uri = makeUri(RandomFileName(), "image/jpg", img)
+                        funImageUpload(challengeId, uri)
+                    }
+                }
+            }
+
+        }
+
+    private fun makeUri(fileName: String, mimeType: String, bitmap: Bitmap): Uri? {
+        var CV = ContentValues()
+        CV.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+        CV.put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            CV.put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
+
+        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, CV)
+
+        if (uri != null) {
+            var scriptor = contentResolver.openFileDescriptor(uri, "w")
+
+            if (scriptor != null) {
+                val fos = FileOutputStream(scriptor.fileDescriptor)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                fos.close()
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    CV.clear()
+                    CV.put(MediaStore.Images.Media.IS_PENDING, 0)
+                    contentResolver.update(uri, CV, null, null)
+                }
+            }
+        }
+        return uri
+    }
+
+    fun RandomFileName() : String
+    {
+        val fineName = SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis())
+        return fineName
     }
 
     private fun moveActivity(){
@@ -128,41 +197,8 @@ class ChallengeDetailActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == pickImageFromAlbum) {
-            if (resultCode == Activity.RESULT_OK) {
-                uriPhoto = data?.data
-//                Log.d("!!!!!!!!!", "$uriPhoto !!")
 
-                if (ContextCompat.checkSelfPermission(
-                        this, Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    funImageUpload(challengeId, uriPhoto)
-                }
-            }
-
-        }
-        if(requestCode == REQUEST_TAKE_PHOTO) {
-            Log.i("REQUEST_TAKE_PHOTO", "${Activity.RESULT_OK}" + " " + "${resultCode}")
-            if (resultCode == Activity.RESULT_OK) {
-                try {
-                    galleryAddPic()
-                    Log.d("REQUEST_TAKE_PHOTO", " 저장 ")
-                } catch (e: Exception) {
-                    Log.e("REQUEST_TAKE_PHOTO", e.toString())
-                }
-            }
-            else {
-                Toast.makeText(this@ChallengeDetailActivity, "사진찍기를 취소하였습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-
-
-    }
-
+    //사진 데이버 베이스에 올리기
     private fun funImageUpload(challengeId: String?, uri: Uri?) {
         var timeStamp = SimpleDateFormat("yyyyMMddHHmm").format(Date())
         var imgFileName = "IMAGE" + timeStamp + "_.png"
@@ -196,6 +232,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
     }
 
+    //챌린지 디테일 가져오기
     private fun upload(id: String) {
         val dialog = LoadingDialog(this)
         CoroutineScope(Dispatchers.Main).launch {
@@ -239,6 +276,8 @@ class ChallengeDetailActivity : AppCompatActivity() {
             dialog.dismiss()
         }
     }
+
+
 
     private fun getUid(cid: String) {
         val challengeInfo = ChallengeInfo()
@@ -296,6 +335,8 @@ class ChallengeDetailActivity : AppCompatActivity() {
         }
     }
 
+
+    //사용자 이름 가져오기
     private suspend fun getUserName(email: String?): QuerySnapshot {
         return db.collection("User").whereEqualTo("email", email).get().await()
     }
@@ -307,10 +348,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
     private suspend fun getCertification(id: String): QuerySnapshot {
         return db.collection("Certification").whereEqualTo("challengeId", id).get().await()
     }
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(READ_EXTERNAL_STORAGE, CAMERA),
-            REQUEST_IMAGE_CAPTURE)
-    }
+
 
     @Throws(IOException::class)
     fun createImageFile(): File? { // Create an image file name
@@ -327,8 +365,11 @@ class ChallengeDetailActivity : AppCompatActivity() {
         return imageFile
     }
 
+
+    //사진찍기
     private fun captureCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             var photoFile: File?
             try {
@@ -338,22 +379,12 @@ class ChallengeDetailActivity : AppCompatActivity() {
                 return
             }
             if (photoFile != null) {
-                val providerURI = FileProvider.getUriForFile(this,"com.teamgether.willing.view", photoFile)
+                val providerURI = FileProvider.getUriForFile(this,"com.teamgether.willing.view.fileprovider", photoFile)
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerURI)
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+//                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+                getContent.launch(takePictureIntent)
             }
         }
-    }
-
-    private fun galleryAddPic() {
-        Log.d("DetailActivity !!", "Call");
-        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-        val f = File(currentPhotoPath)
-        val contentUri: Uri = Uri.fromFile(f)
-        mediaScanIntent.setData(contentUri)
-        sendBroadcast(mediaScanIntent)
-        Toast.makeText(this, "사진이 앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show()
-        
     }
 
 
