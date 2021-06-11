@@ -1,44 +1,33 @@
 package com.teamgether.willing.view
 
-import android.Manifest
-import android.Manifest.permission.CAMERA
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission_group.STORAGE
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.SyncStateContract
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.gms.common.internal.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.okhttp.Challenge
-import com.teamgether.willing.Fragment.UserProfileFragment
 import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.adapters.CertifiAdapter
 import com.teamgether.willing.R
@@ -74,17 +63,10 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
     var storageRef: StorageReference? = null
 
-    var pickImageFromAlbum = 0
     var fbStorage: FirebaseStorage? = null
     var uriPhoto: Uri? = null
 
-    val REQUEST_IMAGE_CAPTURE = 1
-    val CAMERA_CODE = 44
-    val STORAGE_CODE = 66
     lateinit var currentPhotoPath : String
-    val REQUEST_TAKE_PHOTO = 22
-
-
     private var isMine: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,12 +102,25 @@ class ChallengeDetailActivity : AppCompatActivity() {
             moveActivity()
         }
 
+        binding.certifiBtn.setOnClickListener {
+                val singleChoiceList = arrayOf("만보기", "타이머")
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("인증 방법")
+                builder.setItems(singleChoiceList, { dialogInterface, which ->
+                    Toast.makeText(this@ChallengeDetailActivity, singleChoiceList[which], Toast.LENGTH_SHORT).show()})
+                // builder.create().show();
+                val alertDialog = builder.create()
+                alertDialog.show()
+
+        }
+
 
         //갤러리에서 시진 선택하는 버튼
-        upload_btn.setOnClickListener {
+        upload_gallery_btn.onThrottleClick {
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = MediaStore.Images.Media.CONTENT_TYPE
             photoPickerIntent.type = "image/*"
+
             //startActivityForResult(photoPickerIntent, pickImageFromAlbum)
             getContent.launch(photoPickerIntent)
         }
@@ -141,8 +136,6 @@ class ChallengeDetailActivity : AppCompatActivity() {
     private val getContent =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
-                Log.d("!!!!!!!!!!!", "${result.data?.data?.javaClass?.name}")
-                Log.d("!!!!!!!!!!!", "${result.data?.extras?.get("data")?.javaClass?.name}")
                 if (result.data?.data != null) {
                     funImageUpload(challengeId, result.data?.data)
                 } else {
@@ -200,12 +193,14 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
     //사진 데이버 베이스에 올리기
     private fun funImageUpload(challengeId: String?, uri: Uri?) {
-        var timeStamp = SimpleDateFormat("yyyyMMddHHmm").format(Date())
-        var imgFileName = "IMAGE" + timeStamp + "_.png"
-        var storageRef = fbStorage?.reference?.child("certification")?.child(imgFileName)
+
+        val today = SimpleDateFormat("yyyyMMddHHmm").format(Date())
+        val timeStamp  = today.toLong() ?: 202106111429
+        val imgFileName = "IMAGE" + today + "_.png"
+        val storageRef = fbStorage?.reference?.child("certification")?.child(imgFileName)
 
         storageRef?.putFile(uri!!)?.addOnSuccessListener {
-            Toast.makeText(this, "upload", Toast.LENGTH_SHORT).show()
+            makeText(this, "upload", Toast.LENGTH_SHORT).show()
 
             val certifi = Certifi()
             certifi.imgUrl = "certification/$imgFileName"
@@ -268,7 +263,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
             list = arrayListOf()
             for (document in documents) {
                 val model =
-                    Certifi(document["imgUrl"].toString(), document["timestamp"].toString())
+                    Certifi(document["imgUrl"].toString(), document["timestamp"] as Long)
                 list.add(model)
             }
             adapter = CertifiAdapter(list)
@@ -299,7 +294,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
             ch_detail_profile_cl.isVisible = false
         } else {
             ch_detail_account_cl.isVisible = false
-            upload_btn.isVisible = false
+            certifi_btn.isVisible = false
             getUserData(userEmail)
         }
     }
@@ -346,7 +341,8 @@ class ChallengeDetailActivity : AppCompatActivity() {
     }
 
     private suspend fun getCertification(id: String): QuerySnapshot {
-        return db.collection("Certification").whereEqualTo("challengeId", id).get().await()
+        return db.collection("Certification").whereEqualTo("challengeId", id).orderBy("timestamp",
+            Query.Direction.DESCENDING).get().await()
     }
 
 
@@ -366,25 +362,37 @@ class ChallengeDetailActivity : AppCompatActivity() {
     }
 
 
-    //사진찍기
-    private fun captureCamera() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-        if (takePictureIntent.resolveActivity(packageManager) != null) {
-            var photoFile: File?
-            try {
-                photoFile = createImageFile()
-            } catch (ex: IOException) {
-                Log.d("DetailActivity !!", "error")
-                return
-            }
-            if (photoFile != null) {
-                val providerURI = FileProvider.getUriForFile(this,"com.teamgether.willing.view.fileprovider", photoFile)
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerURI)
-//                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
-                getContent.launch(takePictureIntent)
+    class OnThrottleClickListener(
+        private val clickListener: View.OnClickListener,
+        private val interval: Long = 10000
+    ) :
+        View.OnClickListener {
+        private var clickable = true
+        override fun onClick(v: View?) {
+            if (clickable) {
+                clickable = false
+                v?.run {
+                    postDelayed({
+                        clickable = true
+                    }, interval)
+                    clickListener.onClick(v)
+                }
+            } else {
+                Toast.makeText(v?.context, "사진을 올리고있습니다.", Toast.LENGTH_SHORT).show()
+                Log.d("DetailActivity3333",  "waiting for a while")
             }
         }
+
+    }
+
+    fun View.onThrottleClick(action: (v: View) -> Unit) {
+        val listener = View.OnClickListener { action(it) }
+        setOnClickListener(OnThrottleClickListener(listener))
+    }
+    // with interval setting
+    fun View.onThrottleClick(action: (v: View) -> Unit, interval: Long) {
+        val listener = View.OnClickListener { action(it) }
+        setOnClickListener(OnThrottleClickListener(listener, interval))
     }
 
 
