@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera2" />
+
 
     <application
         android:allowBackup="true"
@@ -33,11 +35,24 @@
         <activity android:name=".view.ProfileUpdateActivity"/>
         <activity android:name=".view.ProfileActivity"/>
 
+<<<<<<< HEAD
         <service android:name=".firebase.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+=======
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.teamgether.willing.view.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+>>>>>>> feature/challenge_create_re
 
         <service android:name=".firebase.FirebaseInstanceService">
             <intent-filter>

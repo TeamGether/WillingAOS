@@ -1,16 +1,22 @@
 package com.teamgether.willing.view
 
-import android.Manifest
-import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import android.widget.Toast.makeText
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,11 +24,10 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.okhttp.Challenge
-import com.teamgether.willing.Fragment.UserProfileFragment
 import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.adapters.CertifiAdapter
 import com.teamgether.willing.R
@@ -34,6 +39,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -49,17 +57,16 @@ class ChallengeDetailActivity : AppCompatActivity() {
     private val storage: FirebaseStorage =
         FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
 
-
     private var uid: String? = null
     private var auth = FirebaseAuth.getInstance()
     val user = auth.currentUser
 
     var storageRef: StorageReference? = null
 
-    var pickImageFromAlbum = 0
     var fbStorage: FirebaseStorage? = null
     var uriPhoto: Uri? = null
 
+    lateinit var currentPhotoPath : String
     private var isMine: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,8 +81,9 @@ class ChallengeDetailActivity : AppCompatActivity() {
         fbStorage = FirebaseStorage.getInstance()
         storageRef = fbStorage!!.getReference()
 
+
+
         challengeId = intent.getStringExtra("challengeId").toString()
-//        Log.d("!!!!!!!Detail!!!!", "id :: $challengeId")
         if (challengeId != null) {
             upload(challengeId!!)
         }
@@ -89,17 +97,91 @@ class ChallengeDetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
         ch_detail_fork_btn.setOnClickListener {
             moveActivity()
         }
 
-        upload_btn.setOnClickListener {
-
-            val photoPickerIntent = Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type = "image/*"
-            startActivityForResult(photoPickerIntent, pickImageFromAlbum)
+        binding.certifiBtn.setOnClickListener {
+                val singleChoiceList = arrayOf("만보기", "타이머")
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("인증 방법")
+                builder.setItems(singleChoiceList, { dialogInterface, which ->
+                    Toast.makeText(this@ChallengeDetailActivity, singleChoiceList[which], Toast.LENGTH_SHORT).show()})
+                // builder.create().show();
+                val alertDialog = builder.create()
+                alertDialog.show()
 
         }
+
+
+        //갤러리에서 시진 선택하는 버튼
+        upload_gallery_btn.onThrottleClick {
+            val photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = MediaStore.Images.Media.CONTENT_TYPE
+            photoPickerIntent.type = "image/*"
+
+            //startActivityForResult(photoPickerIntent, pickImageFromAlbum)
+            getContent.launch(photoPickerIntent)
+        }
+
+        //카메라로 이동하는 버튼
+        uplaod_camera_btn.setOnClickListener {
+//            captureCamera()
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            getContent.launch(takePictureIntent)
+        }
+    }
+
+    private val getContent =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == RESULT_OK) {
+                if (result.data?.data != null) {
+                    funImageUpload(challengeId, result.data?.data)
+                } else {
+                    if (result.data?.extras?.get("data") != null) {
+                        val img = result.data?.extras?.get("data") as Bitmap
+                        val uri = makeUri(RandomFileName(), "image/jpg", img)
+                        funImageUpload(challengeId, uri)
+                    }
+                }
+            }
+
+        }
+
+    private fun makeUri(fileName: String, mimeType: String, bitmap: Bitmap): Uri? {
+        var CV = ContentValues()
+        CV.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+        CV.put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            CV.put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
+
+        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, CV)
+
+        if (uri != null) {
+            var scriptor = contentResolver.openFileDescriptor(uri, "w")
+
+            if (scriptor != null) {
+                val fos = FileOutputStream(scriptor.fileDescriptor)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                fos.close()
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    CV.clear()
+                    CV.put(MediaStore.Images.Media.IS_PENDING, 0)
+                    contentResolver.update(uri, CV, null, null)
+                }
+            }
+        }
+        return uri
+    }
+
+    fun RandomFileName() : String
+    {
+        val fineName = SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis())
+        return fineName
     }
 
     private fun moveActivity(){
@@ -108,33 +190,17 @@ class ChallengeDetailActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == pickImageFromAlbum) {
-            if (resultCode == Activity.RESULT_OK) {
-                uriPhoto = data?.data
-//                Log.d("!!!!!!!!!", "$uriPhoto !!")
 
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    funImageUpload(challengeId, uriPhoto)
-                }
-            }
-
-        }
-    }
-
-
+    //사진 데이버 베이스에 올리기
     private fun funImageUpload(challengeId: String?, uri: Uri?) {
-        var timeStamp = SimpleDateFormat("yyyyMMddHHmm").format(Date())
-        var imgFileName = "IMAGE" + timeStamp + "_.png"
-        var storageRef = fbStorage?.reference?.child("certification")?.child(imgFileName)
+
+        val today = SimpleDateFormat("yyyyMMddHHmm").format(Date())
+        val timeStamp  = today.toLong() ?: 202106111429
+        val imgFileName = "IMAGE" + today + "_.png"
+        val storageRef = fbStorage?.reference?.child("certification")?.child(imgFileName)
 
         storageRef?.putFile(uri!!)?.addOnSuccessListener {
-            Toast.makeText(this, "upload", Toast.LENGTH_SHORT).show()
+            makeText(this, "upload", Toast.LENGTH_SHORT).show()
 
             val certifi = Certifi()
             certifi.imgUrl = "certification/$imgFileName"
@@ -161,6 +227,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
     }
 
+    //챌린지 디테일 가져오기
     private fun upload(id: String) {
         val dialog = LoadingDialog(this)
         CoroutineScope(Dispatchers.Main).launch {
@@ -171,10 +238,10 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
             val title = result["title"] as String
             val money = result["price"] as Long
-            val totalWeek = result["term"]
-            val perWeek = result["cntPerWeek"]
-            val bank = result["targetBank"]
-            val account = result["targetAccount"]
+            val totalWeek = result["term"] as Long
+            val perWeek = result["cntPerWeek"] as Long
+            val bank = result["targetBank"] as String
+            val account = result["targetAccount"] as String
 
             binding.titleTvd.text = title
             binding.moneyTvd.text = "$money"
@@ -183,6 +250,16 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
             // 인증 사진 목록 불러오기
             val documents = getCertification(id).documents
+
+            val size = documents.size
+            val percent : Long  = (100 * size / (perWeek * totalWeek))
+
+            db.collection("Challenge").document(id).update("percent", percent).addOnSuccessListener {
+                Log.d("DetailActivity !!", "$percent is saved")
+            }.addOnFailureListener {
+                Log.e("DetailActivity !!", it.message.toString())
+            }
+
             list = arrayListOf()
             for (document in documents) {
                 val model =
@@ -194,6 +271,8 @@ class ChallengeDetailActivity : AppCompatActivity() {
             dialog.dismiss()
         }
     }
+
+
 
     private fun getUid(cid: String) {
         val challengeInfo = ChallengeInfo()
@@ -215,7 +294,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
             ch_detail_profile_cl.isVisible = false
         } else {
             ch_detail_account_cl.isVisible = false
-            upload_btn.isVisible = false
+            certifi_btn.isVisible = false
             getUserData(userEmail)
         }
     }
@@ -251,6 +330,8 @@ class ChallengeDetailActivity : AppCompatActivity() {
         }
     }
 
+
+    //사용자 이름 가져오기
     private suspend fun getUserName(email: String?): QuerySnapshot {
         return db.collection("User").whereEqualTo("email", email).get().await()
     }
@@ -260,6 +341,60 @@ class ChallengeDetailActivity : AppCompatActivity() {
     }
 
     private suspend fun getCertification(id: String): QuerySnapshot {
-        return db.collection("Certification").whereEqualTo("challengeId", id).get().await()
+        return db.collection("Certification").whereEqualTo("challengeId", id).orderBy("timestamp",
+            Query.Direction.DESCENDING).get().await()
     }
+
+
+    @Throws(IOException::class)
+    fun createImageFile(): File? { // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "JPEG_$timeStamp.jpg"
+        var imageFile: File?
+        val storageDir = File(Environment.getExternalStorageDirectory().toString() + "/Pictures","/willing")
+        if (!storageDir.exists()) {
+            Log.d("DetailActivity", storageDir.toString())
+            storageDir.mkdirs()
+        }
+        imageFile = File(storageDir, imageFileName)
+        currentPhotoPath = imageFile.absolutePath
+        return imageFile
+    }
+
+
+    class OnThrottleClickListener(
+        private val clickListener: View.OnClickListener,
+        private val interval: Long = 10000
+    ) :
+        View.OnClickListener {
+        private var clickable = true
+        override fun onClick(v: View?) {
+            if (clickable) {
+                clickable = false
+                v?.run {
+                    postDelayed({
+                        clickable = true
+                    }, interval)
+                    clickListener.onClick(v)
+                }
+            } else {
+                Toast.makeText(v?.context, "사진을 올리고있습니다.", Toast.LENGTH_SHORT).show()
+                Log.d("DetailActivity3333",  "waiting for a while")
+            }
+        }
+
+    }
+
+    fun View.onThrottleClick(action: (v: View) -> Unit) {
+        val listener = View.OnClickListener { action(it) }
+        setOnClickListener(OnThrottleClickListener(listener))
+    }
+    // with interval setting
+    fun View.onThrottleClick(action: (v: View) -> Unit, interval: Long) {
+        val listener = View.OnClickListener { action(it) }
+        setOnClickListener(OnThrottleClickListener(listener, interval))
+    }
+
+
+
 }
