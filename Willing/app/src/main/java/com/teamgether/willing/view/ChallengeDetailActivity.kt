@@ -106,9 +106,17 @@ class ChallengeDetailActivity : AppCompatActivity() {
                 val singleChoiceList = arrayOf("만보기", "타이머")
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("인증 방법")
-                builder.setItems(singleChoiceList, { dialogInterface, which ->
-                    Toast.makeText(this@ChallengeDetailActivity, singleChoiceList[which], Toast.LENGTH_SHORT).show()})
-                // builder.create().show();
+                builder.setItems(singleChoiceList) { dialogInterface, which ->
+
+                    if (singleChoiceList[which] == "만보기") {
+                        val intent = Intent(this, CheckActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(this,"타이머",Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
                 val alertDialog = builder.create()
                 alertDialog.show()
 
