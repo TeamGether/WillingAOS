@@ -3,14 +3,13 @@ package com.teamgether.willing.Fragment
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.teamgether.willing.Adapter.ChallengeListAdapter
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
@@ -52,6 +51,8 @@ class ProfileChallengeFinishFragment : Fragment() {
         userEmail = UserProfileFragment.uid
 
         getChallenge()
+
+
         refresh_layout.setOnRefreshListener {
             getChallenge()
             challengeListAdapter.notifyDataSetChanged()
@@ -65,29 +66,51 @@ class ProfileChallengeFinishFragment : Fragment() {
         val titleField = "title"
         val percentField = "percent"
 
-        db.collection("Challenge").whereEqualTo("uid", userEmail).whereEqualTo("show",true).whereEqualTo("didFinish", true)
-            .get()
-            .addOnSuccessListener { result ->
-                list = arrayListOf()
-                for (document in result) {
-                    val challenges = ChallengeList()
-                    val documentId = document.id
-                    val subject = document[subjectField] as String
-                    val title = document[titleField] as String
-                    val percent = document[percentField] as Number
-                    //if문으로 background color 바꿔주기?
-                    challenges.challengeId = documentId
-                    challenges.subject = subject
-                    challenges.title = title
-                    challenges.percent = percent
-                    list.add(challenges)
+        if (userEmail == currentUser?.email) {
+            db.collection("Challenge").whereEqualTo("uid", userEmail)
+                .whereEqualTo("didFinish", true)
+                .get()
+                .addOnSuccessListener { result ->
+                    list = arrayListOf()
+                    for (document in result) {
+                        resultChallenge(document, subjectField, titleField, percentField)
+                    }
 
-                    challengeListAdapter = ChallengeListAdapter(list, activity)
-                    challengeListAdapter.notifyDataSetChanged()
-                    mp_challenge_list!!.adapter = challengeListAdapter
+
                 }
+        } else {
+            db.collection("Challenge").whereEqualTo("uid", userEmail).whereEqualTo("show", true)
+                .whereEqualTo("didFinish", true)
+                .get()
+                .addOnSuccessListener { result ->
+                    list = arrayListOf()
+                    for (document in result) {
+                        resultChallenge(document, subjectField, titleField, percentField)
+                    }
+                }
+        }
+    }
 
+    private fun resultChallenge(
+        document: QueryDocumentSnapshot,
+        subjectField: String,
+        titleField: String,
+        percentField: String
+    ) {
+        val challenges = ChallengeList()
+        val documentId = document.id
+        val subject = document[subjectField] as String
+        val title = document[titleField] as String
+        val percent = document[percentField] as Number
+        //if문으로 background color 바꿔주기?
+        challenges.challengeId = documentId
+        challenges.subject = subject
+        challenges.title = title
+        challenges.percent = percent
+        list.add(challenges)
 
-            }
+        challengeListAdapter = ChallengeListAdapter(list, activity)
+        challengeListAdapter.notifyDataSetChanged()
+        mp_challenge_list!!.adapter = challengeListAdapter
     }
 }
