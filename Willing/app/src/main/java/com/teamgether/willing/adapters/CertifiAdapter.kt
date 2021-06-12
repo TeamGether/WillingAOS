@@ -25,7 +25,7 @@ class CertifiAdapter(val certifiList: ArrayList<Certifi>) : RecyclerView.Adapter
                     if (task.isSuccessful) {
                         Glide.with(context)
                             .load(task.result)
-                            .override(500,500)
+                            .override(150,100)
                             .centerCrop()
                             .into(imageView)
                     } else {
