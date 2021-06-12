@@ -14,6 +14,8 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.teamgether.willing.LoadingDialog
 import com.teamgether.willing.R
 import kotlinx.android.synthetic.main.activity_profile_update.*
@@ -31,6 +34,9 @@ import kotlinx.coroutines.*
 class ProfileUpdateActivity : AppCompatActivity() {
     private val storage: FirebaseStorage =
         FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
+
+    var storageRef: StorageReference? = null
+    var fbStorage: FirebaseStorage? = null
 
     private var auth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
@@ -69,9 +75,12 @@ class ProfileUpdateActivity : AppCompatActivity() {
             callCamera()
         }
         gallery_btn.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_GET_IMAGE)
+
+            val photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = MediaStore.Images.Media.CONTENT_TYPE
+            photoPickerIntent.type = "image/*"
+
+            getContent.launch(photoPickerIntent)
         }
 
     }
@@ -101,36 +110,36 @@ class ProfileUpdateActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_GET_IMAGE -> {
+    private val getContent =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == RESULT_OK) {
+                if (result.data?.data != null) {
                     try {
-                        uri = data?.data
+                        uri = result.data?.data
                         Glide.with(this)
                             .load(uri)
                             .override(150, 150)
                             .centerCrop()
                             .into(profile_update_img)
+                        Log.d("TAG", "resultCode:$REQUEST_GET_IMAGE")
                     } catch (e: Exception) {
                     }
-                }
-                CAMERA_CODE -> {
-                    if (data?.extras?.get("data") != null) {
-                        val img = data.extras?.get("data") as Bitmap
+                } else {
+                    if (result.data?.extras?.get("data") != null) {
+                        val img = result.data?.extras?.get("data") as Bitmap
                         uri = saveFile(randomFileName(), "image/jpeg", img)
                         Glide.with(this)
                             .load(uri)
                             .override(150, 150)
                             .centerCrop()
                             .into(profile_update_img)
+
+                        Log.d("TAG", "resultCode:$CAMERA_CODE")
                     }
                 }
             }
+
         }
-    }
 
     private fun checkPermission(permissions: Array<out String>, type: Int): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -150,8 +159,8 @@ class ProfileUpdateActivity : AppCompatActivity() {
 
     private fun callCamera() {
         if (checkPermission(CAMERA, CAMERA_CODE) && checkPermission(STORAGE, STORAGE_CODE)) {
-            val itt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(itt, CAMERA_CODE)
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            getContent.launch(takePictureIntent)
         }
     }
 
@@ -254,6 +263,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
         Intent.FLAG_ACTIVITY_CLEAR_TASK
         finish()
     }
+
     private fun cancel() {
         finish()
     }
