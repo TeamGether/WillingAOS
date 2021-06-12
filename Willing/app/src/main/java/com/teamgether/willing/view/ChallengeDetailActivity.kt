@@ -135,7 +135,6 @@ class ChallengeDetailActivity : AppCompatActivity() {
 
         //카메라로 이동하는 버튼
         uplaod_camera_btn.setOnClickListener {
-//            captureCamera()
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             getContent.launch(takePictureIntent)
         }
@@ -271,7 +270,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
             list = arrayListOf()
             for (document in documents) {
                 val model =
-                    Certifi(document["imgUrl"].toString(), document["timestamp"] as Long)
+                    Certifi(imgUrl = document["imgUrl"].toString(), timestamp = document["timestamp"] as Long, challengeId = document["challengeId"].toString())
                 list.add(model)
             }
             adapter = CertifiAdapter(list)

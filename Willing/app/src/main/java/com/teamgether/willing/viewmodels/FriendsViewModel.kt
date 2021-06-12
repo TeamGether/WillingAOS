@@ -42,7 +42,7 @@ class FriendsViewModel(application: Application): AndroidViewModel(application) 
             for (follower in followers) {
                 for (following in followings) {
                     if (follower == following) {
-                        val userInfo = FirebaseUserService.getUserInfo(follower)
+                        val userInfo = FirebaseUserService.getUserInfoByName(follower)
                         setUI(userInfo)
                     }
                 }

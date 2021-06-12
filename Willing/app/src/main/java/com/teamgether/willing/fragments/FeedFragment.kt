@@ -47,22 +47,22 @@ class  FeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.feedList.layoutManager = GridLayoutManager(view.context, 3)
-        viewModel.getData(current, binding.feedList)
+        viewModel.getData(current, binding.feedList, this.requireContext())
 
         binding.feedFollowBtn.setOnClickListener {
             current = "follow"
             changeBtnStatus(current, view)
-            viewModel.getData(current,binding.feedList)
+            viewModel.getData(current,binding.feedList, this.requireContext())
         }
 
         binding.feedRecentBtn.setOnClickListener {
             current = "recent"
             changeBtnStatus(current, view)
-            viewModel.getData(current,binding.feedList)
+            viewModel.getData(current,binding.feedList, this.requireContext())
         }
 
         binding.feedSwipeRefreshLayout.setOnRefreshListener {
-            viewModel.getData(current,binding.feedList)
+            viewModel.getData(current,binding.feedList, this.requireContext())
             binding.feedSwipeRefreshLayout.isRefreshing = false
         }
     }

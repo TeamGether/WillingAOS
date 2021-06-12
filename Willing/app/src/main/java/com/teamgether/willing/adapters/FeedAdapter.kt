@@ -41,6 +41,7 @@ class FeedAdapter (private var list: MutableList<Feed>): RecyclerView.Adapter<Fe
                 Intent(context, OtherDetailActivity::class.java).apply {
                     putExtra("challengeId", data.challengeId)
                     putExtra("imgUrl", data.pictureUrl)
+                    putExtra("userName", data.userName)
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }.run {
                     context.startActivity(this)

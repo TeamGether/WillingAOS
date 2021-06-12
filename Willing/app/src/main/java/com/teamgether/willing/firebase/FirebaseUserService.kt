@@ -22,17 +22,17 @@ object FirebaseUserService {
         }
     }
 
-    suspend fun getUserInfo(follow: String): List<DocumentSnapshot> {
+    suspend fun getUserInfoByName(name: String): List<DocumentSnapshot> {
         val db = FirebaseFirestore.getInstance()
         return try {
-            db.collection("User").whereEqualTo("name", follow).get().await().documents
+            db.collection("User").whereEqualTo("name", name).get().await().documents
         } catch (e: Exception) {
             Log.e(TAG, "Error : " + e)
             emptyList()
         }
     }
 
-    suspend fun getUserName(email : String) : List<DocumentSnapshot> {
+    suspend fun getUserInfoByEmail(email : String) : List<DocumentSnapshot> {
         val db = FirebaseFirestore.getInstance()
         return try {
             db.collection("User").whereEqualTo("email", email).get().await().documents
@@ -41,4 +41,5 @@ object FirebaseUserService {
             emptyList()
         }
     }
+
 }
