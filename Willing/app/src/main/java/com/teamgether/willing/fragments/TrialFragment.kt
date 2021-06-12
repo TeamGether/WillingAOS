@@ -1,10 +1,12 @@
 package com.teamgether.willing.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,17 +47,18 @@ class TrialFragment : Fragment() {
         trialList.layoutManager = LinearLayoutManager(view.context)
         swipeLayout = view.findViewById(R.id.trial_swipeLayout)
 
-        list = arrayListOf()
-        loadData(view)
+        loadData(view.context)
 
         swipeLayout.setOnRefreshListener {
-            loadData(view)
+            loadData(view.context)
             swipeLayout.isRefreshing = false
         }
     }
 
-    private fun loadData(view: View) {
-        val dialog = LoadingDialog(view.context)
+    private fun loadData(context : Context) {
+        val dialog = LoadingDialog(context)
+        val link = SetListAdapter()
+        list = arrayListOf()
 
         CoroutineScope(Dispatchers.Main).launch {
             dialog.show()
@@ -75,7 +78,7 @@ class TrialFragment : Fragment() {
                 val content = challengeInfo["title"] as String
                 val name = challengeInfo["uid"] as String
 
-                val userInfo = getUserProfile(name.toString()).await().documents
+                val userInfo = getUserProfile(name).await().documents
                 var username = ""
                 var profileImg = ""
                 for (data in userInfo) {
@@ -94,7 +97,9 @@ class TrialFragment : Fragment() {
                 list.add(trial)
             }
 
-            adapter = TrialAdapter(list)
+            Log.d("!!!!!!!!!!!!!!!!", list.toString())
+
+            adapter = TrialAdapter(list, link)
             trialList.adapter = adapter
 
             dialog.dismiss()
@@ -116,5 +121,10 @@ class TrialFragment : Fragment() {
         return db.collection("User").whereEqualTo("email", userName).get()
     }
 
+    inner class SetListAdapter {
+        fun getData(context: Context) {
+            loadData(context)
+        }
+    }
 
 }

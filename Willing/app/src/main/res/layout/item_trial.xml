@@ -13,6 +13,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/item_trial_profileLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

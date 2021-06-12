@@ -1,6 +1,7 @@
 package com.teamgether.willing.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.teamgether.willing.R
 import com.teamgether.willing.model.Certifi
+import com.teamgether.willing.view.OtherDetailActivity
 
 class CertifiAdapter(val certifiList: ArrayList<Certifi>) : RecyclerView.Adapter<CertifiAdapter.ViewHolder>() {
     private val storage: FirebaseStorage = FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
@@ -32,6 +34,13 @@ class CertifiAdapter(val certifiList: ArrayList<Certifi>) : RecyclerView.Adapter
                         Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
+
+            itemView.setOnClickListener {
+                val intent = Intent(context, OtherDetailActivity::class.java)
+                intent.putExtra("challengeId", data.challengeId.toString())
+                intent.putExtra("imgUrl", data.imgUrl.toString())
+                context.startActivity(intent)
             }
         }
     }

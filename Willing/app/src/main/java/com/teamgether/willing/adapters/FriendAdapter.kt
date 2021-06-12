@@ -1,6 +1,5 @@
  package com.teamgether.willing.adapters
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,20 +11,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.teamgether.willing.R
 import com.teamgether.willing.firebase.FirebaseUserService
 import com.teamgether.willing.model.Friends
-import com.teamgether.willing.viewmodels.FriendsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import org.json.JSONObject
 import java.io.OutputStream
 import java.net.HttpURLConnection
@@ -66,7 +60,7 @@ class FriendAdapter (private var list: MutableList<Friends>): RecyclerView.Adapt
                             val current = FirebaseUserService.getCurrentUser()
 
                             CoroutineScope(Dispatchers.IO).launch {
-                                val documents = FirebaseUserService.getUserName(current)
+                                val documents = FirebaseUserService.getUserInfoByEmail(current)
                                 var userName : String = ""
                                 var fcmToken : String = ""
                                 for (document in documents) {

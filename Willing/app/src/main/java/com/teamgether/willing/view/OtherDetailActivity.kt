@@ -10,31 +10,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.teamgether.willing.adapters.CommentAdapter
 import com.teamgether.willing.LoadingDialog
-import com.teamgether.willing.MainActivity
 import com.teamgether.willing.R
 import com.teamgether.willing.databinding.ActivityOtherDetailBinding
+import com.teamgether.willing.firebase.FirebaseUserService
 import com.teamgether.willing.model.Comment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class OtherDetailActivity : AppCompatActivity() {
-    private var challengeId: String = ""
-    private var imgUrl: String = ""
     private lateinit var binding: ActivityOtherDetailBinding
     private var db = FirebaseFirestore.getInstance()
     private val storage: FirebaseStorage =
@@ -51,10 +46,16 @@ class OtherDetailActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_other_detail)
         binding.otherDetail = this
 
-        getData()
-        setChallengeInfo()
-        setTimeStamp()
-        setImg()
+        // intent 받아오기
+        val imgUrl = intent.getStringExtra("imgUrl").toString()
+        val challengeId = intent.getStringExtra("challengeId").toString()
+        val userName = intent.getStringExtra("userName").toString()
+
+        binding.otherDetailUsername.text = userName
+
+        setChallengeInfo(challengeId)
+        setTimeStamp(imgUrl)
+        setImg(imgUrl)
 
         // 뒤로가기
         binding.otherDetailBackBtn.setOnClickListener {
@@ -67,49 +68,30 @@ class OtherDetailActivity : AppCompatActivity() {
         getComment(imgUrl)
         binding.otherDetailCommentList.layoutManager = LinearLayoutManager(this@OtherDetailActivity)
         binding.otherDetailSendBtn.setOnClickListener {
-            saveComment(binding.otherDetailEditComment.text.toString())
+            saveComment(binding.otherDetailEditComment.text.toString(), imgUrl)
             binding.otherDetailEditComment.text.clear()
             inputManager.hideSoftInputFromWindow(binding.otherDetailEditComment.windowToken, 0)
         }
 
         // 다른 사람 프로필
-        val userEmail = getUserEmail(binding.otherDetailUsername.text.toString())
-        binding.otherDetailProfile.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("email", userEmail)
-            intent.putExtra("flag", 5)
-            startActivity(intent)
-        }
-
-    }
-
-    private fun getUserEmail(userName: String): String {
-        var email : String = ""
+        val intent = Intent(this@OtherDetailActivity, ProfileActivity::class.java)
         CoroutineScope(Dispatchers.Main).launch {
-            val documents = getEmail(userName).documents
-            for (document in documents) {
-                email = document["email"] as String
+            val emailData = FirebaseUserService.getUserInfoByName(userName)
+            intent.putExtra("userEmail", emailData[0]["email"].toString())
+            Log.d("!!!!!!!!!!", "userEmail :: ${emailData[0]["email"].toString()}")
+            binding.otherDetailUsername.setOnClickListener {
+                startActivity(intent)
+            }
+            binding.otherDetailProfile.setOnClickListener {
+                startActivity(intent)
             }
         }
-        return email
-    }
 
-    private suspend fun getEmail(userName: String): QuerySnapshot {
-        return db.collection("User").whereEqualTo("name", userName).get().await()
-    }
 
-    // intent 받아오기
-    private fun getData() {
-        if (intent.hasExtra("challengeId")) {
-            challengeId = intent.getStringExtra("challengeId").toString()
-            imgUrl = intent.getStringExtra("imgUrl").toString()
-        } else {
-            Toast.makeText(this@OtherDetailActivity, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-        }
     }
 
     // 인증사진 imageView에 넣어주기
-    private fun setImg() {
+    private fun setImg(imgUrl: String) {
         storageRef.child(imgUrl).downloadUrl.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Glide.with(this)
@@ -125,29 +107,22 @@ class OtherDetailActivity : AppCompatActivity() {
     }
 
     // 해당 챌린지 정보 넣어주기
-    private fun setChallengeInfo() {
-        val docRef = db.collection("Challenge").document(challengeId)
-        docRef.addSnapshotListener { value, error ->
-            if (error != null) {
-                Log.e("OtherDetailActivity", error.message.toString())
-                return@addSnapshotListener
-            }
-            if (value != null && value.exists()) {
-                binding.otherDetailChallenge.text = value["title"].toString()
-                setProfileImg(value["uid"].toString())
-
-            } else {
-                Toast.makeText(this@OtherDetailActivity, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
+    private fun setChallengeInfo(challengeId : String) {
+        db.collection("Challenge").document(challengeId).get().addOnSuccessListener { result ->
+            binding.otherDetailChallenge.text = result["title"].toString()
+            setProfileImg(result["uid"].toString())
+        }.addOnFailureListener {
+            Toast.makeText(this@OtherDetailActivity, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            Log.e("OtherDetailActivity", it.message.toString())
         }
     }
 
     // 해당 인증사진 타임스탬프 받아오기
-    private fun setTimeStamp() {
+    private fun setTimeStamp(imgUrl: String) {
         db.collection("Certification").whereEqualTo("imgUrl", imgUrl).get()
             .addOnSuccessListener { result ->
-                val data = result.documents[0]["timestamp"].toString()
-                binding.otherDetailTimesetamp.text = data
+                val time = result.documents[0]["timestamp"].toString()
+                binding.otherDetailTimesetamp.text = "${time.substring(0,4)}년 ${time.substring(4,6)}월 ${time.substring(6,8)}일 ${time.substring(8, 10)}시 ${time.substring(10)}분"
             }
             .addOnFailureListener { exception ->
                 Log.e("OtherDetailActivity", "Error : $exception")
@@ -159,10 +134,8 @@ class OtherDetailActivity : AppCompatActivity() {
         var img = ""
 
         CoroutineScope(Dispatchers.Main).launch {
-            val documents = getUserInfo(email).documents
+            val documents = FirebaseUserService.getUserInfoByEmail(email)
             for (document in documents) {
-                Log.d("!!!DETAILACTIVITY!!!", document["name"].toString())
-                binding.otherDetailUsername.text = document["name"].toString()
                 img = document["profileImg"] as String
 
                 storageRef.child(img).downloadUrl.addOnSuccessListener { task ->
@@ -179,17 +152,8 @@ class OtherDetailActivity : AppCompatActivity() {
 
     }
 
-    private suspend fun getUserInfo(email : String) : QuerySnapshot {
-        return db.collection("User").whereEqualTo("email", email).get().await()
-    }
-
     // 댓글 저장하기
-    private fun saveComment(comment: String) {
-
-        // 사용자 정보 받아오기
-        val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-        val email = user?.email
-
+    private fun saveComment(comment: String, imgUrl: String) {
         var profileImgUrl: String = ""
         var name: String = ""
         val current: Long = System.currentTimeMillis()
@@ -197,29 +161,29 @@ class OtherDetailActivity : AppCompatActivity() {
         val dateFormat = SimpleDateFormat("yy/MM/dd hh:mm")
 
         CoroutineScope(Dispatchers.Main).launch {
-            val documents = email?.let { getUserInfo(it) }
-            if (documents != null) {
-                for (document in documents) {
-                    name = document["name"] as String
-                    profileImgUrl = document["profileImg"] as String
-                }
+            val email = FirebaseUserService.getCurrentUser()
+            val documents = FirebaseUserService.getUserInfoByName(email)
+            for (document in documents) {
+                name = document["name"] as String
+                profileImgUrl = document["profileImg"] as String
+            }
 
-                val comments = Comment(imgUrl, profileImgUrl, name, comment, dateFormat.format(time), current)
-                db.collection("Comment").add(comments).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        getComment(imgUrl)
-                    } else {
-                        Toast.makeText(this@OtherDetailActivity, "다시 시도해주세요.", Toast.LENGTH_SHORT)
-                            .show()
-                        Log.e("OtherDetailActivity", it.exception.toString())
-                    }
+            val comments =
+                Comment(imgUrl, profileImgUrl, name, comment, dateFormat.format(time), current)
+            db.collection("Comment").add(comments).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    getComment(imgUrl)
+                } else {
+                    Toast.makeText(this@OtherDetailActivity, "다시 시도해주세요.", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.e("OtherDetailActivity", it.exception.toString())
                 }
             }
         }
     }
 
     // 댓글 불러오기
-    private fun getComment(imgUrl : String) {
+    private fun getComment(imgUrl: String) {
         val dialog = LoadingDialog(this@OtherDetailActivity)
         CoroutineScope(Dispatchers.Main).launch {
             dialog.show()
@@ -250,8 +214,8 @@ class OtherDetailActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun loadComment(imgUrl : String) : QuerySnapshot {
-        return  db.collection("Comment").whereEqualTo("imgId", imgUrl).get().await()
+    private suspend fun loadComment(imgUrl: String): QuerySnapshot {
+        return db.collection("Comment").whereEqualTo("imgId", imgUrl).get().await()
     }
 
 }

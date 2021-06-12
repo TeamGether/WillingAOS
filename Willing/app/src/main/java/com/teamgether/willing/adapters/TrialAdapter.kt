@@ -1,47 +1,48 @@
 package com.teamgether.willing.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.teamgether.willing.R
+import com.teamgether.willing.firebase.FirebaseUserService
+import com.teamgether.willing.fragments.TrialFragment
 import com.teamgether.willing.model.Trial
+import com.teamgether.willing.view.ProfileActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<TrialAdapter.ViewHolder>() {
+class TrialAdapter (private var list: MutableList<Trial>, var link : TrialFragment.SetListAdapter): RecyclerView.Adapter<TrialAdapter.ViewHolder>() {
     private val storage: FirebaseStorage =
         FirebaseStorage.getInstance("gs://willing-88271.appspot.com/")
     private val storageRef: StorageReference = storage.reference
     private var db = FirebaseFirestore.getInstance()
 
     inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
-        var profileImg: ImageView = itemView!!.findViewById(R.id.item_trial_userProfile)
-        var userName: TextView = itemView!!.findViewById(R.id.item_trial_userName)
-        var timestamp: TextView = itemView!!.findViewById(R.id.item_trial_timestamp)
-        var content: TextView = itemView!!.findViewById(R.id.item_trial_content)
-        var cheeringCnt: TextView = itemView!!.findViewById(R.id.item_trial_cheeringCnt)
-        var questionCnt: TextView = itemView!!.findViewById(R.id.item_trial_badCnt)
+        val profileImg: ImageView = itemView!!.findViewById(R.id.item_trial_userProfile)
+        val userName: TextView = itemView!!.findViewById(R.id.item_trial_userName)
+        val timestamp: TextView = itemView!!.findViewById(R.id.item_trial_timestamp)
+        val content: TextView = itemView!!.findViewById(R.id.item_trial_content)
+        val cheeringCnt: TextView = itemView!!.findViewById(R.id.item_trial_cheeringCnt)
+        val questionCnt: TextView = itemView!!.findViewById(R.id.item_trial_badCnt)
         val cheeringBtn: Button = itemView!!.findViewById(R.id.item_trial_cheeringBtn)
         val questionBtn: Button = itemView!!.findViewById(R.id.item_trial_badBtn)
-        var img: ImageView = itemView!!.findViewById(R.id.item_trial_img)
+        val img: ImageView = itemView!!.findViewById(R.id.item_trial_img)
+        val layout : LinearLayout = itemView!!.findViewById(R.id.item_trial_profileLayout)
 
         fun bind(data: Trial, context: Context) {
             storageRef.child(data.profileImg.toString()).downloadUrl.addOnCompleteListener { task ->
@@ -69,58 +70,25 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
             }
 
             userName.text = data.userName
-            timestamp.text = "${data.timestamp}"
+            val time = data.timestamp.toString()
+            timestamp.text = "${time.substring(0,4)}년 ${time.substring(4,6)}월 ${time.substring(6,8)}일 ${time.substring(8, 10)}시 ${time.substring(10)}분"
             content.text = data.content
             cheeringCnt.text = data.cheeringCnt.toString()
             questionCnt.text = data.questionCnt.toString()
 
-            val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
-            var current = ""
             CoroutineScope(Dispatchers.Main).launch {
-                val deferred = currentUserEmail?.let { getCurrentUser(it).await().documents }
-                if (deferred != null) {
-                    for (data in deferred) {
-                        current = data["name"] as String
-                    }
-                }
 
-                cheeringBtn.setOnClickListener {
-                    cheeringCnt.text =
-                        refreshCount(data.imgId.toString(), "cheering", current, context).toString()
-                    notifyDataSetChanged()
+                val emailData = FirebaseUserService.getUserInfoByName(data.userName!!)
+                val intent = Intent(context, ProfileActivity::class.java)
+                for (email in emailData) {
+                    intent.putExtra("userEmail", email["email"].toString())
                 }
-
-                questionBtn.setOnClickListener {
-                    questionCnt.text =
-                        refreshCount(data.imgId.toString(), "question", current, context).toString()
-                    notifyDataSetChanged()
+                layout.setOnClickListener {
+                    context.startActivity(intent)
                 }
             }
-        }
-    }
 
-    private fun refreshCount(imgId: String, flag: String, current: String, context: Context): Int {
-        var cheeringCnt = 0
-        var questionCnt = 0
 
-        plusCnt(imgId, current, context, flag)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val deferred = getArray(imgId).await().documents
-
-            for (data in deferred) {
-                val cheeringArr = data["cheering"] as ArrayList<String>
-                cheeringCnt = cheeringArr.size
-
-                val questionArr = data["question"] as ArrayList<String>
-                questionCnt = questionArr.size
-            }
-
-        }
-        if (flag.equals("cheering")) {
-            return cheeringCnt
-        } else {
-            return questionCnt
         }
     }
 
@@ -130,7 +98,7 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
         var array = arrayListOf<String>()
 
         CoroutineScope(Dispatchers.Main).launch {
-            val deferred = getArray(imgId).await().documents
+            val deferred = getArray(imgId).documents
 
             for (data in deferred) {
                 documentId = data.id
@@ -165,12 +133,8 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
 
     }
 
-    private suspend fun getCurrentUser(current: String): Task<QuerySnapshot> {
-        return db.collection("User").whereEqualTo("email", current).get()
-    }
-
-    private suspend fun getArray(imgId: String): Task<QuerySnapshot> {
-        return db.collection("Certification").whereEqualTo("imgUrl", imgId).get()
+    private suspend fun getArray(imgId: String): QuerySnapshot {
+        return db.collection("Certification").whereEqualTo("imgUrl", imgId).get().await()
     }
 
     override fun getItemCount(): Int {
@@ -179,10 +143,27 @@ class TrialAdapter (private var list: MutableList<Trial>): RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position], holder.itemView.context)
+        holder.cheeringBtn.setOnClickListener {
+            list[position].userName?.let { it1 ->
+                plusCnt(list[position].imgId.toString(),
+                    it1, holder.itemView.context, "cheering")
+            }
+            link.getData(holder.itemView.context)
+        }
+
+        holder.questionBtn.setOnClickListener {
+            list[position].userName?.let { it1 ->
+                plusCnt(list[position].imgId.toString(),
+                    it1, holder.itemView.context, "question")
+            }
+
+            link.getData(holder.itemView.context)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_trial, parent, false)
         return ViewHolder(view)
     }
+
 }
