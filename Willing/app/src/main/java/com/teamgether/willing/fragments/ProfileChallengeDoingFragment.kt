@@ -10,10 +10,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.teamgether.willing.Adapter.ChallengeListAdapter
 import com.teamgether.willing.R
 import com.teamgether.willing.model.ChallengeList
 import kotlinx.android.synthetic.main.fragment_doing_challenge.*
+import kotlinx.android.synthetic.main.fragment_doing_challenge.mp_challenge_list
+import kotlinx.android.synthetic.main.fragment_doing_challenge.refresh_layout
+import kotlinx.android.synthetic.main.fragment_finish_challenge.*
 
 class ProfileChallengeDoingFragment : Fragment() {
     private lateinit var list: ArrayList<ChallengeList>
@@ -57,8 +61,60 @@ class ProfileChallengeDoingFragment : Fragment() {
         }
 
     }
-
     private fun getChallenge() {
+        val subjectField = "subject"
+        val titleField = "title"
+        val percentField = "percent"
+
+        if (userEmail == currentUser?.email) {
+            db.collection("Challenge").whereEqualTo("uid", userEmail)
+                .whereEqualTo("didFinish", false)
+                .get()
+                .addOnSuccessListener { result ->
+                    list = arrayListOf()
+                    for (document in result) {
+                        Log.d("TAG", "getChallenge: ")
+                        resultChallenge(document, subjectField, titleField, percentField)
+                    }
+
+
+                }
+        } else {
+            db.collection("Challenge").whereEqualTo("uid", userEmail).whereEqualTo("show", true)
+                .whereEqualTo("didFinish", false)
+                .get()
+                .addOnSuccessListener { result ->
+                    list = arrayListOf()
+                    for (document in result) {
+                        resultChallenge(document, subjectField, titleField, percentField)
+                    }
+                }
+        }
+    }
+
+    private fun resultChallenge(
+        document: QueryDocumentSnapshot,
+        subjectField: String,
+        titleField: String,
+        percentField: String
+    ) {
+        val challenges = ChallengeList()
+        val documentId = document.id
+        val subject = document[subjectField] as String
+        val title = document[titleField] as String
+        val percent = document[percentField] as Number
+        //if문으로 background color 바꿔주기?
+        challenges.challengeId = documentId
+        challenges.subject = subject
+        challenges.title = title
+        challenges.percent = percent
+        list.add(challenges)
+
+        challengeListAdapter = ChallengeListAdapter(list, activity)
+        challengeListAdapter.notifyDataSetChanged()
+        mp_challenge_list!!.adapter = challengeListAdapter
+    }
+  /*  private fun getChallenge() {
         val subjectField = "subject"
         val titleField = "title"
         val percentField = "percent"
@@ -85,5 +141,5 @@ class ProfileChallengeDoingFragment : Fragment() {
                     mp_challenge_list!!.adapter = challengeListAdapter
                 }
             }
-    }
+    }*/
 }
