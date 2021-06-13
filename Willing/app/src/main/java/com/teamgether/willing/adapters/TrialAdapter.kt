@@ -57,6 +57,7 @@ class TrialAdapter (private var list: MutableList<Trial>, var link : TrialFragme
                 } else {
                     Log.d("TrialAdapter !!", task.exception.toString())
                 }
+                profileImg.clipToOutline = true
             }
 
             storageRef.child(data.imgId.toString()).downloadUrl.addOnCompleteListener { task ->
