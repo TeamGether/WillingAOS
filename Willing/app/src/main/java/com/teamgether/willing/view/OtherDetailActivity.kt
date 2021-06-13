@@ -79,7 +79,6 @@ class OtherDetailActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val emailData = FirebaseUserService.getUserInfoByName(userName)
             intent.putExtra("userEmail", emailData[0]["email"].toString())
-            Log.d("!!!!!!!!!!", "userEmail :: ${emailData[0]["email"].toString()}")
             binding.otherDetailUsername.setOnClickListener {
                 startActivity(intent)
             }
@@ -155,6 +154,7 @@ class OtherDetailActivity : AppCompatActivity() {
                     Log.e("OtherDetailActivity", it.message.toString())
                 }
             }
+            binding.otherDetailProfile.clipToOutline = true
         }
 
     }
