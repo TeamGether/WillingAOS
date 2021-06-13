@@ -270,7 +270,7 @@ class ChallengeDetailActivity : AppCompatActivity() {
             list = arrayListOf()
             for (document in documents) {
                 val model =
-                    Certifi(imgUrl = document["imgUrl"].toString(), timestamp = document["timestamp"] as Long, challengeId = document["challengeId"].toString())
+                    Certifi(imgUrl = document["imgUrl"].toString(), timestamp = document["timestamp"] as Long, challengeId = document["challengeId"].toString(), userName = document["userName"].toString())
                 list.add(model)
             }
             adapter = CertifiAdapter(list)

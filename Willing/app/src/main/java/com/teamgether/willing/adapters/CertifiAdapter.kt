@@ -40,6 +40,7 @@ class CertifiAdapter(val certifiList: ArrayList<Certifi>) : RecyclerView.Adapter
                 val intent = Intent(context, OtherDetailActivity::class.java)
                 intent.putExtra("challengeId", data.challengeId.toString())
                 intent.putExtra("imgUrl", data.imgUrl.toString())
+                intent.putExtra("userName", data.userName.toString())
                 context.startActivity(intent)
             }
         }

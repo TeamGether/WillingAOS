@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -111,6 +112,12 @@ class OtherDetailActivity : AppCompatActivity() {
         db.collection("Challenge").document(challengeId).get().addOnSuccessListener { result ->
             binding.otherDetailChallenge.text = result["title"].toString()
             setProfileImg(result["uid"].toString())
+            val show = result["show"] as Boolean
+            if (!show) {
+                binding.otherDetailComment.visibility = View.GONE
+                binding.otherDetailCommentList.visibility = View.GONE
+                binding.divider.visibility = View.GONE
+            }
         }.addOnFailureListener {
             Toast.makeText(this@OtherDetailActivity, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             Log.e("OtherDetailActivity", it.message.toString())
