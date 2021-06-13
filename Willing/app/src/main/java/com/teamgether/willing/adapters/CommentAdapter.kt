@@ -30,10 +30,13 @@ class CommentAdapter (private var list: MutableList<Comment>): RecyclerView.Adap
                 if (task.isSuccessful) {
                     Glide.with(context)
                         .load(task.result)
+                        .override(50,50)
+                        .centerCrop()
                         .into(profileImg)
                 } else {
                     Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
                 }
+                profileImg.clipToOutline = true
             }
             userName.text = data.userName
             content.text = data.content

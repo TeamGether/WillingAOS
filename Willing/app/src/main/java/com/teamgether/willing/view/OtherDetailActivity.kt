@@ -167,16 +167,15 @@ class OtherDetailActivity : AppCompatActivity() {
         val time = Date(current)
         val dateFormat = SimpleDateFormat("yy/MM/dd hh:mm")
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val email = FirebaseUserService.getCurrentUser()
-            val documents = FirebaseUserService.getUserInfoByName(email)
+        val email = FirebaseUserService.getCurrentUser()
+        db.collection("User").whereEqualTo("email",email).get().addOnSuccessListener { result ->
+            val documents = result.documents
             for (document in documents) {
-                name = document["name"] as String
                 profileImgUrl = document["profileImg"] as String
+                name = document["name"] as String
             }
 
-            val comments =
-                Comment(imgUrl, profileImgUrl, name, comment, dateFormat.format(time), current)
+            val comments = Comment(imgUrl, profileImgUrl, name, comment, dateFormat.format(time), current)
             db.collection("Comment").add(comments).addOnCompleteListener {
                 if (it.isSuccessful) {
                     getComment(imgUrl)
@@ -186,7 +185,12 @@ class OtherDetailActivity : AppCompatActivity() {
                     Log.e("OtherDetailActivity", it.exception.toString())
                 }
             }
+        }.addOnFailureListener {
+            Toast.makeText(this, "실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            Log.e("OtherDetailActivity!!!", it.message.toString())
         }
+
+
     }
 
     // 댓글 불러오기

@@ -18,6 +18,7 @@
             android:id="@+id/item_comment_profile"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:background="@drawable/mp_profile_image_view"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
