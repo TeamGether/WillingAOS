@@ -37,6 +37,11 @@ class FriendsFragment : Fragment() {
         binding.friendsRecyclerView.layoutManager = LinearLayoutManager(view.context)
         viewModel.loadData(binding.friendsRecyclerView)
 
+        binding.friendsSwipeLayout.setOnRefreshListener {
+            viewModel.loadData(binding.friendsRecyclerView)
+            binding.friendsSwipeLayout.isRefreshing = false
+        }
+
     }
 
 }

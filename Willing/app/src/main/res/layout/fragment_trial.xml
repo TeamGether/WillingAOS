@@ -27,6 +27,7 @@
                 android:text="인증 재판"
                 android:textColor="@color/black"
                 android:textSize="20sp"
+                android:fontFamily="@font/sc_dream7"
                 app:layout_constraintBottom_toBottomOf="@+id/view3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.048"

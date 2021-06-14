@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/group_appSetting">
-        <item android:id="@+id/menu_account"
-            android:title="@string/menu_account" />
-        <item android:id="@+id/menu_notify"
-            android:title="@string/menu_notify" />
-    </group>
-    <group android:id="@+id/group_info">
-        <item android:id="@+id/menu_question"
-            android:title="@string/menu_question" />
-        <item android:id="@+id/menu_app_info"
-            android:title="@string/menu_app_info" />
-    </group>
     <group android:id="@+id/group_sign">
         <item android:id="@+id/menu_sign_out"
             android:title="@string/menu_sign_out" />
-        <item android:id="@+id/menu_delete_user"
-            android:title="@string/menu_delete_user" />
     </group>
 </menu>

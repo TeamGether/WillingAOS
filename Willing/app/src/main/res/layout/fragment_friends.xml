@@ -36,7 +36,7 @@
                 android:text="친구 목록"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold"
+                android:fontFamily="@font/sc_dream7"
                 app:layout_constraintBottom_toBottomOf="@+id/friends_toolbar"
                 app:layout_constraintEnd_toEndOf="@+id/friends_toolbar"
                 app:layout_constraintHorizontal_bias="0.044"
