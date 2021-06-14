@@ -302,6 +302,8 @@ class ChallengeDetailActivity : AppCompatActivity() {
         } else {
             ch_detail_account_cl.isVisible = false
             certifi_btn.isVisible = false
+            uplaod_camera_btn.isVisible = false
+            upload_gallery_btn.isVisible = false
             getUserData(userEmail)
         }
     }
