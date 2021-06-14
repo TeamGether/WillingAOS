@@ -97,8 +97,6 @@ class TrialFragment : Fragment() {
                 list.add(trial)
             }
 
-            Log.d("!!!!!!!!!!!!!!!!", list.toString())
-
             adapter = TrialAdapter(list, link)
             trialList.adapter = adapter
 

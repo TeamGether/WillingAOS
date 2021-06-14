@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.teamgether.willing.Fragment.UserProfileFragment
 import com.teamgether.willing.fragments.*
 import com.teamgether.willing.databinding.ActivityMainBinding
@@ -40,10 +41,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         binding.mainBottomNavigation.setOnNavigationItemSelectedListener(this)
 
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful){
+                Log.d("FCMTOKEN!!!", "${task.result}  !!!!!")
+            } else {
+                Log.e("FCMTOKEN!!!", task.exception.toString())
+            }
+        }
 
         ActivityCompat.requestPermissions(this, arrayOf(READ_EXTERNAL_STORAGE, CAMERA), 1)
-
-
         supportFragmentManager.beginTransaction().add(R.id.main_frameLayout, ChallengeFragment()).commit()
 
     }

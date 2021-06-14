@@ -69,21 +69,34 @@ class FriendAdapter (private var list: MutableList<Friends>): RecyclerView.Adapt
                 db.collection("User").whereEqualTo("email", current).get().addOnSuccessListener { result ->
                     val documents = result.documents
                     var userName : String = ""
-                    var fcmToken : String = ""
                     for (document in documents) {
                         userName = document["name"] as String
-                        fcmToken = document["fcmToken"] as String
                     }
-                    Thread() {
-                        kotlin.run {
-                            try {
-                                sendNotification(fcmToken, userName)
-                            } catch (e : Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                    }.start()
 
+                    db.collection("User").whereEqualTo("email", data.email).get().addOnSuccessListener { result ->
+                        val results = result.documents
+                        var fcmToken : String = ""
+                        for (doc in results) {
+                            fcmToken = doc["fcmToken"] as String
+                        }
+                        Log.d("FriendAdapter", "userName : $userName  \n fcmToken : $fcmToken ")
+                        Thread() {
+                            kotlin.run {
+                                try {
+                                    sendNotification(fcmToken, userName)
+                                } catch (e : Exception) {
+                                    e.printStackTrace()
+                                }
+                            }
+                        }.start()
+                    }.addOnFailureListener {
+                        Log.e("FriendAdapter","secondFail : ${it.message.toString()}" )
+                        Toast.makeText(itemView.context, "다시 시도해주세요!", Toast.LENGTH_SHORT).show()
+                    }
+
+                }.addOnFailureListener {
+                    Log.e("FriendAdapter","firstFail : ${it.message.toString()}" )
+                    Toast.makeText(itemView.context, "다시 시도해주세요!", Toast.LENGTH_SHORT).show()
                 }
 
                 Toast.makeText(itemView.context, "응원하였습니다!", Toast.LENGTH_SHORT).show()
@@ -104,16 +117,16 @@ class FriendAdapter (private var list: MutableList<Friends>): RecyclerView.Adapt
         conn.requestMethod = "POST"
         conn.doOutput = true
         conn.doInput = true
-        conn.addRequestProperty("Authorization", "key= AAAATgZHayw:APA91bFBSRExqArtJs9R4EUbHGRrtvAEn6v4MbFmOly8j0Ih3CWLtpuGBpQgIn7kZ4nxG0AnsIrSfrcAZwFJgOtG9XakF5A_shWpOVqzfr7-5LjctqEwG-9eiRuaM0fY3VAMVHHnFspG")
+        conn.addRequestProperty("Authorization", "key=AAAATgZHayw:APA91bFBSRExqArtJs9R4EUbHGRrtvAEn6v4MbFmOly8j0Ih3CWLtpuGBpQgIn7kZ4nxG0AnsIrSfrcAZwFJgOtG9XakF5A_shWpOVqzfr7-5LjctqEwG-9eiRuaM0fY3VAMVHHnFspG")
         conn.setRequestProperty("Accept", "application/json")
         conn.setRequestProperty("Content-type", "application/json")
         val os : OutputStream = conn.outputStream
         os.write(root.toString().toByteArray(Charset.defaultCharset()))
         os.flush()
         conn.responseCode
+
+        Log.d("FriendAdapter", "notification :: ${conn.responseCode}")
     }
-
-
 
     override fun getItemCount(): Int {
         return list.size

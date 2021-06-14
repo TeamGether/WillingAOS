@@ -26,11 +26,6 @@ class FriendsViewModel(application: Application): AndroidViewModel(application) 
     private lateinit var list: ArrayList<Friends>
     private lateinit var adapter: FriendAdapter
 
-    private val db = FirebaseFirestore.getInstance()
-
-    private val SERVER_KEY : String = "AAAATgZHayw:APA91bFBSRExqArtJs9R4EUbHGRrtvAEn6v4MbFmOly8j0Ih3CWLtpuGBpQgIn7kZ4nxG0AnsIrSfrcAZwFJgOtG9XakF5A_shWpOVqzfr7-5LjctqEwG-9eiRuaM0fY3VAMVHHnFspG"
-    private val FCM_MESSAGE_URL : String = "https://fcm.googleapis.com/fcm/send"
-
     fun loadData(recyclerView: RecyclerView) {
         list = arrayListOf()
         viewModelScope.launch {
@@ -70,71 +65,6 @@ class FriendsViewModel(application: Application): AndroidViewModel(application) 
             }
 
         }
-    }
-
-    fun sendPostToFCM(userName : String?, currentUser : String?) {
-
-        val list = getInfo(userName, currentUser)
-        val fcmToken : String = list[0]
-        val name : String = list[1]
-
-        Thread() {
-            kotlin.run {
-                try {
-                    Log.d("!!!!!", "쓰레드 실행 전!")
-                    val root = JSONObject()
-                    val notification = JSONObject()
-                    notification.put("body", name +"님이 응원해요!")
-                    notification.put("title", "Willing 윌링")
-                    root.put("notification", notification)
-                    root.put("to", fcmToken)
-
-                    val url = URL(FCM_MESSAGE_URL)
-                    val conn : HttpURLConnection = url.openConnection() as HttpURLConnection
-                    conn.requestMethod = "POST"
-                    conn.doOutput = true
-                    conn.doInput = true
-                    conn.addRequestProperty("Authorization", "key= $SERVER_KEY")
-                    conn.setRequestProperty("Accept", "application/json")
-                    conn.setRequestProperty("Content-type", "application/json")
-                    val os : OutputStream = conn.outputStream
-                    os.write(root.toString().toByteArray(Charset.defaultCharset()))
-                    os.flush()
-                    conn.responseCode
-                    Log.d("!!!!!!!", "쓰레드 실행함!")
-                } catch (e : Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }.start()
-    }
-
-    private fun getInfo(userName : String?, currentUser : String?): ArrayList<String> {
-        var fcmToken : String = ""
-        var name : String = ""
-        var list : ArrayList<String> = arrayListOf()
-
-        CoroutineScope(Dispatchers.Main).launch {
-            fcmToken = getFCMToken(userName).documents[0]["fcmToken"] as String
-            name = getCurrentUserData(currentUser).documents[0]["name"] as String
-        }
-        list.add(fcmToken)
-        list.add(name)
-
-        Log.d("!!!!!!!", "list !! : $list ")
-
-        return list
-    }
-
-
-    // 현재 사용자 이름 알아오기
-    private suspend fun getCurrentUserData(currentUser: String?) : QuerySnapshot {
-        return db.collection("User").whereEqualTo("email", currentUser).get().await()
-    }
-
-    // 상대방 이름으로 fcm Token 알아오기
-    private suspend fun getFCMToken(userName: String?): QuerySnapshot {
-        return db.collection("User").whereEqualTo("name", userName).get().await()
     }
 
 }

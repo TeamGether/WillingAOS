@@ -81,7 +81,6 @@ class ChallengeFragment : Fragment() {
 
                 list.add(challenge)
             }
-            Log.d("!!!!!", list.toString())
             adapter = ChallengeListAdapter(list, requireContext())
             binding.rvChallenge.adapter = adapter
         }
