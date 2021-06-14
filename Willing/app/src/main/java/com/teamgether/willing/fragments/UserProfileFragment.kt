@@ -150,11 +150,9 @@ class UserProfileFragment : Fragment() {
             }
         }
         mp_follow_btn.setOnClickListener {
-            if (isFollow) {
-                unfollowUser()
-            } else {
-                followUser()
-            }
+
+                getCurrentUserName()
+
         }
 
     }
@@ -278,11 +276,15 @@ class UserProfileFragment : Fragment() {
             .addOnSuccessListener { result ->
                 val document = result.documents[0]
                 currentUserName = document["name"] as String
+                if (isFollow) {
+                    unfollowUser()
+                } else {
+                    followUser()
+                }
             }
     }
 
     private fun followUser() {
-        getCurrentUserName()
         userName = profileInfo.name
         var followerList: MutableList<String> = ArrayList()
         var followingList: MutableList<String> = ArrayList()
@@ -318,8 +320,6 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun unfollowUser() {
-
-        getCurrentUserName()
         userName = profileInfo.name
         var followerList: MutableList<String> = ArrayList()
         var followingList: MutableList<String> = ArrayList()
