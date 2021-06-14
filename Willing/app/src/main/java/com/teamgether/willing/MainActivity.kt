@@ -41,14 +41,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         binding.mainBottomNavigation.setOnNavigationItemSelectedListener(this)
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful){
-                Log.d("FCMTOKEN!!!", "${task.result}  !!!!!")
-            } else {
-                Log.e("FCMTOKEN!!!", task.exception.toString())
-            }
-        }
-
         ActivityCompat.requestPermissions(this, arrayOf(READ_EXTERNAL_STORAGE, CAMERA), 1)
         supportFragmentManager.beginTransaction().add(R.id.main_frameLayout, ChallengeFragment()).commit()
 
